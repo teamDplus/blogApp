@@ -9,24 +9,29 @@ const AppContext = createContext();
 
 export const AppProvider = ({ children }) => {
     const [user,setUser] = useState(null);
-    const [userName,setUserName] = useState<string | null>(null);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (newUser) => {
             setUser(newUser);
-
+            setLoading(false); // 非同期処理の完了を示す
         
         });
         return () => {
             unsubscribe();
         };
     },[])
+    // loadingがtrueの間は子コンポーネントのレンダリングを待つ
+    if (loading) {
+      return null; 
+    }else if(!loading){
+      return (
+        <AppContext.Provider value={{user,setUser}}>
+          {children}  
+        </AppContext.Provider>
+      )
+    }
 
-return (
-  <AppContext.Provider value={{user,setUser,userName,setUserName}}>
-    {children}  
-  </AppContext.Provider>
-)
 }
 
 

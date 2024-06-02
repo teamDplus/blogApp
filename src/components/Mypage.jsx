@@ -1,23 +1,19 @@
 import { onAuthStateChanged, signOut } from 'firebase/auth'
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useNavigate} from 'react-router-dom'
 import '../css/components/Mypage.css';
 import { auth } from '../utils/firebase';
+import AppContext from '../context/AppContext';
 
 const Mypage = () => {
   const navigate = useNavigate();
-  const [user,setUser] = useState()
+  const {user} = useContext(AppContext);
 
-  useEffect(() => {
-    onAuthStateChanged(auth,(user) => {
-        if(user){
-            localStorage.setItem('user', user);
-            setUser(user)
-        }else{
-           
-        }
-    })
-},[])
+ useEffect(() => {
+  if(!user){
+    navigate("/")
+  }
+ },[user])
   
   const handleSignOut = () => {
     signOut(auth).then(() => {
@@ -35,8 +31,8 @@ const Mypage = () => {
   return (
     <div>
       <h1>マイページ</h1>
-      <p onClick={checkLogin}>check</p>
-      <p onClick={handleSignOut} className='logout'>ログアウト</p>
+      <button onClick={checkLogin}>check</button>
+      <button onClick={handleSignOut} className='logout'>ログアウト</button>
     </div>
   )
 }

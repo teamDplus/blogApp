@@ -14,7 +14,7 @@ const Login = () => {
       signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         const user = userCredential.user
-      navigate(`/mypage/${user.uid}`)
+      navigate(`/${user.uid}`)
       console.log(user)
       })
       .catch((error) => {
