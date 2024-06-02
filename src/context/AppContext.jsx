@@ -26,7 +26,7 @@ export const AppProvider = ({ children }) => {
       return null; 
     }else if(!loading){
       return (
-        <AppContext.Provider value={{user,setUser}}>
+        <AppContext.Provider value={{user,setUser,loading}}>
           {children}  
         </AppContext.Provider>
       )

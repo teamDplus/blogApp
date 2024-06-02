@@ -10,7 +10,6 @@ function Home() {
   console.log(user)
   return (
     <div className="App">
-      <h1>blogApp</h1>
       <BlogList/>
     </div>
   );

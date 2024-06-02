@@ -1,4 +1,26 @@
-.blog{
-    border: 2px solid #212121;
+.blog-list{
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.blog-list__items{
+    display: grid;
+    grid-template-columns: repeat(auto-fit,minmax(260px,260px));
+    justify-content: center;
+    gap: 20px;
+    padding: 10px;
+}
+
+.blog-list__item{
     margin-bottom: 10px;
+    border-radius: 16px;
+    background: #E6E7EE;
+    padding: 10px;
+    box-shadow:  5px 5px 20px #c8c9cc, -5px -5px 20px #ffffff;
+}
+
+.blog-list__item-content{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }

@@ -7,9 +7,10 @@ import AppContext from '../context/AppContext';
 
 const Mypage = () => {
   const navigate = useNavigate();
-  const {user} = useContext(AppContext);
+  const {user,loading} = useContext(AppContext);
 
  useEffect(() => {
+  console.log(user)
   if(!user){
     navigate("/")
   }
@@ -23,15 +24,10 @@ const Mypage = () => {
       console.error(error)
     })
   }
-
-  const checkLogin = () => {
-    console.log(user)
-  }
   
   return (
-    <div>
-      <h1>マイページ</h1>
-      <button onClick={checkLogin}>check</button>
+    <div className='mypage'>
+      <h1 className='mypage__title'>マイページ</h1>
       <button onClick={handleSignOut} className='logout'>ログアウト</button>
     </div>
   )
