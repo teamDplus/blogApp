@@ -11,7 +11,6 @@ function Home() {
   return (
     <div className="App">
       <h1>blogApp</h1>
-      <Login/>
       <BlogList/>
     </div>
   );
