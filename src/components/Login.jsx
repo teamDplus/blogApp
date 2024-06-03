@@ -16,10 +16,11 @@ const Login = () => {
       signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         const user = userCredential.user
+        console.log(user)
       navigate(`/${user.uid}`)
-      console.log(user)
       })
       .catch((error) => {
+        console.error(error);
       });
     }
 
@@ -28,14 +29,14 @@ const Login = () => {
           <h1 className="login__title">ログイン</h1>
           <form onSubmit={signIn} className="login__form">
               <div>
-                  <label for="email" class="">メールアドレス</label>
-                  <input onChange={(e) => setEmail(e.target.value)} type="email" name="email" id="email" class="" placeholder="name@company.com" required=""/>
+                  <label htmlFor="email" className="">メールアドレス</label>
+                  <input onChange={(e) => setEmail(e.target.value)} type="email" name="email" id="email" className="" placeholder="name@company.com" required=""/>
               </div>
               <div>
-                  <label for="password" class="">パスワード</label>
-                  <input onChange={(e) => setPassword(e.target.value)} type="password" name="password" id="password" placeholder="••••••••" class="" required=""/>
+                  <label htmlFor="password" className="">パスワード</label>
+                  <input onChange={(e) => setPassword(e.target.value)} type="password" name="password" id="password" placeholder="••••••••" className="" required=""/>
               </div>
-              <button type="submit" class="">ログイン</button>
+              <button type="submit" className="">ログイン</button>
           </form>
       </div>
   )
