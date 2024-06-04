@@ -13,10 +13,10 @@
 
 .blog-list__item{
     margin-bottom: 10px;
-    border-radius: 16px;
+    border-radius: 12px;
     background: #E6E7EE;
     padding: 10px;
-    box-shadow:  5px 5px 20px #c8c9cc, -5px -5px 20px #ffffff;
+    box-shadow:  5px 5px 10px #CDCDCD,-5px -5px 10px #FFFFFF;
 }
 
 .blog-list__item-content{
