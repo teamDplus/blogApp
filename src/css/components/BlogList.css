@@ -1,6 +1,7 @@
 .blog-list{
     max-width: 1000px;
     margin: 0 auto;
+    text-align: center;
 }
 
 .blog-list__items{
