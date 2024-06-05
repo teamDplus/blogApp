@@ -29,8 +29,8 @@ const Signup = () => {
       .then((userCredential) => {
         const user = userCredential.user
         console.log(userCredential);
-        //登録が完了したらログイン画面に移動
-        navigate("/login");
+        //登録が完了したらマイページに移動
+        navigate(`/${user.uid}`);
       })
       .catch((error) => {
         console.error(error);
@@ -76,7 +76,6 @@ const Signup = () => {
 //登録情報を確認するモーダル
 const SignupChechModal = ({ isOpen, onClose, onConfirm, email, password }) => {
   if (!isOpen) return null;
-  if (email = "") return;
 
   return (
     <div className="modal">
