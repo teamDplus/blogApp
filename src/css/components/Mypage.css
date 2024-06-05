@@ -5,3 +5,41 @@
 .logout{
     cursor: pointer;
 }
+
+.mypage-list{
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.mypage-list__items{
+    display: grid;
+    grid-template-columns: repeat(auto-fit,minmax(260px,260px));
+    justify-content: center;
+    gap: 20px;
+    padding: 10px;
+}
+
+.mypage-list__link{
+    text-decoration: none;
+}
+
+.mypage-list__item{
+    margin-bottom: 10px;
+    border-radius: 16px;
+    background: #E6E7EE;
+    padding: 10px;
+    box-shadow:  5px 5px 20px #c8c9cc, -5px -5px 20px #ffffff;
+    color: #000;
+    text-decoration: none;
+}
+
+.mypage-list__item:hover{
+    opacity: 0.5;
+}
+
+.mypage-list__item-content{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text-decoration: none;
+}
