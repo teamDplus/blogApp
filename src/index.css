@@ -3,15 +3,6 @@ body{
   margin: 0;
 }
 
-.contents{
-  display: flex;
-  justify-content: left;
-}
-
-.header{
-  width: 100%;
-}
-
-.app{
-  flex: 1;
+a{
+  text-decoration: none;
 }

@@ -23,7 +23,7 @@ const BlogList = () => {
 
   return (
     <div className="blog-list">
-        <h2>ブログ一覧</h2>
+        <h2 className='blog-list__title'>ブログ一覧</h2>
         <div className="blog-list__items">
             {posts.map((post) => (
                 <div className="blog-list__item" key={post.id}>
