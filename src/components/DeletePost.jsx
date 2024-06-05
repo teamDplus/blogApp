@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import { auth } from "../utils/firebase";
+import AppContext from "../context/AppContext";
 import { useParams, useNavigate } from "react-router-dom";
 import { doc, deleteDoc } from "firebase/firestore";
 import { db } from "../utils/firebase";
@@ -7,8 +9,10 @@ import "../css/components/DeletePost.css";
 
 function DeletePost() {
   const { postId } = useParams();
-  const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const { user, loading } = useContext(AppContext);
+
+  const navigate = useNavigate();
 
   // モーダルを開く関数 記事が削除されるが押されたら発動
   const handleOpenModal = () => {
@@ -29,11 +33,15 @@ function DeletePost() {
   };
 
   return (
-    <div className="deletePost">
-      <p className="deletePost__byebye" onClick={handleOpenModal}>
-        記事を削除する
-      </p>
-      <DeleteModal isOpen={isModalOpen} onClose={handleCloseModal} onConfirm={handleConfirmDelete} />
+    <div>
+      {user ? (
+        <div className="deletePost">
+          <p className="deletePost__byebye" onClick={handleOpenModal}>
+            記事を削除する
+          </p>
+          <DeleteModal isOpen={isModalOpen} onClose={handleCloseModal} onConfirm={handleConfirmDelete} />
+        </div>
+      ) : null}
     </div>
   );
 }
