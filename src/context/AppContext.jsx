@@ -1,5 +1,3 @@
-"use client";
-
 import { onAuthStateChanged } from 'firebase/auth';
 import React, {  useState ,createContext, useEffect} from 'react';
 import { auth, db } from '../utils/firebase';
