@@ -1,0 +1,18 @@
+.login{
+    max-width: 400px;
+    margin: 20px auto;
+    border-radius: 16px;
+    background: #E6E7EE;
+    padding: 10px;
+    box-shadow:  5px 5px 20px #c8c9cc, -5px -5px 20px #ffffff;
+}
+
+.login__title{
+    font-size: 24px;
+    text-align: center;
+}
+
+.login__form{
+    max-width: 300px;
+    margin: 0 auto;
+}
