@@ -1,4 +1,5 @@
 import React, { useContext, useState } from 'react';
+import { Navigate, useNavigate } from "react-router-dom";
 import { db,auth } from '../utils/firebase';
 import firebase from "firebase/compat/app";
 import '../css/components/Post.css';
@@ -10,6 +11,7 @@ function Post() {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const {user,loading} = useContext(AppContext);
+  const Navigator = useNavigate();
   async function SendPost(e) {
     e.preventDefault();
 
@@ -21,14 +23,15 @@ function Post() {
 
     setTitle("");
     setContent("");
+    Navigator("/:id");
   }
   console.log(db)
   return (
     <div className='post'>
       <h1>ブログを投稿する</h1>
       <form onSubmit={SendPost}>
-        <div className="post__title">
           <input placeholder="タイトルを入れてください" type='text' onChange={(e) => setTitle(e.target.value)} value={title} />
+        <div className="post__title">
         </div>
 
         <div className="post__content">
