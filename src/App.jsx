@@ -4,6 +4,7 @@ import Home from './components/Home';
 import Mypage from './components/Mypage';
 import Login from './components/Login';
 import Header from './components/Header';
+import Post from './components/Post';
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/:id" element={<Mypage />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/:id/post" element={<Post />} />
         </Routes>
       </div>
     </div>
