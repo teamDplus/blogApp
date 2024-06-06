@@ -8,7 +8,7 @@ import DeleteModal from "../components/DeleteModal";
 import "../css/components/DeletePost.css";
 
 function DeletePost() {
-  const { postId } = useParams();
+  const { id, postId } = useParams();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { user, loading } = useContext(AppContext);
 
@@ -34,7 +34,7 @@ function DeletePost() {
 
   return (
     <div>
-      {user ? (
+      {user.uid == id ? (
         <div className="deletePost">
           <p className="deletePost__byebye" onClick={handleOpenModal}>
             記事を削除する
