@@ -3,7 +3,8 @@ import { useEffect, useState } from "react";
 import { db } from "../utils/firebase";
 import { doc, getDoc } from "firebase/firestore";
 import DeletePost from "./DeletePost";
-import "../css/components/Post.css";
+import EditPost from "./EditPost";
+import "../css/components/PostList.css";
 
 function Post() {
   //App.jsxのpostIdに設定したURLを取得、<Route path="/:id/posts/:postId"
@@ -38,7 +39,10 @@ function Post() {
           <p className="post-list__item-content">{post.content}</p>
         </div>
       </div>
+      {/* <div className="post-list__menu"> */}
       <DeletePost />
+      <EditPost />
+      {/* </div> */}
     </>
   );
 }

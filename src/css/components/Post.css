@@ -33,3 +33,10 @@
   margin: 0 auto;
 }
 
+
+.post-list__menu{
+  display: flex;
+  justify-content: center;
+  margin-top: 150px;
+  gap: 80px;
+}
