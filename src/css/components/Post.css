@@ -1,3 +1,4 @@
+
 .post{
     max-width: 1000px;
     margin: 0 auto;
@@ -26,3 +27,9 @@
     padding: 10px;
     box-shadow:  5px 5px 10px #CDCDCD,-5px -5px 10px #FFFFFF;
 }
+
+.post-list{
+  max-width: 1000px;
+  margin: 0 auto;
+}
+

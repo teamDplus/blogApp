@@ -1,4 +1,4 @@
-.login{
+.login, .signup{
     max-width: 400px;
     margin: 20px auto;
     border-radius: 16px;
@@ -7,12 +7,27 @@
     box-shadow:  5px 5px 20px #c8c9cc, -5px -5px 20px #ffffff;
 }
 
-.login__title{
+.login__title, .signup__title{
     font-size: 24px;
     text-align: center;
 }
 
-.login__form{
+.login__form, .signup__form{
     max-width: 300px;
     margin: 0 auto;
+}
+
+.login__button, .signup__button{
+    display: block;
+    margin: 8px auto 24px;
+}
+
+.login__text, .signup__text{
+    text-align: center;
+    font-size: 15px;
+}
+
+.login__text--link, .signup__text--link{
+    margin-left: 12px;
+    border-bottom: 1px solid;
 }
