@@ -2,6 +2,7 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { db } from "../utils/firebase";
 import { doc, getDoc } from "firebase/firestore";
+import DeletePost from "./DeletePost";
 import "../css/components/Post.css";
 
 function Post() {
@@ -30,12 +31,15 @@ function Post() {
   }
 
   return (
-    <div className="post-list">
-      <div className="post-list__item">
-        <h3 className="post-list__item-title">{post.title}</h3>
-        <p className="post-list__item-content">{post.content}</p>
+    <>
+      <div className="post-list">
+        <div className="post-list__item">
+          <h3 className="post-list__item-title">{post.title}</h3>
+          <p className="post-list__item-content">{post.content}</p>
+        </div>
       </div>
-    </div>
+      <DeletePost />
+    </>
   );
 }
 
