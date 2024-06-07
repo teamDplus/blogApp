@@ -1,8 +1,10 @@
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { auth } from '../utils/firebase';
+import { auth, db } from '../utils/firebase';
 import { Link } from 'react-router-dom';
+// import { collection, query, where, getDocs, updateDoc } from "firebase/firestore";
+
 import "../css/components/Login.css"
 import "../css/components/Signup.css"
 import { XLogin } from './XLogin';
@@ -41,6 +43,7 @@ const Signup = () => {
       setIsModalOpen(false);
   }
 
+
   return (
     <div className="signup">
       <h1 className="signup__title">ユーザ登録</h1>
@@ -63,7 +66,7 @@ const Signup = () => {
           </Link>
         </p>
       </div>
-      <SignupChechModal 
+      <SignupChechModal
         isOpen={isModalOpen}
         onClose={closeModal}
         onConfirm={signUp}
