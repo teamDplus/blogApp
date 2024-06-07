@@ -1,10 +1,7 @@
 .editPost{
   text-align: center;
   margin: 0 auto;
-<<<<<<< HEAD
   margin-top: 50px;
-=======
->>>>>>> 571ed6303d651d4ce9d0b6ef55fbd2fcdb5e61a3
 
 }
 .editPost__byebye:hover{
@@ -15,14 +12,9 @@
   width: 100%;
   height: 56px;
   line-height: 56px;
-<<<<<<< HEAD
-  box-shadow: 6px 6px 20px #c8c9cc, -6px -6px 20px #ffffff;
-  padding: 0 20px;
-=======
   box-shadow:  6px 6px 20px #c8c9cc, -6px -6px 20px #ffffff;
   padding: 0 20px;
 
->>>>>>> 571ed6303d651d4ce9d0b6ef55fbd2fcdb5e61a3
   background: #E6E7EE;
   border-radius: 35px;
   margin: 0 auto;
