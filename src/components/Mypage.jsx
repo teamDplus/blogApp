@@ -7,6 +7,8 @@ import { auth } from "../utils/firebase";
 import AppContext from "../context/AppContext";
 import { collection, query, where, onSnapshot } from "firebase/firestore";
 import { db } from "../utils/firebase";
+import GetUserInfo from "./GetUserInfo"
+
 
 //ログイン情報の取得
 const Mypage = () => {
@@ -55,6 +57,7 @@ const Mypage = () => {
   return (
     <div className="mypage">
       <h1 className="mypage__title">マイページ</h1>
+      <GetUserInfo />
       <button onClick={handleSignOut} className="logout">
         ログアウト
       </button>

@@ -1,0 +1,8 @@
+.mypage__user--noNickName::before{
+    content: "!";
+    border: solid 1px;
+    border-radius: 50%;
+    display: inline-block;
+    width: 18px;
+    height: 20px;
+}
