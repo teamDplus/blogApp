@@ -20,7 +20,7 @@ const CheckNewUserInfo = ({ isCheckModalOpen, newNickName, onCheckModalClose, us
     //displayNameのuseStateを更新して画面の表示も切り替える
     setDisplayName(newNickName);
     //textNoNickNameのuseStateを更新
-    setTextNoNickName('');
+    setTextNoNickName(false);
   };
 
   //「いいえ」を押した場合、ユーザ情報の変更を行わない

@@ -3,6 +3,7 @@ import { getAuth } from 'firebase/auth';
 import { collection, query, where, getDocs } from "firebase/firestore";
 import { db } from "../utils/firebase";
 import ChangeUserInfoModal from "./ChangeUserInfoModal"
+import "../css/components/GetUserInfo.css"
 
 //ログイン中のユーザ情報を取得
 const GetUserInfo = () => {
@@ -10,7 +11,7 @@ const GetUserInfo = () => {
     const [nickName, setNickName] = useState('');
     const [userId, setUserId] = useState('');
     const [isSetModalOpen, setIsSetModalOpen] = useState(false);
-    const [textNoNickName, setTextNoNickName] = useState('');
+    const [textNoNickName, setTextNoNickName] = useState(false);
 
     useEffect(() => {
         // 表示名の設定（nickNameが登録されていれば表示、されていなければname:ユーザ名を表示）
@@ -33,14 +34,18 @@ const GetUserInfo = () => {
                     // nickNameが登録されていればnickNameを表示
                     if (doc.data().nickName != null) {
                         setDisplayName(doc.data().nickName);
-                        setTextNoNickName('')
+                        setTextNoNickName(false)
                     }
                     // nickNameが登録されていない場合、name:ユーザ名を表示
-                    // 現在はuserIdを表示、サインアップでnameを自動登録(初期値はuserId)されるようにしたら変更
+                    // 現在はnameがなければuserIdを表示、サインアップでnameを自動登録(初期値userId)されるようにしたら修正
+                    else if (doc.data().name != null) {
+                        setDisplayName(doc.data().nickName);
+                        setTextNoNickName(false)
+                    }
                     else {
                         setDisplayName(doc.data().userId);
                         //ニックネームの設定を促すメッセージを表示
-                        setTextNoNickName("※ニックネームが登録されていません")
+                        setTextNoNickName(true)
                     }
                 });
             }
@@ -62,7 +67,9 @@ const GetUserInfo = () => {
     return (
         <div className="mypage__user">
             <div className='mypage__user--displayName'>{displayName}</div>
-            <div className='mypage__user--noNickName'>{textNoNickName}</div>
+            {textNoNickName != "" && (
+                <div className='mypage__user--noNickName'>ニックネームが登録されていません</div>
+            )}
             <div className='mypage__user--changeUserInfo'>
                 <button onClick={openSetModal}>ユーザ情報の変更</button>
             </div>
