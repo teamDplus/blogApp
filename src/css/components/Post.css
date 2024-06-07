@@ -21,11 +21,18 @@
 .post__content input {
     width: 100%;
     border: none;
-    margin-bottom: 10px;
+    vertical-align: top;
+    height: 600px;
+    margin-bottom: 40px;
     border-radius: 12px;
     background: #E6E7EE;
     padding: 10px;
     box-shadow:  5px 5px 10px #CDCDCD,-5px -5px 10px #FFFFFF;
+}
+
+.post__content input::placeholder {
+  vertical-align: top;
+  margin-top: 0;
 }
 
 .post-list{
@@ -38,4 +45,20 @@
   justify-content: center;
   margin-top: 150px;
   gap: 80px;
+}
+
+.post__button button:hover {
+  opacity: 0.5;
+}
+
+.post__button button {
+  border: none;
+  width: 40%;
+  height: 56px;
+  line-height: 56px;
+  box-shadow:  6px 6px 20px #c8c9cc, -6px -6px 20px #ffffff;
+  padding: 0 20px;
+  background: #E6E7EE;
+  border-radius: 35px;
+  margin: 0 auto;
 }

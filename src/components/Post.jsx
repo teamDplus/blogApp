@@ -39,7 +39,7 @@ function Post({ EditPost }) {
     navigate("/mypage"); // "/mypage"に移動
   }
 
-  console.log(EditPost);
+  // console.log(EditPost);
 
   return (
     <>
@@ -50,13 +50,17 @@ function Post({ EditPost }) {
             <h1>{EditPost ? <p>ブログを編集する</p> : <p>ブログを投稿する</p>}</h1>
             <form onSubmit={SendPost}>
               <div className="post__title">
-                <input placeholder="タイトルを入れてください" type="text" onChange={(e) => setTitle(e.target.value)} value={title} />
+                <input placeholder="タイトルを入れてください" type="text" onChange={(e) => {if (e.target.value.length <= 40) {setTitle(e.target.value)}}} value={title} maxLength={40} />
               </div>
 
               <div className="post__content">
-                <input placeholder="本文を入れてください" type="text" onChange={(e) => setContent(e.target.value)} value={content} />
+                <input placeholder="本文を入れてください" type="text" onChange={(e) => {if (100 <= e.target.value.length && e.target.value.length <= 400) {setContent(e.target.value)}}} value={content} maxLength={400} />
               </div>
-              <button type="submit">投稿する</button>
+
+              <div className="post__button">
+                <button type="submit" class="post__button">投稿する</button>
+              </div>           
+              
             </form>
           </div>
         </>
@@ -66,18 +70,23 @@ function Post({ EditPost }) {
           <h1>ブログを投稿する</h1>
           <form onSubmit={SendPost}>
             <div className="post__title">
-              <input placeholder="タイトルを入れてください" type="text" onChange={(e) => setTitle(e.target.value)} value={title} />
+            <input placeholder="タイトルを入れてください" type="text" onChange={(e) => {if (e.target.value.length <= 40) {setTitle(e.target.value)}}} value={title} maxLength={40} />
             </div>
 
             <div className="post__content">
-              <input placeholder="本文を入れてください" type="text" onChange={(e) => setContent(e.target.value)} value={content} />
+              <input placeholder="本文を入れてください" type="text" onChange={(e) => {if (100 <= e.target.value.length <= 400) {setContent(e.target.value)}}} value={content} maxLength={400} />
             </div>
-            <button type="submit">投稿する</button>
+
+            <div className="post__button">
+              <button type="submit">投稿する</button>
+            </div>
           </form>
         </div>
       )}
     </>
+
   );
+  
 }
 
 export default Post;
