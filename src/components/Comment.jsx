@@ -10,7 +10,7 @@ export const Comment = () => {
     const [comments, setComments] = useState(null);
     const { user, loading } = useContext(AppContext);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const { postId } = useParams(); 
+    const { id,postId } = useParams(); 
 
     useEffect(() => {
         const fetchComments = async () => {
@@ -56,7 +56,7 @@ export const Comment = () => {
         setIsModalOpen(false);
         };
 
-    console.log(comments)
+    console.log(id)
   return (
     <div className="comment">
         <h3 className="comment__title">コメント</h3>
@@ -71,16 +71,21 @@ export const Comment = () => {
             </div>
           ))}
         </div>
-        <button className='comment-post' onClick={handleOpenModal}>
-          <img className='comment-post__img' src="../../commentIcon.svg" alt="" />
-          {user 
-            ? 
-          (<p className='comment-post__text'>コメントを書く</p>)
-            :
-          (<Link to="/login" className='comment-post__text'>コメントを書く</Link>)
+        {
+            id === user.uid 
+                ?
+            ""
+                :
+            <button className='comment-post' onClick={handleOpenModal}>
+            <img className='comment-post__img' src="../../commentIcon.svg" alt="" />
+            {user 
+                ? 
+            (<p className='comment-post__text'>コメントを書く</p>)
+                :
+            (<Link className='comment-post__text'>コメントを書く</Link>)
+            }
+            </button>
         }
-          
-        </button>
          {/* 編集が押されたらPost.jsxを表示させ、Firebaseから取得してきた内容を渡す */}
          {isModalOpen 
             && 

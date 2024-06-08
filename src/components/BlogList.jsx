@@ -22,13 +22,13 @@ const BlogList = () => {
             unsubscribe();
         }
     },[])
-
+console.log(posts)
   return (
     <div className="blog-list">
         <h2 className='blog-list__title'>ブログ一覧</h2>
         <div className="blog-list__items">
             {posts.map((post) => (
-                <Link to={`/${post.uid}/posts/${post.id}`} className="blog-list__item" key={post.id}>
+                <Link to={`/${post.authorId}/posts/${post.id}`} className="blog-list__item" key={post.id}>
                     <h3 className="blog-list__item-title">{post.title}</h3>
                     <p className="blog-list__item-content">{post.content}</p>
                 </Link>
