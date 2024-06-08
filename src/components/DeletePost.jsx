@@ -32,6 +32,11 @@ function DeletePost() {
     navigate("/mypage"); // "/mypage"に移動
   };
 
+  if (!user) {
+    return null;
+  }
+
+
   return (
     <div>
       {user.uid == id ? (

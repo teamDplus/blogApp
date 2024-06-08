@@ -1,8 +1,10 @@
 body{
   background-color: #E6E7EE;
   margin: 0;
+  font-family: "sofia-pro", sans-serif;
 }
 
 a{
+  color: #575F6B;
   text-decoration: none;
 }

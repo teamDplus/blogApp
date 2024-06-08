@@ -6,11 +6,13 @@ import DeletePost from "./DeletePost";
 import EditPost from "./EditPost";
 import "../css/components/PostList.css";
 import "../css/components/Post.css";
+import { Comment } from "./Comment";
 
 function Post() {
   //App.jsxのpostIdに設定したURLを取得、<Route path="/:id/posts/:postId"
   const { postId } = useParams();
   const [post, setPost] = useState(null);
+ 
 
   useEffect(() => {
     const fetchPost = async () => {
@@ -44,6 +46,7 @@ function Post() {
       <DeletePost />
       <EditPost />
       {/* </div> */}
+      <Comment/>
     </>
   );
 }
