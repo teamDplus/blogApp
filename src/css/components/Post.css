@@ -11,28 +11,23 @@
 .post__title input {
     border: none;
     width: 100%;
-    margin-bottom: 40px;
+    margin-bottom: 10px;
     border-radius: 12px;
     background: #E6E7EE;
     padding: 10px;
     box-shadow:  5px 5px 10px #CDCDCD,-5px -5px 10px #FFFFFF;
 }
 
-.post__content input {
+.post__content textarea {
     width: 100%;
     border: none;
     vertical-align: top;
-    height: 600px;
-    margin-bottom: 40px;
+    height: 100px;
+    margin-bottom: 50px;
     border-radius: 12px;
     background: #E6E7EE;
     padding: 10px;
     box-shadow:  5px 5px 10px #CDCDCD,-5px -5px 10px #FFFFFF;
-}
-
-.post__content input::placeholder {
-  vertical-align: top;
-  margin-top: 0;
 }
 
 .post-list{

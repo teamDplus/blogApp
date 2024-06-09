@@ -16,6 +16,13 @@ function Post({ EditPost }) {
 
   const navigate = useNavigate();
 
+  // エラーチェック
+  const titleLength = title.length > 40;
+  const contentLength = content.length < 100;
+  // if (titleLength) {console.log("タイトルは40字以内で入力してください");}
+  // if (contentLength) {console.log("本文は100字以上400字以内で入力してください");}
+  // const enableSubmit = !titleLength && !contentLength;
+
   //SendPostが押されたらFirebaseの処理開始
   async function SendPost(e) {
     e.preventDefault();
@@ -50,15 +57,17 @@ function Post({ EditPost }) {
             <h1>{EditPost ? <p>ブログを編集する</p> : <p>ブログを投稿する</p>}</h1>
             <form onSubmit={SendPost}>
               <div className="post__title">
-                <input placeholder="タイトルを入れてください" type="text" onChange={(e) => {if (e.target.value.length <= 40) {setTitle(e.target.value)}}} value={title} maxLength={40} />
+                <p>タイトル(40字以内)</p>
+                <input placeholder="タイトルを入れてください" type="text" onChange={(e) => {setTitle(e.target.value)}} value={title} maxLength={40} />
               </div>
 
               <div className="post__content">
-                <input placeholder="本文を入れてください" type="text" onChange={(e) => {if (100 <= e.target.value.length && e.target.value.length <= 400) {setContent(e.target.value)}}} value={content} maxLength={400} />
+                <p>本文(100字以上400字以内)</p>
+                <textarea placeholder="本文を入れてください" type="text" onChange={(e) => {setContent(e.target.value)}} value={content} maxLength={400} />
               </div>
 
-              <div className="post__button">
-                <button type="submit" class="post__button">投稿する</button>
+              <div className="post__button">                
+                <button type="submit" disabled={contentLength} class="post__button">投稿する</button>
               </div>           
               
             </form>
@@ -70,15 +79,17 @@ function Post({ EditPost }) {
           <h1>ブログを投稿する</h1>
           <form onSubmit={SendPost}>
             <div className="post__title">
-            <input placeholder="タイトルを入れてください" type="text" onChange={(e) => {if (e.target.value.length <= 40) {setTitle(e.target.value)}}} value={title} maxLength={40} />
+            <p>タイトル(40字以内)</p>
+            <input placeholder="タイトルを入れてください" type="text" onChange={(e) => {setTitle(e.target.value)}} value={title} maxLength={40} />
             </div>
 
             <div className="post__content">
-              <input placeholder="本文を入れてください" type="text" onChange={(e) => {if (100 <= e.target.value.length <= 400) {setContent(e.target.value)}}} value={content} maxLength={400} />
+            <p>本文(100字以上400字以内)</p>
+              <textarea placeholder="本文を入れてください" type="text" onChange={(e) => {setContent(e.target.value)}} value={content} maxLength={400} />
             </div>
 
             <div className="post__button">
-              <button type="submit">投稿する</button>
+              <button type="submit" disabled={contentLength} class="post__button">投稿する</button>
             </div>
           </form>
         </div>
