@@ -32,14 +32,9 @@ function DeletePost() {
     navigate("/mypage"); // "/mypage"に移動
   };
 
-  if (!user) {
-    return null;
-  }
-
-
   return (
     <div>
-      {user.uid == id ? (
+      {user && user.uid == id ? (
         <div className="deletePost">
           <p className="deletePost__byebye" onClick={handleOpenModal}>
             記事を削除する

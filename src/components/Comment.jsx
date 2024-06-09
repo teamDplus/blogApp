@@ -13,15 +13,17 @@ export const Comment = () => {
     const { id,postId } = useParams(); 
 
     useEffect(() => {
+        // このuseEffectの中全体で行っていることは、コメントコレクションの情報と、それに紐づくusersコレクションの情報の取得
         const fetchComments = async () => {
             const commentRef = collection(db, "posts", postId, "comments");
             const q = query(commentRef, orderBy("createdAt", "desc"));
             onSnapshot(q, async (querySnapshot) => {
                 const commentsData = await Promise.all(querySnapshot.docs.map(async (docData) => {
+                    // まずは、コメントコレクションの情報を取得。cosole.log(commentData)で確認できる。
                     const commentData = docData.data();
+                    // 続いて、コメントコレクション内のauthorIdに紐づくusersコレクションの情報を取得。cosole.log(userSnap)で確認できる。
                     const userRef = doc(db, "users", commentData.authorId);
                     const userSnap = await getDoc(userRef);
-                    console.log(userSnap.data().nickName)
                     if (userSnap.exists()) {
                         return {
                             ...commentData,
@@ -46,12 +48,12 @@ export const Comment = () => {
         return <div>Loading...</div>;
       }
         
-  // モーダルを開く関数 記事が削除されるが押されたら発動
+        // モーダルを開く関数 「コメントを書く」を押すと発動
         const handleOpenModal = () => {
         setIsModalOpen(true);
         };
 
-        // モーダルを閉じる関数 Modal.jsxのいいえが押されたら発動
+        // モーダルを閉じる関数 CommentModal.jsxの閉じるが押されたら発動
         const handleCloseModal = () => {
         setIsModalOpen(false);
         };
@@ -71,22 +73,24 @@ export const Comment = () => {
             </div>
           ))}
         </div>
-        {
+        {/* ログインしているユーザーのidと、今見ている記事のユーザーのidが一致すれば、「コメントを書く」ボタンを非表示にする。 */}
+        {user &&
             id === user.uid 
                 ?
             ""
                 :
             <button className='comment-post' onClick={handleOpenModal}>
             <img className='comment-post__img' src="../../commentIcon.svg" alt="" />
+            {/*ログインしていない時に「コメントを書く」ボタンを押すと、ログイン画面に遷移させる。  */}
             {user 
                 ? 
             (<p className='comment-post__text'>コメントを書く</p>)
                 :
-            (<Link className='comment-post__text'>コメントを書く</Link>)
+            (<Link to="/login" className='comment-post__text'>コメントを書く</Link>)
             }
             </button>
         }
-         {/* 編集が押されたらPost.jsxを表示させ、Firebaseから取得してきた内容を渡す */}
+         {/* 「コメントを書く」を押すと、CommentModalコンポーネントが表示される。 */}
          {isModalOpen 
             && 
          <CommentModal isOpen={isModalOpen} onClose={handleCloseModal} setIsModalOpen={setIsModalOpen} />

@@ -1,35 +1,42 @@
-// components/Modal.js
-import React, { useContext, useState } from "react";
+// components/CommentModal.jsx
+import React, { useContext } from "react";
 import "../css/components/CommentModal.css";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { db } from "../utils/firebase";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import AppContext from "../context/AppContext";
 import { useForm } from "react-hook-form";
 
 function Modal({ isOpen, onClose,setIsModalOpen }) {
-    const { user, loading } = useContext(AppContext);
+    const { user } = useContext(AppContext);
     const { postId } = useParams();
+    // react-hook-formで使うもの
     const {
         register,
         handleSubmit,
         formState: { errors }
       } = useForm()
+
     if (!isOpen) return null;
 
+    // react-hook-formを導入しているので、引数には、各フォームに入力した情報がわたってくる。console.log(data)で確認できる。
 const handlePostComment = async (data) => {
-    const commentRef = collection(db, "posts", postId, "comments");
-    await addDoc(commentRef, {
-        authorId: user.uid,
-        content: data.comment,
-        createdAt:serverTimestamp(),
-      });
-    setIsModalOpen(false); // モーダルを閉じる
+    if (user && user.uid) {
+        // console.log(data)
+        const commentRef = collection(db, "posts", postId, "comments");
+        await addDoc(commentRef, {
+            authorId: user.uid,
+            content: data.comment,
+            createdAt:serverTimestamp(),
+          });
+        setIsModalOpen(false); // モーダルを閉じる
+    }
 };
 
 
 
   return (
+    // react-hook-formライブラリをインストールして、バリデーションを適用
     <div className="comment-modal">
       <div className="comment-modal__content">
         <button className="comment-modal__close" onClick={onClose}>閉じる</button>
