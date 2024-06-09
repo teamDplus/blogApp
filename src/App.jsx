@@ -7,6 +7,9 @@ import Header from "./components/Header";
 import Signup from "./components/Signup";
 import PostList from "./components/PostList";
 import Post from "./components/Post";
+import { ResetPassword } from "./components/ResetPassword";
+import { ForgotPassword } from "./components/ForgotPassword";
+import { SentPassword } from "./components/SentPassword";
 
 function App() {
   return (
@@ -23,6 +26,9 @@ function App() {
             <Route path="/:id/posts/:postId" element={<PostList />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/:id/post" element={<Post />} />
+            <Route path="/reset_password" element={<ResetPassword />} />
+            <Route path="/password_sent" element={<SentPassword />} />
+            <Route path="/forgot_password" element={<ForgotPassword />} />
           </Routes>
         </div>
       </div>

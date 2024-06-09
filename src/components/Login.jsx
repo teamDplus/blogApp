@@ -25,6 +25,18 @@ const Login = () => {
       });
   }
 
+  const submitPasswordResetEmail = async () => {
+    await auth
+      .sendPasswordResetEmail(email)
+      .then((resp) => {
+        // メール送信成功
+      })
+      .catch((error) => {
+        // メール送信失敗
+        console.log(error)
+      })
+  }
+
   return (
     <div className="login">
       <h1 className="login__title">ログイン</h1>
@@ -45,6 +57,9 @@ const Login = () => {
             新規登録
           </Link>
         </p>
+      </div>
+      <div className='forgot__password'>
+        <Link to="/forgot_password">パスワードを忘れた場合</Link>
       </div>
     </div>
 
