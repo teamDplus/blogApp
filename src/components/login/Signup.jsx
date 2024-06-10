@@ -1,12 +1,12 @@
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { auth, db } from '../utils/firebase';
+import { auth, db } from '../../utils/firebase';
 import { Link } from 'react-router-dom';
 // import { collection, query, where, getDocs, updateDoc } from "firebase/firestore";
 
-import "../css/components/Login.css"
-import "../css/components/Signup.css"
+import "../../css/components/Login.css"
+import "../../css/components/Signup.css"
 import { XLogin } from './XLogin';
 
 //ユーザ情報の登録

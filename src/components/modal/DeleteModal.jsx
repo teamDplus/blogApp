@@ -1,6 +1,6 @@
 // components/Modal.js
 import React from "react";
-import "../css/components/DeleteModal.css";
+import "../../css/components/DeleteModal.css";
 
 function Modal({ isOpen, onClose, onConfirm }) {
   if (!isOpen) return null;

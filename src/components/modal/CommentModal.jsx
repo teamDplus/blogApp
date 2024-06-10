@@ -1,10 +1,10 @@
 // components/CommentModal.jsx
 import React, { useContext } from "react";
-import "../css/components/CommentModal.css";
+import "../../css/components/CommentModal.css";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
-import { db } from "../utils/firebase";
+import { db } from "../../utils/firebase";
 import { useParams } from "react-router-dom";
-import AppContext from "../context/AppContext";
+import AppContext from "../../context/AppContext";
 import { useForm } from "react-hook-form";
 
 function Modal({ isOpen, onClose,setIsModalOpen }) {

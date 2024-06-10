@@ -1,15 +1,15 @@
 import "./App.css";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import Home from "./components/Home";
-import Mypage from "./components/Mypage";
-import Login from "./components/Login";
+import Home from "./components/login/Home";
+import Mypage from "./components/login/Mypage";
+import Login from "./components/login/Login";
 import Header from "./components/Header";
-import Signup from "./components/Signup";
-import PostList from "./components/PostList";
-import Post from "./components/Post";
-import { ResetPassword } from "./components/ResetPassword";
-import { ForgotPassword } from "./components/ForgotPassword";
-import { SentPassword } from "./components/SentPassword";
+import Signup from "./components/login/Signup";
+import PostList from "./components/post/PostList";
+import Post from "./components/post/Post";
+import { ResetPassword } from "./components/login/ResetPassword";
+import { ForgotPassword } from "./components/login/ForgotPassword";
+import { SentPassword } from "./components/login/SentPassword";
 
 function App() {
   return (

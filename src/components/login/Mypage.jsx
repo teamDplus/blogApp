@@ -2,11 +2,11 @@
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import React, { useContext, useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import "../css/components/Mypage.css";
-import { auth } from "../utils/firebase";
-import AppContext from "../context/AppContext";
+import "../../css/components/Mypage.css";
+import { auth } from "../../utils/firebase";
+import AppContext from "../../context/AppContext";
 import { collection, query, where, onSnapshot } from "firebase/firestore";
-import { db } from "../utils/firebase";
+import { db } from "../../utils/firebase";
 import GetUserInfo from "./GetUserInfo"
 
 

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import CheckNewUserInfo from './CheckNewUserInfo';
+import CheckNewUserInfo from '../login/CheckNewUserInfo';
 
 //ユーザ情報を変更するモーダル
 const ChangeUserInfoModal = ({ isSetModalOpen, nickName, onSetModalClose, userId, setDisplayName, setTextNoNickName }) => {
