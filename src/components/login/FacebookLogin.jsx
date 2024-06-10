@@ -1,5 +1,5 @@
 import React from 'react'
-import { getAuth, signInWithPopup, FacebookAuthProvider } from "firebase/auth";
+import { signInWithPopup } from "firebase/auth";
 import { auth, provider } from '../../utils/firebase';
 import "../../css/components/FacebookLogin.css"
 import { useNavigate } from 'react-router-dom';
