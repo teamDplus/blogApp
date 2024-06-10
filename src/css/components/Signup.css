@@ -30,3 +30,10 @@
   .modal__button:hover {
     background: #0056b3;
   }
+
+  .signup__sns{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+  }
