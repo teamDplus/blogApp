@@ -7,6 +7,7 @@ import Header from "./components/Header";
 import Signup from "./components/login/Signup";
 import PostList from "./components/post/PostList";
 import Post from "./components/post/Post";
+import Draft from "./components/post/BlogDrafts";
 import { ResetPassword } from "./components/login/ResetPassword";
 import { ForgotPassword } from "./components/login/ForgotPassword";
 import { SentPassword } from "./components/login/SentPassword";
@@ -29,10 +30,10 @@ function App() {
             <Route path="/reset_password" element={<ResetPassword />} />
             <Route path="/password_sent" element={<SentPassword />} />
             <Route path="/forgot_password" element={<ForgotPassword />} />
+            <Route path="/:id/drafts" element={<Draft />} />
           </Routes>
         </div>
       </div>
-
     </Router>
   );
 }

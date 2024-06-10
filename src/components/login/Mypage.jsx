@@ -7,8 +7,7 @@ import { auth } from "../../utils/firebase";
 import AppContext from "../../context/AppContext";
 import { collection, query, where, onSnapshot } from "firebase/firestore";
 import { db } from "../../utils/firebase";
-import GetUserInfo from "./GetUserInfo"
-
+import GetUserInfo from "./GetUserInfo";
 
 //ログイン情報の取得
 const Mypage = () => {
@@ -39,7 +38,8 @@ const Mypage = () => {
   // Firebaseの中にあるpostsのフィールドから、ユーザーの投稿記事を取得
   useEffect(() => {
     // postsの中にあるコレクションの中からフィールドのauthorIdとログインしているuserと同じidの記事を取得
-    const q = query(collection(db, "posts"), where("authorId", "==", user.uid));
+    //postsの中にあるisDraftがfalseを取得(公開済みの記事)
+    const q = query(collection(db, "posts"), where("authorId", "==", user.uid), where("isDraft", "==", false));
 
     const unsubscribe = onSnapshot(q, (snapshot) => {
       const postsData = [];
@@ -66,12 +66,14 @@ const Mypage = () => {
         <h2>ブログ一覧</h2>
         <div className="mypage-list__items">
           {posts.map((post) => (
-            <Link to={`/${user.uid}/posts/${post.id}`} className="mypage-list__link">
-              <div key={post.id} className="mypage-list__item">
-                <h3 className="mypage-list__item-title">{post.title}</h3>
-                <p className="mypage-list__item-content">{post.content}</p>
-              </div>
-            </Link>
+            <div key={post.id}>
+              <Link to={`/${user.uid}/posts/${post.id}`} className="mypage-list__link">
+                <div className="mypage-list__item">
+                  <h3 className="mypage-list__item-title">{post.title}</h3>
+                  <p className="mypage-list__item-content">{post.content}</p>
+                </div>
+              </Link>
+            </div>
           ))}
         </div>
       </div>
