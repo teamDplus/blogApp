@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom';
 
 import "../css/components/Login.css"
 import "../css/components/Signup.css"
+import { XLogin } from './XLogin';
 
 //ユーザ情報の登録
 const Signup = () => {
@@ -57,6 +58,7 @@ const Signup = () => {
         </div>
         <button type="submit" className="signup__button">新規登録</button>
       </form>
+      <XLogin/>
       <div className='signup__text'>
         <p>すでにアカウントをお持ちの方は
           <Link to="/login" className="signup__text--link">
