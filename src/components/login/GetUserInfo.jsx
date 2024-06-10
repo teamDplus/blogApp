@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { getAuth } from 'firebase/auth';
 import { collection, query, where, getDocs } from "firebase/firestore";
-import { db } from "../utils/firebase";
-import ChangeUserInfoModal from "./ChangeUserInfoModal"
-import "../css/components/GetUserInfo.css"
+import { db } from "../../utils/firebase";
+import ChangeUserInfoModal from "../modal/ChangeUserInfoModal"
+import "../../css/components/GetUserInfo.css"
 
 //ログイン中のユーザ情報を取得
 const GetUserInfo = () => {

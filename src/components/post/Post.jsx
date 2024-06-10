@@ -1,10 +1,10 @@
 import React, { useContext, useState } from "react";
-import { db, auth } from "../utils/firebase";
+import { db, auth } from "../../utils/firebase";
 import firebase from "firebase/compat/app";
 import { useParams, useNavigate } from "react-router-dom";
 import { collection, addDoc, doc, deleteDoc } from "firebase/firestore";
-import "../css/components/Post.css";
-import AppContext from "../context/AppContext";
+import "../../css/components/Post.css";
+import AppContext from "../../context/AppContext";
 
 //記事の編集が押されたら（EditPost.jsx）から情報を{EditPost}に渡してる
 function Post({ EditPost }) {

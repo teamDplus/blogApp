@@ -1,11 +1,11 @@
 import React, { useContext, useEffect, useState } from "react";
-import { auth } from "../utils/firebase";
-import AppContext from "../context/AppContext";
+import { auth } from "../../utils/firebase";
+import AppContext from "../../context/AppContext";
 import { useParams, useNavigate } from "react-router-dom";
 import { doc, getDoc } from "firebase/firestore";
-import { db } from "../utils/firebase";
-import Post from "../components/Post";
-import "../css/components/EditPost.css";
+import { db } from "../../utils/firebase";
+import Post from "./Post";
+import "../../css/components/EditPost.css";
 
 function EditPost() {
   const { id, postId } = useParams();

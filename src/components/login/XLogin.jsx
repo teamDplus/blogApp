@@ -1,7 +1,7 @@
 import React from 'react';
 import { TwitterAuthProvider, signInWithPopup } from "firebase/auth";
-import { auth } from '../utils/firebase';
-import "../css/components/XLogin.css"
+import { auth } from '../../utils/firebase';
+import "../../css/components/XLogin.css"
 import { useNavigate } from 'react-router-dom';
 
 

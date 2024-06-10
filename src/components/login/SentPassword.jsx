@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link, useLocation } from 'react-router-dom';
-import "../css/components/SentPassword.css"
+import "../../css/components/SentPassword.css"
 
 export const SentPassword = () => {
     // パラメータに含まれるemailに関する情報を取得

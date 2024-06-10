@@ -3,7 +3,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import { db } from '../utils/firebase';
 import { Link, useParams } from 'react-router-dom';
 import "../css/components/Comment.css";
-import CommentModal from "../components/CommentModal";
+import CommentModal from "./modal/CommentModal";
 import AppContext from '../context/AppContext';
 
 export const Comment = () => {

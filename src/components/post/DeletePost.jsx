@@ -1,11 +1,11 @@
 import React, { useContext, useEffect, useState } from "react";
-import { auth } from "../utils/firebase";
-import AppContext from "../context/AppContext";
+import { auth } from "../../utils/firebase";
+import AppContext from "../../context/AppContext";
 import { useParams, useNavigate } from "react-router-dom";
 import { doc, deleteDoc } from "firebase/firestore";
-import { db } from "../utils/firebase";
-import DeleteModal from "../components/DeleteModal";
-import "../css/components/DeletePost.css";
+import { db } from "../../utils/firebase";
+import DeleteModal from "../modal/DeleteModal";
+import "../../css/components/DeletePost.css";
 
 function DeletePost() {
   const { id, postId } = useParams();

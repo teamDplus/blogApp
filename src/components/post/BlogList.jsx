@@ -1,9 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react'
-import "../css/components/BlogList.css"
+import "../../css/components/BlogList.css"
 import { collection, onSnapshot } from 'firebase/firestore';
-import { db } from '../utils/firebase';
+import { db } from '../../utils/firebase';
 import { Link } from 'react-router-dom';
-import AppContext from '../context/AppContext';
+import AppContext from '../../context/AppContext';
 
 const BlogList = () => {
     const [posts,setPosts] = useState([]);

@@ -1,5 +1,5 @@
 import { collection, query, where, getDocs, updateDoc } from "firebase/firestore";
-import { db } from "../utils/firebase";
+import { db } from "../../utils/firebase";
 
 //変更内容を確認するモーダル
 const CheckNewUserInfo = ({ isCheckModalOpen, newNickName, onCheckModalClose, userId, setDisplayName, setTextNoNickName }) => {

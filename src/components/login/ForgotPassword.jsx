@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { auth } from '../utils/firebase'
+import { auth } from '../../utils/firebase'
 import { sendPasswordResetEmail } from 'firebase/auth'
 import { useNavigate } from 'react-router-dom';
 

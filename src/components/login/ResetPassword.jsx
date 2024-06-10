@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { verifyPasswordResetCode, confirmPasswordReset } from "firebase/auth";
-import { auth } from "../utils/firebase";
+import { auth } from "../../utils/firebase";
 import { Link, useNavigate } from "react-router-dom";
-import "../css/components/ResetPassword.css"
+import "../../css/components/ResetPassword.css"
 
 export const ResetPassword = () => {
     const [actionCode, setActionCode] = useState('')
