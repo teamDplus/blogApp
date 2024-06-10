@@ -34,7 +34,7 @@ function DeletePost() {
 
   return (
     <div>
-      {user.uid == id ? (
+      {user && user.uid == id ? (
         <div className="deletePost">
           <p className="deletePost__byebye" onClick={handleOpenModal}>
             記事を削除する

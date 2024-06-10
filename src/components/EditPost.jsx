@@ -28,6 +28,11 @@ function EditPost() {
     console.log(post);
   };
 
+  if (!user) {
+    return null;
+  }
+
+
   return (
     <div>
       {/* ユーザーidとurlのidが一致したら表示 */}
