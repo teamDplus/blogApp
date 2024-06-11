@@ -42,10 +42,10 @@
 }
 
 .header__button:hover .header__button-img{
-    animation: press 0.12s forwards;
+    animation: press 0.1s forwards;
 }
 
 .header__button:not(:hover) .header__button-img{
-    animation: release 0.12s forwards;
+    animation: release 0.1s forwards;
 }
 

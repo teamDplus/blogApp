@@ -17,15 +17,15 @@
     border-radius: 12px;
     background: #E6E7EE;
     padding: 10px;
-    box-shadow: 6px 6px 20px #CDCDCD, -6px -6px 20px #FFFFFF;
+    box-shadow: 5px 5px 20px #CDCDCD, -5px -5px 20px #FFFFFF;
 }
 
 .blog-list__item:hover{
-    animation: press 0.12s forwards;
+    animation: press 0.1s forwards;
 }
 
 .blog-list__item:not(:hover){
-    animation: release 0.12s forwards;
+    animation: release 0.1s forwards;
 }
 
 .blog-list__item-content{

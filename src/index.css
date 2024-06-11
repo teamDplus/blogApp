@@ -11,7 +11,7 @@ a{
 
 @keyframes press {
   0% {
-      box-shadow: 6px 6px 20px #CDCDCD, -6px -6px 20px #FFFFFF;
+      box-shadow: 5px 5px 20px #CDCDCD, -5px -5px 20px #FFFFFF;
   }
   12.5% {
       box-shadow: 4px 4px 10px #D1D1D1, -4px -4px 10px #F6F6F6;
@@ -29,14 +29,14 @@ a{
       box-shadow: inset 4px 4px 10px #C6C4C4, inset -4px -4px 10px #F3F3F3;
   }
   100% {
-      box-shadow: inset 6px 6px 20px #c8c9cc, inset -6px -6px 20px #ffffff;
+      box-shadow: inset 5px 5px 20px #c8c9cc, inset -5px -5px 20px #ffffff;
   }
 }
 
 @keyframes release {
   0% {
       
-      box-shadow: inset 6px 6px 20px #c8c9cc, inset -6px -6px 20px #ffffff;
+      box-shadow: inset 5px 5px 20px #c8c9cc, inset -5px -5px 20px #ffffff;
   }
   12.5%{
       box-shadow: inset 4px 4px 10px #C6C4C4, inset -4px -4px 10px #F3F3F3;
@@ -55,6 +55,6 @@ a{
       box-shadow: 4px 4px 10px #D1D1D1, -4px -4px 10px #F6F6F6;
   }
   100% {
-      box-shadow: 6px 6px 20px #CDCDCD, -6px -6px 20px #FFFFFF;
+      box-shadow: 5px 5px 20px #CDCDCD, -5px -5px 20px #FFFFFF;
   }
 }

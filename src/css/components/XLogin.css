@@ -3,7 +3,7 @@
     height: 50px;
     margin: 0 auto;
     background: linear-gradient(311deg, #E6E7EE 0%, #E5E6EC 100%);
-    box-shadow: 4px 4px 10px #CDCDCD, -4px -4px 10px #FFFFFF;
+    box-shadow: 5px 5px 20px #CDCDCD, -5px -5px 20px #FFFFFF;
     display: flex;
     justify-content: center;
     align-items: center;
