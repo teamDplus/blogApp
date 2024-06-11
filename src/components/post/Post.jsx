@@ -17,12 +17,13 @@ function Post({ EditPost }) {
 
   const navigate = useNavigate();
 
-  const falseisDraft = () => {
-    setIsDraft(false);
-  };
-  const trueisDraft = () => {
-    setIsDraft(false);
-  };
+  async function swicthisDraft(e) {
+    // e.preventDefault();
+    await addDoc(collection(db, "posts"), {
+      isDraft: isDraft,
+    });
+    setIsDraft();
+  }
 
   // 100字以上になると投稿ボタンが押せるようになる
   const contentLength = content.length < 100;
