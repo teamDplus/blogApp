@@ -4,9 +4,7 @@
   margin-top: 50px;
 
 }
-.editPost__byebye:hover{
-  opacity: 0.5;
-}
+
 .editPost__byebye{
   max-width: 212px;
   width: 100%;
@@ -18,4 +16,13 @@
   background: #E6E7EE;
   border-radius: 35px;
   margin: 0 auto;
+  cursor: pointer;
+}
+
+.editPost__byebye:hover {
+  animation: press 0.1s forwards;
+}
+
+.editPost__byebye:not(:hover){
+  animation: release 0.1s forwards;
 }

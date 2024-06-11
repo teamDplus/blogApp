@@ -43,8 +43,13 @@
 }
 
 .post__button button:hover {
-  opacity: 0.5;
+  animation: press 0.1s forwards;
 }
+
+.post__button button:not(:hover){
+  animation: release 0.1s forwards;
+}
+
 
 .post__button button {
   border: none;
@@ -56,4 +61,5 @@
   background: #E6E7EE;
   border-radius: 35px;
   margin: 0 auto;
+  cursor: pointer;
 }
