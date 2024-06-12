@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom';
 import "../../css/components/Login.css"
 import "../../css/components/Signup.css"
 import { XLogin } from './XLogin';
+import { FacebookLogin } from './FacebookLogin';
 import { useForm } from 'react-hook-form';
 
 //ユーザ情報の登録
@@ -79,7 +80,10 @@ const Signup = () => {
         </div>
         <button type="submit" className="signup__button">新規登録</button>
       </form>
-      <XLogin/>
+      <div className='signup__sns'>
+        <FacebookLogin/>
+        <XLogin/>
+      </div>
       <div className='signup__text'>
         <p>すでにアカウントをお持ちの方は
           <Link to="/login" className="signup__text--link">
