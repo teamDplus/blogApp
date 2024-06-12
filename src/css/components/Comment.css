@@ -20,8 +20,20 @@
     justify-content: space-between;
     align-items: center;
   }
-  
+
   .comment-user{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .comment-user__img{
+    width: 40px;
+    border-radius: 50%;
+  }
+  
+  .comment-user__name{
     font-size: 24px;
     color: #575F6B;
     margin: 0;
