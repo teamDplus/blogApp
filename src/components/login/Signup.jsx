@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom';
 import "../../css/components/Login.css"
 import "../../css/components/Signup.css"
 import { XLogin } from './XLogin';
+import { useForm } from 'react-hook-form';
 
 //ユーザ情報の登録
 const Signup = () => {
@@ -15,10 +16,15 @@ const Signup = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors }
+  } = useForm()
+
 
   //登録情報を確認するモーダルの開閉
   const openModal = (e) => {
-    e.preventDefault();
     setIsModalOpen(true);
   };
   const closeModal = () => {
@@ -47,10 +53,25 @@ const Signup = () => {
   return (
     <div className="signup">
       <h1 className="signup__title">ユーザ登録</h1>
-      <form onSubmit={openModal} className="signup__form">
+      <form onSubmit={handleSubmit(openModal)} className="signup__form">
         <div>
           <label htmlFor="email" className="">メールアドレス</label>
-          <input onChange={(e) => setEmail(e.target.value)} type="email" name="email" id="email" className="" placeholder="name@company.com" required="" />
+          <input 
+            type="email" 
+            name="email"
+            id="email" 
+            className="" 
+            placeholder="name@company.com" 
+            required="" 
+            {...register('email', {
+              required: '必須入力',
+              pattern: {
+                value: /@gmail.com/,
+                message: "gmail以外は登録できません。" 
+              },
+              onChange: (e) => setEmail(e.target.value) // カスタムonChangeハンドラ
+            })}/>
+            {errors.email && <span className="validation-message">{errors.email.message}</span>}
         </div>
         <div>
           <label htmlFor="password" className="">パスワード</label>
