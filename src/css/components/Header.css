@@ -11,32 +11,41 @@
     margin-bottom: 47px;
 }
 
-.header__mypage{
+.header__button{
     display: flex;
     justify-content: left;
     align-items: center;
     gap: 20px;
 }
 
-.header__mypage-img{
+.header__button-img{
     width: 50px;
     height: 50px;
     background-color: transparent linear-gradient(311deg,#E6E7EE 0%,#E5E6EC 100%) 0% 0% no-repeat padding-box;
-    box-shadow: 4px 4px 10px#CDCDCD,-4px -4px 10px #FFFFFF;
+    box-shadow: 6px 6px 20px#CDCDCD,-6px -6px 20px #FFFFFF;
     display: flex;
     justify-content: center;
     align-items: center;
     border-radius: 10px;
 }
 
-.header__mypage-img img{
+.header__button-img img{
     width: 20px;
     height: 20px;
     margin: 0 auto;
 }
 
-.header__mypage-text{
+.header__button-text{
     font-size: 16px;
     color: #575F6B;
     font-family: "Sofia Pro";
 }
+
+.header__button:hover .header__button-img{
+    animation: press 0.1s forwards;
+}
+
+.header__button:not(:hover) .header__button-img{
+    animation: release 0.1s forwards;
+}
+
