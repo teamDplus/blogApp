@@ -46,6 +46,13 @@
   animation: press 0.1s forwards;
 }
 
+.post__button {
+  display: flex;
+  width: 100%;
+  margin: 0 auto;
+}
+
+
 .post__button button:not(:hover){
   animation: release 0.1s forwards;
 }
@@ -53,13 +60,17 @@
 
 .post__button button {
   border: none;
-  width: 40%;
+  width: 50%;
   height: 56px;
   line-height: 56px;
   box-shadow:  5px 5px 20px #c8c9cc, -5px -5px 20px #ffffff;
   padding: 0 20px;
   background: #E6E7EE;
   border-radius: 35px;
+
+  margin: 0 20px;
+
   margin: 0 auto;
   cursor: pointer;
+
 }

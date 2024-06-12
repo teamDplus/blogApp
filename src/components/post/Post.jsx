@@ -2,7 +2,7 @@ import React, { useContext, useState } from "react";
 import { db, auth } from "../../utils/firebase";
 import firebase from "firebase/compat/app";
 import { useParams, useNavigate } from "react-router-dom";
-import { collection, addDoc, doc, deleteDoc } from "firebase/firestore";
+import { collection, addDoc, doc, deleteDoc, setDoc } from "firebase/firestore";
 import "../../css/components/Post.css";
 import AppContext from "../../context/AppContext";
 
@@ -12,16 +12,38 @@ function Post({ EditPost }) {
   const [title, setTitle] = useState(EditPost ? EditPost.title : ""); //EditPostが渡ってきたら「title」を入れる。なかったら「("")」
   const [content, setContent] = useState(EditPost ? EditPost.content : ""); //EditPostが渡ってきたら「content」を入れる。なかったら「("")」
   const { user, loading } = useContext(AppContext);
-  const { postId } = useParams(); // URLのuserIdを取得
+  const { id, postId } = useParams(); // URLのuserIdを取得
 
   const navigate = useNavigate();
 
-  // エラーチェック
-  const titleLength = title.length > 40;
+  // 投稿画面で下書き保存ボタンを押したら発火
+  async function swicthisDraft(e) {
+    e.preventDefault();
+    // isDraftで下書きに切り替え
+    await addDoc(collection(db, "posts"), {
+      isDraft: true,
+      authorId: user.uid,
+      content: content,
+      title: title,
+    });
+    navigate(`/${id}/drafts`);
+  }
+
+  // 編集画面で下書き移動ボタンを押したら発火
+  async function editisDraft(e) {
+    e.preventDefault();
+    // isDraftで下書きに切り替え
+    await setDoc(doc(db, "posts", postId), {
+      isDraft: true,
+      authorId: user.uid,
+      content: content,
+      title: title,
+    });
+    navigate(`/${id}/drafts`);
+  }
+
+  // 100字以上になると投稿ボタンが押せるようになる
   const contentLength = content.length < 100;
-  // if (titleLength) {console.log("タイトルは40字以内で入力してください");}
-  // if (contentLength) {console.log("本文は100字以上400字以内で入力してください");}
-  // const enableSubmit = !titleLength && !contentLength;
 
   //SendPostが押されたらFirebaseの処理開始
   async function SendPost(e) {
@@ -29,6 +51,7 @@ function Post({ EditPost }) {
 
     //postsに各要素を保存
     await addDoc(collection(db, "posts"), {
+      isDraft: false,
       authorId: user.uid,
       content: content,
       title: title,
@@ -67,7 +90,8 @@ function Post({ EditPost }) {
               </div>
 
               <div className="post__button">                
-                <button type="submit" disabled={contentLength} class="post__button">投稿する</button>
+                <button type="submit" disabled={contentLength}>投稿する</button>
+                <button type="button" onClick={editisDraft}>{EditPost ? "下書きに移動する" : "下書き保存する"}</button>
               </div>           
               
             </form>
@@ -89,7 +113,8 @@ function Post({ EditPost }) {
             </div>
 
             <div className="post__button">
-              <button type="submit" disabled={contentLength} class="post__button">投稿する</button>
+              <button type="submit" disabled={contentLength}>投稿する</button>
+              <button type="button" onClick={swicthisDraft}>{EditPost ? "下書きに移動する" : "下書き保存する"}</button>
             </div>
           </form>
         </div>
