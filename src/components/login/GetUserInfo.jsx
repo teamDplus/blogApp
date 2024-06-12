@@ -7,11 +7,12 @@ import "../../css/components/GetUserInfo.css"
 
 //ログイン中のユーザ情報を取得
 const GetUserInfo = () => {
-    const [displayName, setDisplayName] = useState('');
-    const [nickName, setNickName] = useState('');
-    const [userId, setUserId] = useState('');
     const [isSetModalOpen, setIsSetModalOpen] = useState(false);
-    const [textNoNickName, setTextNoNickName] = useState(false);
+    const [userId, setUserId] = useState('');  //ユーザ固有のid
+    const [nickName, setNickName] = useState('');  //現在のニックネーム
+    const [profilePicture, setProfilePicture] = useState('');
+    const [displayName, setDisplayName] = useState(''); //表示名(ニックネーム、ユーザ名、ユーザidどれを表示するか)
+    const [textNoNickName, setTextNoNickName] = useState(false); //ニックネームの設定を促すメッセージ
 
     useEffect(() => {
         // 表示名の設定（nickNameが登録されていれば表示、されていなければname:ユーザ名を表示）
@@ -31,21 +32,22 @@ const GetUserInfo = () => {
                     setNickName(doc.data().nickName);
                     //ユーザidを取得
                     setUserId(doc.data().userId);
+                    //アイコンを取得
+                    setProfilePicture(doc.data().profilePictureUrl);
                     // nickNameが登録されていればnickNameを表示
                     if (doc.data().nickName != null) {
                         setDisplayName(doc.data().nickName);
-                        setTextNoNickName(false)
+                        setTextNoNickName(false);
                     }
                     // nickNameが登録されていない場合、name:ユーザ名を表示
-                    // 現在はnameがなければuserIdを表示、サインアップでnameを自動登録(初期値userId)されるようにしたら修正
                     else if (doc.data().name != null) {
                         setDisplayName(doc.data().nickName);
-                        setTextNoNickName(false)
+                        setTextNoNickName(false);
                     }
                     else {
                         setDisplayName(doc.data().userId);
                         //ニックネームの設定を促すメッセージを表示
-                        setTextNoNickName(true)
+                        setTextNoNickName(true);
                     }
                 });
             }
@@ -54,7 +56,7 @@ const GetUserInfo = () => {
         getDisplayName();
     }, []);
 
-    // 「ユーザ情報の変更」をクリックしたときに変更内容を入力するモーダルを表示
+    //「ユーザ情報の変更」をクリックしたときに変更内容を入力するモーダルを表示
     const openSetModal = (e) => {
         e.preventDefault();
         setIsSetModalOpen(true);
@@ -70,14 +72,19 @@ const GetUserInfo = () => {
             {textNoNickName != "" && (
                 <div className='mypage__user--noNickName'>ニックネームが登録されていません</div>
             )}
+            <div className='mypage__user--profilePicture'>
+                <img src={profilePicture} alt="" />
+            </div>
             <div className='mypage__user--changeUserInfo'>
                 <button onClick={openSetModal}>ユーザ情報の変更</button>
             </div>
             <ChangeUserInfoModal
                 isSetModalOpen={isSetModalOpen}
-                nickName={nickName}
                 onSetModalClose={closeSetModal}
                 userId={userId}
+                nickName={nickName}
+                setNickName={setNickName}
+                setProfilePicture={setProfilePicture}
                 setDisplayName={setDisplayName}
                 setTextNoNickName={setTextNoNickName}
             />

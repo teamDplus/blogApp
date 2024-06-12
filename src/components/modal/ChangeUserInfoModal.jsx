@@ -1,10 +1,23 @@
 import { useState } from 'react';
-import CheckNewUserInfo from '../login/CheckNewUserInfo';
+import CheckNewUserInfoModal from './CheckNewUserInfoModal';
+import UploadImage from "../login/UploadImage";
 
 //ユーザ情報を変更するモーダル
-const ChangeUserInfoModal = ({ isSetModalOpen, nickName, onSetModalClose, userId, setDisplayName, setTextNoNickName }) => {
-  const [newNickName, setNewNickName] = useState('');
-  const [isCheckModalOpen, setIsCheckModalOpen] = useState(false);
+const ChangeUserInfoModal = ( props ) => {
+  const {
+    isSetModalOpen, //設定用のモーダルを開く
+    onSetModalClose, //設定用のモーダルを閉じる
+    userId, //ユーザ固有のid
+    nickName, //現在のニックネーム
+    setNickName, //現在のニックネーム
+    setDisplayName, //表示名の設定(ニックネーム、ユーザ名、ユーザidどれを表示するか)
+    setTextNoNickName, //ニックネームの設定を促すメッセージ
+    setProfilePicture //プロフィール画面の設定
+  } = props;
+
+  const [newNickName, setNewNickName] = useState(''); //変更後のニックネーム
+  const [newProfilePicture, setNewProfilePicture] = useState(''); //変更後のプロフィール画像
+  const [isCheckModalOpen, setIsCheckModalOpen] = useState(false);  //確認用のモーダルを開く
 
   //「変更」ボタンを押したときに確認用のモーダルに切り替える
   const openCheckModal = (e) => {
@@ -28,19 +41,22 @@ const ChangeUserInfoModal = ({ isSetModalOpen, nickName, onSetModalClose, userId
                 <label htmlFor="nickName" className="">ニックネーム</label>
                 <input onChange={(e) => setNewNickName(e.target.value)} type="nickName" name="nickName" id="nickName" className="" placeholder={nickName} required="" />
               </div>
+              <UploadImage setNewProfilePicture={setNewProfilePicture} />
               <button type="submit" className="changeUserInfo__button">変更</button>
-
             </form>
           </div>
         </div>
       )}
-      <CheckNewUserInfo
+      <CheckNewUserInfoModal
         isCheckModalOpen={isCheckModalOpen}
-        newNickName={newNickName}
         onCheckModalClose={closeCheckModal}
         userId={userId}
+        newNickName={newNickName}
+        newProfilePicture={newProfilePicture}
+        setNickName={setNickName}
         setDisplayName={setDisplayName}
         setTextNoNickName={setTextNoNickName}
+        setProfilePicture={setProfilePicture}
       />
     </>
   );
