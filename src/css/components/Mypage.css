@@ -33,9 +33,14 @@
     text-decoration: none;
 }
 
-.mypage-list__item:hover{
-    opacity: 0.5;
-}
+.mypage-list__item:hover {
+    animation: press 0.1s forwards;
+  }
+  
+  .mypage-list__item:not(:hover){
+    animation: release 0.1s forwards;
+  }
+  
 
 .mypage-list__item-content{
     overflow: hidden;

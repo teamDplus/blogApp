@@ -3,9 +3,7 @@
   margin: 0 auto;
 
 }
-.deletePost__byebye:hover{
-  opacity: 0.5;
-}
+
 .deletePost__byebye{
   max-width: 212px;
   width: 100%;
@@ -16,4 +14,14 @@
   background: #E6E7EE;
   border-radius: 35px;
   margin: 0 auto;
+  cursor: pointer;
+}
+
+
+.deletePost__byebye:hover {
+  animation: press 0.1s forwards;
+}
+
+.deletePost__byebye:not(:hover){
+  animation: release 0.1s forwards;
 }
