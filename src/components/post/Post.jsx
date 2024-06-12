@@ -2,7 +2,7 @@ import React, { useContext, useState } from "react";
 import { db, auth } from "../../utils/firebase";
 import firebase from "firebase/compat/app";
 import { useParams, useNavigate } from "react-router-dom";
-import { collection, addDoc, doc, deleteDoc } from "firebase/firestore";
+import { collection, addDoc, doc, deleteDoc, setDoc } from "firebase/firestore";
 import "../../css/components/Post.css";
 import AppContext from "../../context/AppContext";
 
@@ -11,18 +11,35 @@ function Post({ EditPost }) {
   // postの内容取得
   const [title, setTitle] = useState(EditPost ? EditPost.title : ""); //EditPostが渡ってきたら「title」を入れる。なかったら「("")」
   const [content, setContent] = useState(EditPost ? EditPost.content : ""); //EditPostが渡ってきたら「content」を入れる。なかったら「("")」
-  const [isDraft, setIsDraft] = useState(true);
   const { user, loading } = useContext(AppContext);
-  const { postId } = useParams(); // URLのuserIdを取得
+  const { id, postId } = useParams(); // URLのuserIdを取得
 
   const navigate = useNavigate();
 
+  // 投稿画面で下書き保存ボタンを押したら発火
   async function swicthisDraft(e) {
-    // e.preventDefault();
+    e.preventDefault();
+    // isDraftで下書きに切り替え
     await addDoc(collection(db, "posts"), {
-      isDraft: isDraft,
+      isDraft: true,
+      authorId: user.uid,
+      content: content,
+      title: title,
     });
-    setIsDraft();
+    navigate(`/${id}/drafts`);
+  }
+
+  // 編集画面で下書き移動ボタンを押したら発火
+  async function editisDraft(e) {
+    e.preventDefault();
+    // isDraftで下書きに切り替え
+    await setDoc(doc(db, "posts", postId), {
+      isDraft: true,
+      authorId: user.uid,
+      content: content,
+      title: title,
+    });
+    navigate(`/${id}/drafts`);
   }
 
   // 100字以上になると投稿ボタンが押せるようになる
@@ -34,6 +51,7 @@ function Post({ EditPost }) {
 
     //postsに各要素を保存
     await addDoc(collection(db, "posts"), {
+      isDraft: false,
       authorId: user.uid,
       content: content,
       title: title,
@@ -73,7 +91,7 @@ function Post({ EditPost }) {
 
               <div className="post__button">                
                 <button type="submit" disabled={contentLength}>投稿する</button>
-                <button type="submit" onSubmit={swicthisDraft()}>{EditPost ? "下書きに移動する" : "下書き保存する"}</button>
+                <button type="button" onClick={editisDraft}>{EditPost ? "下書きに移動する" : "下書き保存する"}</button>
               </div>           
               
             </form>
@@ -96,7 +114,7 @@ function Post({ EditPost }) {
 
             <div className="post__button">
               <button type="submit" disabled={contentLength}>投稿する</button>
-              <button type="submit" onSubmit={swicthisDraft()}>{EditPost ? "下書きに移動する" : "下書き保存する"}</button>
+              <button type="button" onClick={swicthisDraft}>{EditPost ? "下書きに移動する" : "下書き保存する"}</button>
             </div>
           </form>
         </div>
