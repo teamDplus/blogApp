@@ -1,5 +1,4 @@
 const UploadImage = ({ newProfilePicture, setNewProfilePicture, setFileObject }) => {
-
     const onFileInputChange = (e) => {
         if (!e.target.files) return;
         //アップロードしたファイル情報を取得
