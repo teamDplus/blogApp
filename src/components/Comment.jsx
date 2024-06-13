@@ -28,7 +28,8 @@ export const Comment = () => {
                         return {
                             ...commentData,
                             userId: userSnap.data().userId,
-                            userName: userSnap.data().nickName ? userSnap.data().nickName : userSnap.data().userId
+                            userName: userSnap.data().nickName ? userSnap.data().nickName : userSnap.data().userId,
+                            profilePictureUrl: userSnap.data().profilePictureUrl,
                         };
                     } else {
                         return {
@@ -58,7 +59,7 @@ export const Comment = () => {
         setIsModalOpen(false);
         };
 
-    console.log(id)
+    console.log(comments)
   return (
     <div className="comment">
         <h3 className="comment__title">コメント</h3>
@@ -66,7 +67,10 @@ export const Comment = () => {
           {comments && comments.map((comment) => (
             <div className="comment-list__item">
               <div className="comment-list__item-head">
-                <p className="comment-user">{comment.userName}</p>
+                <div className='comment-user'>
+                  <img className='comment-user__img' src={comment.profilePictureUrl} alt="" />
+                  <p className="comment-user__name">{comment.userName}</p>
+                </div>
                 <p className="comment-date">{comment.createdAt ?  comment.createdAt.toDate().toLocaleString() : ""}</p>
               </div>
               <p className="comment-list__item-content">{comment.content}</p>
