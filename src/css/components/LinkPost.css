@@ -16,6 +16,7 @@
   border-radius: 35px;
   margin: 0 auto;
   cursor: pointer;
+   transition: transform 0.1s ease, box-shadow 0.1s ease;
 }
 
 .LinkPost__tooltip {
@@ -45,3 +46,11 @@
   border-color: #E6E7EE transparent transparent transparent;
 }
 
+
+.LinkPost__byebye:hover {
+  animation: press 0.1s forwards;
+}
+
+.LinkPost__byebye:not(:hover){
+  animation: release 0.1s forwards;
+}
