@@ -38,8 +38,7 @@ const Mypage = () => {
   // Firebaseの中にあるpostsのフィールドから、ユーザーの投稿記事を取得
   useEffect(() => {
     // postsの中にあるコレクションの中からフィールドのauthorIdとログインしているuserと同じidの記事を取得
-    //postsの中にあるisDraftがfalseを取得(公開済みの記事)
-    const q = query(collection(db, "posts"), where("authorId", "==", user.uid), where("isDraft", "==", false));
+    const q = query(collection(db, "posts"), where("authorId", "==", user.uid));
 
     const unsubscribe = onSnapshot(q, (snapshot) => {
       const postsData = [];
@@ -66,14 +65,12 @@ const Mypage = () => {
         <h2>ブログ一覧</h2>
         <div className="mypage-list__items">
           {posts.map((post) => (
-            <div key={post.id}>
-              <Link to={`/${user.uid}/posts/${post.id}`} className="mypage-list__link">
-                <div className="mypage-list__item">
-                  <h3 className="mypage-list__item-title">{post.title}</h3>
-                  <p className="mypage-list__item-content">{post.content}</p>
-                </div>
-              </Link>
-            </div>
+            <Link to={`/${user.uid}/posts/${post.id}`} className="mypage-list__link">
+              <div key={post.id} className="mypage-list__item">
+                <h3 className="mypage-list__item-title">{post.title}</h3>
+                <p className="mypage-list__item-content">{post.content}</p>
+              </div>
+            </Link>
           ))}
         </div>
       </div>
