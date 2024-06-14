@@ -58,7 +58,7 @@ const Mypage = () => {
   return (
     <div className="mypage">
       <h1 className="mypage__title">マイページ</h1>
-      {user.uid === id 
+      {user && user.uid === id 
         ? 
         <>
           <GetUserInfo />
