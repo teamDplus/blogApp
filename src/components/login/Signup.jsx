@@ -9,6 +9,8 @@ import "../../css/components/Signup.css"
 import { XLogin } from './XLogin';
 import { FacebookLogin } from './FacebookLogin';
 import { useForm } from 'react-hook-form';
+import { db } from "../../utils/firebase";
+import { collection, query, where, getDocs } from "firebase/firestore";
 
 //ユーザ情報の登録
 const Signup = () => {
@@ -44,8 +46,15 @@ const Signup = () => {
         console.error(error);
         alert('登録に失敗しました。再度お試しください。')
       });
-      // モーダルを閉じる
-      setIsModalOpen(false);
+    // モーダルを閉じる
+    setIsModalOpen(false);
+  }
+
+  //メールアドレスの重複を検知
+  const checkSameEmail = async (email) => {
+    const q = query(collection(db, "users"), where("email", "==", email));
+    const querySnapshot = await getDocs(q);
+    return querySnapshot.empty; // 重複がなければ true を返す
   }
 
   return (
@@ -54,32 +63,38 @@ const Signup = () => {
       <form onSubmit={handleSubmit(openModal)} className="signup__form">
         <div>
           <label htmlFor="email" className="">メールアドレス</label>
-          <input 
-            type="email" 
+          <input
+            type="email"
             name="email"
-            id="email" 
-            className="" 
-            placeholder="name@company.com" 
-            required="" 
+            id="email"
+            className=""
+            placeholder="name@company.com"
+            required=""
             {...register('email', {
               required: '必須入力',
               pattern: {
                 value: /@gmail.com/,
-                message: "gmail以外は登録できません。" 
+                message: "gmail以外は登録できません。"
+              },
+              validate: {
+                duplicated: async (email) => {
+                  const isUnique = await checkSameEmail(email);
+                  return isUnique || 'このメールアドレスは登録されています';
+                }
               },
               onChange: (e) => setEmail(e.target.value) // カスタムonChangeハンドラ
-            })}/>
-            {errors.email && <span className="validation-message">{errors.email.message}</span>}
+            })} />
+          {errors.email && <span className="validation-message">{errors.email.message}</span>}
         </div>
         <div>
           <label htmlFor="password" className="">パスワード</label>
-          <input onChange={(e) => setPassword(e.target.value)} type="password" name="password" id="password" placeholder="••••••••" className="" required="" />
+          <input onChange={(e) => setPassword(e.target.value)} type="password" name="password" id="password" placeholder="••••••••" className="" required="必須入力" />
         </div>
         <button type="submit" className="signup__button">新規登録</button>
       </form>
       <div className='signup__sns'>
-        <FacebookLogin/>
-        <XLogin/>
+        <FacebookLogin />
+        <XLogin />
       </div>
       <div className='signup__text'>
         <p>すでにアカウントをお持ちの方は
