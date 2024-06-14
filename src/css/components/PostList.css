@@ -7,6 +7,13 @@
 .post-list{
   max-width: 1000px;
   margin: 0 auto;
+  margin-top: 100px;
+
+}
+
+.post-list p{
+  white-space: normal;
+  word-wrap: break-word;
 }
 
 
