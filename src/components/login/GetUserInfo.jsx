@@ -34,7 +34,7 @@ const GetUserInfo = () => {
                     //アイコンを取得
                     setProfilePicture(doc.data().profilePictureUrl);
                     // nickNameが登録されていればnickNameを表示→name:ユーザ名→userId
-                    setDisplayName(doc.data().nickName ? doc.data().name : doc.data().userId);
+                    setDisplayName(doc.data().nickName || doc.data().name || doc.data().userId || "");
                     //nicknameが登録されていなければ登録を促すメッセージを表示
                     if(doc.data().nickName == null || doc.data().nickName == "") setTextNoNickName(true);
                 });
