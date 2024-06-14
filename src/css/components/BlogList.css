@@ -33,3 +33,9 @@
     text-overflow: ellipsis;
     white-space: nowrap;
 }
+
+.blog-list__item-title{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
