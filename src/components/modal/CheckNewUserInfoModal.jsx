@@ -91,7 +91,7 @@ const CheckNewUserInfoModal = (props) => {
         <h2 className="checkNewUserInfo__title">変更内容の確認</h2>
         <p>以下の情報で変更しますか？</p>
         <p><strong>ニックネーム:</strong> {newNickName}</p>
-        <p><strong>プロフィール画像:</strong> <img src={newProfilePicture} alt="" /></p>
+        <p><strong>プロフィール画像:</strong> <img src={newProfilePicture} alt="" className="changeUserInfoModal__profilePicture" /></p>
         <button onClick={changeUserInfo} className="modal__button--yes">はい</button>
         <button onClick={closeSetUserInfo} className="modal__button--no">いいえ</button>
       </div>

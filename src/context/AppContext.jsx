@@ -9,6 +9,7 @@ const AppContext = createContext();
 export const AppProvider = ({ children }) => {
     const [user,setUser] = useState(null);
     const [loading, setLoading] = useState(true);
+    const defaultProfilePictureUrl = "https://firebasestorage.googleapis.com/v0/b/blogapp-c1052.appspot.com/o/profileImages%2Fdefault%2FprofilePicture_default.svg?alt=media&token=41401a2c-009b-44fa-9219-9b7c3f599de0"
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, async (newUser) => {
@@ -23,7 +24,7 @@ export const AppProvider = ({ children }) => {
                 email: newUser.email,
                 name: newUser.displayName,
                 nickName: newUser.displayName,
-                profilePictureUrl:newUser.photoURL && newUser.photoURL,
+                profilePictureUrl:newUser.photoURL || defaultProfilePictureUrl,
                 createdAt:serverTimestamp()
               });
             }
