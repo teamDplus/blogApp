@@ -28,9 +28,17 @@
     gap: 10px;
   }
 
-  .comment-user__img{
+  .comment-user__img img{
     width: 40px;
     border-radius: 50%;
+    }
+    
+  .comment-user__img{  
+    transition: 0.2s all;
+  }
+
+  .comment-user__img:hover{
+    opacity: 0.5;
   }
   
   .comment-user__name{

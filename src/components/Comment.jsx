@@ -68,8 +68,10 @@ export const Comment = () => {
             <div className="comment-list__item">
               <div className="comment-list__item-head">
                 <div className='comment-user'>
-                  <img className='comment-user__img' src={comment.profilePictureUrl} alt="" />
-                  <p className="comment-user__name">{comment.userName}</p>
+                  <Link to={`/${comment.userId}`} className='comment-user__img'>
+                    <img className='' src={comment.profilePictureUrl} alt="" />
+                  </Link>
+                    <p className="comment-user__name">{comment.userName}</p>
                 </div>
                 <p className="comment-date">{comment.createdAt ?  comment.createdAt.toDate().toLocaleString() : ""}</p>
               </div>
@@ -79,10 +81,6 @@ export const Comment = () => {
         </div>
         {/* ログインしているユーザーのidと、今見ている記事のユーザーのidが一致すれば、「コメントを書く」ボタンを非表示にする。 */}
         {user &&
-            id === user.uid 
-                ?
-            ""
-                :
             <button className='comment-post' onClick={handleOpenModal}>
             <img className='comment-post__img' src="../../commentIcon.svg" alt="" />
             {/*ログインしていない時に「コメントを書く」ボタンを押すと、ログイン画面に遷移させる。  */}

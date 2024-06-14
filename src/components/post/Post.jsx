@@ -66,7 +66,7 @@ function Post({ EditPost }) {
       await deleteDoc(postDoc); // ドキュメントを削除
     }
 
-    navigate("/mypage"); // "/mypage"に移動
+    navigate(`/${user.uid}`); // "/mypage"に移動
   }
 
   // console.log(EditPost);
