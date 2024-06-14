@@ -1,14 +1,28 @@
 .header{
+    position: fixed;
     padding: 0;
     margin: 0;
     box-sizing: border-box;
     min-height: 819px;
-    min-width: 233px;
+    min-width: 260px;
     background: #E6E7EE;
-    padding: 10px;
+    padding: 20px;
     padding-left: 24px;
     box-shadow:  10px 10px 15px #CDCDCD,-10px -10px 15px #FFFFFF;
     height: 100vh;
+}
+
+.header__top{
+    font-size: 32px;
+    transition: 0.2s all;
+}
+
+.header__top:hover{
+    opacity: 0.5;
+}
+
+.header__links{
+    margin-top: 32px;
 }
 
 .header__links a{
