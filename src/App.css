@@ -4,5 +4,6 @@
 }
 
 .contents__app{
+  padding-left: 260px;
   flex: 1;
 }

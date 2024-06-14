@@ -19,7 +19,7 @@ const Header = () => {
   return (
     <div className="header">
       <div className="header__inner">
-        <h1>Header</h1>
+        <Link to="/" className="header__top">HOME</Link>
         <div className="header__links">
           <Link to={user ? `/${user.uid}` : "/login"} className="header__button">
             <div className="header__button-img">
