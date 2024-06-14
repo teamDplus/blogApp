@@ -11,6 +11,7 @@ import Draft from "./components/post/BlogDrafts";
 import { ResetPassword } from "./components/login/ResetPassword";
 import { ForgotPassword } from "./components/login/ForgotPassword";
 import { SentPassword } from "./components/login/SentPassword";
+import LikeList from "./components/post/LikeList";
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
             <Route path="/password_sent" element={<SentPassword />} />
             <Route path="/forgot_password" element={<ForgotPassword />} />
             <Route path="/:id/drafts" element={<Draft />} />
+            <Route path="/:id/likes" element={<LikeList />} />
           </Routes>
         </div>
       </div>

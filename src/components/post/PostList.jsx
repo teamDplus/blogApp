@@ -7,6 +7,7 @@ import EditPost from "./EditPost";
 import "../../css/components/PostList.css";
 import "../../css/components/Post.css";
 import { Comment } from "../Comment";
+import LikePost from "./LikePost";
 
 function Post() {
   //App.jsxのpostIdに設定したURLを取得、<Route path="/:id/posts/:postId"
@@ -46,6 +47,7 @@ function Post() {
       <DeletePost />
       <EditPost />
       {/* </div> */}
+      <LikePost />
       <Comment/>
     </>
   );

@@ -1,0 +1,33 @@
+.like{
+    margin: 0 auto;
+}
+.like_button {
+    background: none;
+    border: none;
+    margin: 0 auto;
+}
+
+.like_button-heart {
+    width: 30px;
+    height: 30px;
+    position: relative;
+  }
+  .like_button-heart::before,
+  .like_button-heart::after {
+    content: "";
+    width: 50%;
+    height: 80%;
+    background: #E0548E;
+    border-radius: 25px 25px 0 0;
+    display: block;
+    position: absolute;
+  }
+  .like_button-heart::before {
+    transform: rotate(-45deg);
+    left: 14%;
+  }
+  .like_button-heart::after {
+    transform: rotate(45deg);
+    right: 14%;
+  }
+  
