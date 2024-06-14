@@ -67,12 +67,10 @@ export const Comment = () => {
           {comments && comments.map((comment) => (
             <div className="comment-list__item">
               <div className="comment-list__item-head">
-                <div className='comment-user'>
-                  <Link to={`/${comment.userId}`} className='comment-user__img'>
-                    <img className='' src={comment.profilePictureUrl} alt="" />
-                  </Link>
-                    <p className="comment-user__name">{comment.userName}</p>
-                </div>
+                <Link to={`/${comment.userId}`} className='comment-user'>
+                  <img className='comment-user__img' src={comment.profilePictureUrl} alt="" />
+                  <p className="comment-user__name">{comment.userName}</p>
+                </Link>
                 <p className="comment-date">{comment.createdAt ?  comment.createdAt.toDate().toLocaleString() : ""}</p>
               </div>
               <p className="comment-list__item-content">{comment.content}</p>

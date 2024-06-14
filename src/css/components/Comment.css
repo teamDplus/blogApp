@@ -26,18 +26,15 @@
     justify-content: center;
     align-items: center;
     gap: 10px;
+    transition: 0.2s all;
   }
 
-  .comment-user__img img{
+  .comment-user__img{
     width: 40px;
     border-radius: 50%;
     }
     
-  .comment-user__img{  
-    transition: 0.2s all;
-  }
-
-  .comment-user__img:hover{
+  .comment-user:hover{
     opacity: 0.5;
   }
   
