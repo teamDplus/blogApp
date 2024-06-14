@@ -2,6 +2,8 @@ import { useState } from 'react';
 import CheckNewUserInfoModal from './CheckNewUserInfoModal';
 import UploadImage from "../login/UploadImage";
 import { useForm } from "react-hook-form";
+import { db } from "../../utils/firebase";
+import { collection, query, where, getDocs } from "firebase/firestore";
 
 //ユーザ情報を変更するモーダル
 const ChangeUserInfoModal = (props) => {
@@ -38,6 +40,13 @@ const ChangeUserInfoModal = (props) => {
     setIsCheckModalOpen(false);
   };
 
+  //ニックネームの重複を検知
+  const checkSameNickName = async (nickName) => {
+    const q = query(collection(db, "users"), where("nickName", "==", nickName));
+    const querySnapshot = await getDocs(q);
+    return querySnapshot.empty; // 重複がなければ true を返す
+  }
+
   return (
     <>
       {isSetModalOpen && (
@@ -63,6 +72,12 @@ const ChangeUserInfoModal = (props) => {
                       value: 10,
                       message: '3文字以上10文字以内で入力してください'
                     },
+                    validate: {
+                      duplicated: async (nickname) => {
+                        const isUnique = await checkSameNickName(nickname);
+                        return isUnique || 'このニックネームは登録されています';
+                      }
+                    }
                   })}
                 />
                 {errors.nickname && <span className="validation-message">{errors.nickname.message}</span>}

@@ -58,7 +58,6 @@ const CheckNewUserInfoModal = (props) => {
 
       //新しいニックネームが入力された場合
       if (newNickName !== undefined && newNickName.trim() !== '') {
-        console.log("imakoko");
         updates.nickName = newNickName;
         //マイページの表示を更新
         setNickName(newNickName);
