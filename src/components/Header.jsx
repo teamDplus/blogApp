@@ -4,7 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import AppContext from "../context/AppContext";
 
 const Header = () => {
-  const { user, loading } = useContext(AppContext);
+  const { user, followerCount,followingCount } = useContext(AppContext);
 
   const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
@@ -45,12 +45,6 @@ const Header = () => {
             </div>
             <p className="header__button-text">いいね！履歴</p>
           </Link>
-          <Link to={user ? `/${user.uid}/followings` : "/login"} className="header__button">
-            <div className="header__button-img">
-              <img src="./followingIcon.png" alt="" />
-            </div>
-            <p className="header__button-text">フォロー一覧</p>
-          </Link>
           <Link to="/" className="header__button">
             <div className="header__button-img">
               <img src="./peopleIcon.svg" alt="" />
@@ -58,8 +52,11 @@ const Header = () => {
             <p className="header__button-text">みんなの投稿</p>
           </Link>
         </div>
+        <Link to={user ? `/${user.uid}/followings` : "/login"} className="header__button">
+          <p>{followingCount}フォロー</p>
+        </Link>
         <Link to={user ? `/${user.uid}/followers` : "/login"}>
-          <p>1フォロワー</p>
+          <p>{followerCount}フォロワー</p>
         </Link>
       </div>
       {/* 検索機能 */}
