@@ -45,6 +45,12 @@ const Header = () => {
             </div>
             <p className="header__button-text">いいね！履歴</p>
           </Link>
+          <Link to={user ? `/${user.uid}/followings` : "/login"} className="header__button">
+            <div className="header__button-img">
+              <img src="./followingIcon.png" alt="" />
+            </div>
+            <p className="header__button-text">フォロー一覧</p>
+          </Link>
           <Link to="/" className="header__button">
             <div className="header__button-img">
               <img src="./peopleIcon.svg" alt="" />

@@ -5,7 +5,7 @@ import { useNavigate, Link, useParams } from "react-router-dom";
 import "../../css/components/Mypage.css";
 import { auth } from "../../utils/firebase";
 import AppContext from "../../context/AppContext";
-import { collection, query, where, onSnapshot } from "firebase/firestore";
+import { collection, query, where, onSnapshot, serverTimestamp, doc, addDoc } from "firebase/firestore";
 import { db } from "../../utils/firebase";
 import GetUserInfo from "./GetUserInfo";
 
@@ -55,6 +55,19 @@ const Mypage = () => {
     };
   }, [user,id]);
 
+  const handleFollow = async(e) => {
+    e.preventDefault();
+    
+    const followingRef = collection(db, "users", user.uid, "following");
+    await addDoc(followingRef, {
+      followingId: id,
+      followedAt: serverTimestamp()
+    });
+    
+    alert("フォローしました！")
+
+  }
+
   return (
     <div className="mypage">
       <h1 className="mypage__title">マイページ</h1>
@@ -70,7 +83,7 @@ const Mypage = () => {
         ""
       }
  
-
+      <button onClick={handleFollow}>フォローする</button>
       <div className="mypage-list">
         <h2>ブログ一覧</h2>
         <div className="mypage-list__items">
