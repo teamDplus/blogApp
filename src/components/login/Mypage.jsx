@@ -5,7 +5,7 @@ import { useNavigate, Link, useParams } from "react-router-dom";
 import "../../css/components/Mypage.css";
 import { auth } from "../../utils/firebase";
 import AppContext from "../../context/AppContext";
-import { collection, query, where, onSnapshot, serverTimestamp, doc, addDoc } from "firebase/firestore";
+import { collection, query, where, onSnapshot, serverTimestamp, doc, addDoc, getDocs, deleteDoc } from "firebase/firestore";
 import { db } from "../../utils/firebase";
 import GetUserInfo from "./GetUserInfo";
 
@@ -16,6 +16,7 @@ const Mypage = () => {
   const { user, loading } = useContext(AppContext);
   // Firebaseから取得した内容をpostsに代入
   const [posts, setPosts] = useState([]);
+  const [isFollowing, setIsFollowing] = useState();
 
   useEffect(() => {
     console.log(user);
@@ -55,6 +56,21 @@ const Mypage = () => {
     };
   }, [user,id]);
 
+  useEffect(() => {
+    const checkFollowing = async () => {
+        const followingRef = collection(db, "users", user.uid, "following");
+        const q = query(followingRef, where("followingId", "==", id));
+        const querySnapshot = await getDocs(q);
+        if (!querySnapshot.empty) {
+            setIsFollowing(true);
+        } else {
+            setIsFollowing(false);
+        }
+    };
+
+    checkFollowing();
+}, [user, id, isFollowing]);
+
   const handleFollow = async(e) => {
     e.preventDefault();
     
@@ -64,8 +80,27 @@ const Mypage = () => {
       followedAt: serverTimestamp()
     });
     
-    alert("フォローしました！")
+    setIsFollowing(true);
+    alert("フォローしました！");
+  }
 
+  const handleUnfollow = async(e) => {
+    e.preventDefault();
+
+    const followingRef = collection(db, "users", user.uid, "following");
+    const q = query(followingRef, where("followingId", "==", id));
+    const querySnapshot = await getDocs(q);
+
+    if (!querySnapshot.empty) {
+      querySnapshot.forEach(async (docSnapshot) => {
+          const docRef = doc(db, "users", user.uid, "following", docSnapshot.id);
+          await deleteDoc(docRef);
+      });
+    }else{
+
+    }
+    setIsFollowing(false)
+    alert("フォロー解除しました！")
   }
 
   return (
@@ -83,7 +118,12 @@ const Mypage = () => {
         ""
       }
  
-      <button onClick={handleFollow}>フォローする</button>
+      {isFollowing 
+        ? 
+        <button onClick={handleUnfollow}>フォロー解除</button>
+        :
+        <button onClick={handleFollow}>フォローする</button>
+    }
       <div className="mypage-list">
         <h2>ブログ一覧</h2>
         <div className="mypage-list__items">
