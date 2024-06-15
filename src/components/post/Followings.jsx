@@ -10,15 +10,15 @@ export const Followings = () => {
     const [users, setUsers] = useState()
 
     useEffect(() => {
-     // このuseEffectの中全体で行っていることは、コメントコレクションの情報と、それに紐づくusersコレクションの情報の取得
+     // useEffectの中全体でやっていることとしては、followingコレクションのfollowingIdから、そのユーザーの情報を取得
      const fetchComments = async () => {
         const followRef = collection(db,"users",user.uid,"following");
         const q = query(followRef, orderBy("followedAt", "desc"));
         onSnapshot(q, async (querySnapshot) => {
             const followsData = await Promise.all(querySnapshot.docs.map(async (docData) => {
-                // まずは、コメントコレクションの情報を取得。cosole.log(followData)で確認できる。
+                // まずは、followingコレクションの情報を取得。cosole.log(followData)で確認できる。
                 const followData = docData.data();
-                // 続いて、コメントコレクション内のauthorIdに紐づくusersコレクションの情報を取得。cosole.log(userSnap)で確認できる。
+                // 続いて、followingコレクション内のfollowingIdに紐づくusersコレクションの情報を取得。cosole.log(userSnap)で確認できる。
                 const userRef = doc(db, "users", followData.followingId);
                 const userSnap = await getDoc(userRef);
                 if (userSnap.exists()) {
