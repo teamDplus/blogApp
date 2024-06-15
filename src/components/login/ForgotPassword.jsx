@@ -7,9 +7,14 @@ export const ForgotPassword = () => {
     const [email,setEmail] = useState();
     const navigate = useNavigate();
 
+    const actionCodeSettingsResetPassword = {
+      url: 'http://localhost:3000/reset_password',  // パスワードリセットのリダイレクトURL
+      handleCodeInApp: true,
+    };
+
     const submitPasswordResetEmail = async (e) => {
         e.preventDefault();
-        await sendPasswordResetEmail(auth,email)
+        await sendPasswordResetEmail(auth,email,actionCodeSettingsResetPassword)
           .then((resp) => {
             // メール送信成功
             console.log("メール送信成功", resp);
