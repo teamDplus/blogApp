@@ -13,6 +13,7 @@ import { ResetPassword } from "./components/login/ResetPassword";
 import { ForgotPassword } from "./components/login/ForgotPassword";
 import { SentPassword } from "./components/login/SentPassword";
 import { Followings } from "./components/post/Followings";
+import { Followers } from "./components/post/Followers";
 
 function App() {
   return (
@@ -35,6 +36,7 @@ function App() {
             <Route path="/:id/drafts" element={<Draft />} />
             <Route path="/search" element={<SearchPost />} />
             <Route path="/:id/followings" element={<Followings />} />
+            <Route path="/:id/followers" element={<Followers />} />
           </Routes>
         </div>
       </div>

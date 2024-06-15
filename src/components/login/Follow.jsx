@@ -34,7 +34,12 @@ export const Follow = () => {
       followingId: id,
       followedAt: serverTimestamp()
     });
-    
+
+    const followerRef = collection(db, "users", id, "followers");
+    await addDoc(followerRef, {
+        followerId: user.uid,
+        followedAt: serverTimestamp()
+      });
     setIsFollowing(true);
     alert("フォローしました！");
   }
@@ -44,13 +49,19 @@ export const Follow = () => {
     e.preventDefault();
 // まずはクエリで、現在見ているユーザーページのパラムを取得し、それをもとにフォローしているユーザーのドキュメントを取得
     const followingRef = collection(db, "users", user.uid, "following");
-    const q = query(followingRef, where("followingId", "==", id));
-    const querySnapshot = await getDocs(q);
+    const followerRef = collection(db, "users", id, "followers");
+    const followingQuery = query(followingRef, where("followingId", "==", id));
+    const followerQuery = query(followerRef, where("followerId", "==", id));
+    const followingQuerySnapshot = await getDocs(followingQuery);
+    const followerQuerySnapshot = await getDocs(followerQuery);
 // ユーザーが存在していたら、そのドキュメントを削除
-if (!querySnapshot.empty) {
-  querySnapshot.forEach(async (docSnapshot) => {
-        console.log(docSnapshot.id)
+if (!followingQuerySnapshot.empty ) {
+    followingQuerySnapshot.forEach(async (docSnapshot) => {
           const docRef = doc(db, "users", user.uid, "following", docSnapshot.id);
+          await deleteDoc(docRef);
+      });
+      followerQuerySnapshot.forEach(async (docSnapshot) => {
+          const docRef = doc(db, "users", id, "followers", docSnapshot.id);
           await deleteDoc(docRef);
       });
     }else{
@@ -59,6 +70,7 @@ if (!querySnapshot.empty) {
     setIsFollowing(false)
     alert("フォロー解除しました！")
   }
+  console.log(isFollowing)
   return (
     <div>
         {/* 現在訪れているユーザーをフォローしているかどうかでボタンが変わる */}

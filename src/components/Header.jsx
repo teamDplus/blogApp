@@ -58,6 +58,9 @@ const Header = () => {
             <p className="header__button-text">みんなの投稿</p>
           </Link>
         </div>
+        <Link to={user ? `/${user.uid}/followers` : "/login"}>
+          <p>1フォロワー</p>
+        </Link>
       </div>
       {/* 検索機能 */}
       <div className="header__search">

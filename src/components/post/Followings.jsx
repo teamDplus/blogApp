@@ -47,12 +47,16 @@ console.log(users)
         <div className='follow'>
             <h1>フォロー一覧</h1>
             <div className='follow__users'>
-                {users && users.map((user) => (
+                {users && users.length > 0 ? (
+                    users.map((user) => (
                     <Link to={`/${user.userId}`} className='follow__user'>
                         <img src={user.profilePictureUrl} alt="" />
                         <p>{user.userName}</p>
                     </Link>
-                ))}
+                ))
+            ) : (
+                <p>フォローしているユーザーはいません</p>
+            )}
             </div>
         </div>
     </div>
