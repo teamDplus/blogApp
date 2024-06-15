@@ -3,6 +3,7 @@ import "../../css/components/Followings.css";
 import { db } from '../../utils/firebase';
 import { collection, doc, getDoc, onSnapshot, orderBy, query } from 'firebase/firestore';
 import AppContext from '../../context/AppContext';
+import { Link } from 'react-router-dom';
 
 export const Followings = () => {
     const { user } = useContext(AppContext);
@@ -47,7 +48,10 @@ console.log(users)
             <h1>フォロー一覧</h1>
             <div className='follow__users'>
                 {users && users.map((user) => (
-                    <p>{user.userName}</p>
+                    <Link to={`/${user.userId}`} className='follow__user'>
+                        <img src={user.profilePictureUrl} alt="" />
+                        <p>{user.userName}</p>
+                    </Link>
                 ))}
             </div>
         </div>
