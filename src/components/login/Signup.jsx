@@ -43,7 +43,7 @@ const Signup = () => {
     sendSignInLinkToEmail(auth, email, actionCodeSettings)
   .then(() => {
     window.localStorage.setItem('emailForSignIn', email);
-    // ...
+    alert("メールを送信しました！")
   })
   .catch((error) => {
     console.error(error)

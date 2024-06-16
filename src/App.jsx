@@ -28,7 +28,7 @@ function App() {
             <Route path="/:id/posts/:postId" element={<PostList />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/:id/post" element={<Post />} />
-            <Route path="/reset_password" element={<ResetPassword />} />
+            {/* <Route path="/reset_password" element={<ResetPassword />} /> */}
             <Route path="/password_sent" element={<SentPassword />} />
             <Route path="/forgot_password" element={<ForgotPassword />} />
             <Route path="/:id/drafts" element={<Draft />} />
