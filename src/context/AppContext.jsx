@@ -27,8 +27,11 @@ export const AppProvider = ({ children }) => {
                 createdAt:serverTimestamp()
               });
             }
-          }
             setUser(newUser);
+          }
+            else {
+              setUser(null);
+          }
             console.log(newUser)
             setLoading(false); // 非同期処理の完了を示す
         console.log(loading)
