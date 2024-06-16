@@ -5,7 +5,7 @@ import AppContext from '../../context/AppContext';
 import { useParams } from 'react-router-dom';
 
 export const Follow = () => {
-    const { user, loading } = useContext(AppContext);
+    const { user, followerCount,followingCount} = useContext(AppContext);
     const { id } = useParams(); 
     const [isFollowing, setIsFollowing] = useState();
 
@@ -23,7 +23,7 @@ export const Follow = () => {
     };
 
     checkFollowing();
-}, [user, id, isFollowing]);
+}, [user, id, isFollowing, followerCount,followingCount]);
 
 // フォローボタンの処理
   const handleFollow = async(e) => {

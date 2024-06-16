@@ -1,7 +1,7 @@
 import { onAuthStateChanged } from 'firebase/auth';
 import React, {  useState ,createContext, useEffect} from 'react';
 import { auth, db } from '../utils/firebase';
-import { collection, doc, getCountFromServer, getDoc, getDocs, serverTimestamp, setDoc } from 'firebase/firestore';
+import { collection, doc, getCountFromServer, getDoc, getDocs, onSnapshot, serverTimestamp, setDoc } from 'firebase/firestore';
 
 
 const AppContext = createContext();
@@ -42,19 +42,23 @@ export const AppProvider = ({ children }) => {
       },[])
       
       const fetchCounts = async (userId) => {
-        if (userId) {
-            // フォロー数を取得
-            const followingsRef = collection(db, "users", userId, "following");
-            const followingsSnapshot = await getCountFromServer(followingsRef);
-            const followingsCount = followingsSnapshot.data().count;
-            setFollowingCount(followingsCount);
+        // followingの数をリアルタイムで取得
+        const followingsRef = collection(db, "users", userId, "following");
+        const unsubscribeFollowings = onSnapshot(followingsRef, (snapshot) => {
+            setFollowingCount(snapshot.size);
+        });
 
-            // フォロワー数を取得
-            const followersRef = collection(db, "users", userId, "followers");
-            const followersSnapshot = await getCountFromServer(followersRef)
-            const followersCount = followersSnapshot.data().count;
-            setFollowerCount(followersCount);
-        }
+        // followersの数をリアルタイムで取得
+        const followersRef = collection(db, "users", userId, "followers");
+        const unsubscribeFollowers = onSnapshot(followersRef, (snapshot) => {
+            setFollowerCount(snapshot.size);
+        });
+
+        // コンポーネントのアンマウント時にリスナーをクリーンアップ
+        return () => {
+            unsubscribeFollowings();
+            unsubscribeFollowers();
+        };
     };
     // loadingがtrueの間は子コンポーネントのレンダリングを待つ
     if (loading) {

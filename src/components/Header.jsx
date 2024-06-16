@@ -52,12 +52,14 @@ const Header = () => {
             <p className="header__button-text">みんなの投稿</p>
           </Link>
         </div>
-        <Link to={user ? `/${user.uid}/followings` : "/login"} className="header__button">
-          <p>{followingCount}フォロー</p>
-        </Link>
-        <Link to={user ? `/${user.uid}/followers` : "/login"}>
-          <p>{followerCount}フォロワー</p>
-        </Link>
+        <div className="header__follows">
+          <Link to={user ? `/${user.uid}/followings` : "/login"} className="header__follow">
+            <p>{followingCount}フォロー</p>
+          </Link>
+          <Link to={user ? `/${user.uid}/followers` : "/login"} className="header__follower">
+            <p>{followerCount}フォロワー</p>
+          </Link>
+        </div>
       </div>
       {/* 検索機能 */}
       <div className="header__search">
