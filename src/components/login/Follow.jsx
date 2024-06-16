@@ -73,13 +73,16 @@ if (!followingQuerySnapshot.empty ) {
   console.log(isFollowing)
   return (
     <div>
-        {/* 現在訪れているユーザーをフォローしているかどうかでボタンが変わる */}
-      {isFollowing 
-        ? 
+      {user && user.uid === id ? (
+       ""
+      ) : (
+        /* 現在訪れているユーザーをフォローしているかどうかでボタンが変わる */
+      isFollowing ? (
         <button onClick={handleUnfollow}>フォロー解除</button>
-        :
+        ) : (
         <button onClick={handleFollow}>フォローする</button>
-    }
+        )
+      ) }
     </div>
   )
 }
