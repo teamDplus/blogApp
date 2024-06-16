@@ -38,9 +38,18 @@ const Signup = () => {
   };
 
   // モーダルで「はい」を押したときにFirbaseへ登録する
-  const signUp = (e) => {
+  const signUp = async(e) => {
     e.preventDefault();
-    sendSignInLinkToEmail(auth, email, actionCodeSettings)
+    await createUserWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        const user = userCredential.user
+        console.log(userCredential);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+      
+    await sendSignInLinkToEmail(auth, email, actionCodeSettings)
   .then(() => {
     window.localStorage.setItem('emailForSignIn', email);
     alert("メールを送信しました！")
@@ -48,17 +57,6 @@ const Signup = () => {
   .catch((error) => {
     console.error(error)
   });
-    // createUserWithEmailAndPassword(auth, email, password)
-    //   .then((userCredential) => {
-    //     const user = userCredential.user
-    //     console.log(userCredential);
-    //     //登録が完了したらマイページに移動
-    //     navigate(`/${user.uid}`);
-    //   })
-    //   .catch((error) => {
-    //     console.error(error);
-    //     alert('登録に失敗しました。再度お試しください。')
-    //   });
       // モーダルを閉じる
       setIsModalOpen(false);
   }
