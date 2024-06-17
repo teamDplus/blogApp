@@ -1,13 +1,14 @@
 // 各必要な要素を取得
-import { onAuthStateChanged, signOut } from "firebase/auth";
+import { signOut } from "firebase/auth";
 import React, { useContext, useEffect, useState } from "react";
 import { useNavigate, Link, useParams } from "react-router-dom";
 import "../../css/components/Mypage.css";
 import { auth } from "../../utils/firebase";
 import AppContext from "../../context/AppContext";
-import { collection, query, where, onSnapshot } from "firebase/firestore";
+import { collection, query, where, onSnapshot} from "firebase/firestore";
 import { db } from "../../utils/firebase";
 import GetUserInfo from "./GetUserInfo";
+import { Follow } from "./Follow";
 
 //ログイン情報の取得
 const Mypage = () => {
@@ -16,6 +17,7 @@ const Mypage = () => {
   const { user, loading } = useContext(AppContext);
   // Firebaseから取得した内容をpostsに代入
   const [posts, setPosts] = useState([]);
+ 
 
   useEffect(() => {
     console.log(user);
@@ -55,6 +57,8 @@ const Mypage = () => {
     };
   }, [user,id]);
 
+  
+
   return (
     <div className="mypage">
       <h1 className="mypage__title">マイページ</h1>
@@ -69,8 +73,7 @@ const Mypage = () => {
         :
         ""
       }
- 
-
+      <Follow/>
       <div className="mypage-list">
         <h2>ブログ一覧</h2>
         <div className="mypage-list__items">

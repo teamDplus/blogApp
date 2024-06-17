@@ -4,7 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import AppContext from "../context/AppContext";
 
 const Header = () => {
-  const { user, loading } = useContext(AppContext);
+  const { user, followerCount,followingCount } = useContext(AppContext);
 
   const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
@@ -50,6 +50,14 @@ const Header = () => {
               <img src="./peopleIcon.svg" alt="" />
             </div>
             <p className="header__button-text">みんなの投稿</p>
+          </Link>
+        </div>
+        <div className="header__follows">
+          <Link to={user ? `/${user.uid}/followings` : "/login"} className="header__follow">
+            <p>{followingCount}フォロー</p>
+          </Link>
+          <Link to={user ? `/${user.uid}/followers` : "/login"} className="header__follower">
+            <p>{followerCount}フォロワー</p>
           </Link>
         </div>
       </div>
