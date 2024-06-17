@@ -8,14 +8,20 @@ import "../../css/components/LikePost.css"
 function LikePost() {
     const { user } = useContext(AppContext);
     const { id } = useParams();
+    const [active, setActive] = useState(false);
+    const [count, setCount] = useState(0);
     // const { likeCount } = useParams([false]);
 
     async function likesPosts(e) {
+      setActive(!active);
         e.preventDefault();
         await addDoc(collection(db, "posts"), {
           likeCount: true,
         });
+        {setCount(likesPosts ? count+1 : count-1)}
       }
+
+      console.log(count)
 
   return (
     
@@ -23,7 +29,7 @@ function LikePost() {
     {user &&
         id === user.uid ? "" :
             <button type="submit" className='like_button' onClick={likesPosts}>
-        {user ? (<div className='like_button-heart'></div>):
+        {user ? (<div className={active ? 'like_button-heart active' : 'like_button-heart'}></div>):
         (<Link to="/login"><div className='like_button-heart'></div></Link>)
         }
         </button>
