@@ -23,15 +23,23 @@ const Header = () => {
       <div className="header__inner">
         <Link to="/" className="header__top">HOME</Link>
         <div className="header__links">
-          <HeaderButton icon={"/homeIcon.svg"} text="マイページ" link={`${user.uid}`}/>
-          <HeaderButton icon={"/postIcon.svg"} text="ブログを投稿する" link={`/${user.uid}/post`}/>
-          <HeaderButton icon={"/draftsIcon.png"} text="下書き一覧" link={`/${user.uid}/drafts`}/>
-          <HeaderButton icon={"/likes.svg"} text="いいね！履歴" link={`/${user.uid}/likes`}/>
-          <HeaderButton icon={"/peopleIcon.svg"} text="みんなの投稿" link={"/"}/>
+          {user && (
+            <>
+              <HeaderButton icon={"/homeIcon.svg"} text="マイページ" link={`${user.uid}`}/>
+              <HeaderButton icon={"/postIcon.svg"} text="ブログを投稿する" link={`/${user.uid}/post`}/>
+              <HeaderButton icon={"/draftsIcon.png"} text="下書き一覧" link={`/${user.uid}/drafts`}/>
+              <HeaderButton icon={"/likes.svg"} text="いいね！履歴" link={`/${user.uid}/likes`}/>
+              <HeaderButton icon={"/peopleIcon.svg"} text="みんなの投稿" link={"/"}/>
+            </>
+            )}
         </div>
         <div className="header__follows">
-          <FollowButton link={`/${user.uid}/followings`} text={`${followingCount}フォロー`} className={"header__follow"}/>
-          <FollowButton link={`/${user.uid}/followers`} text={`${followerCount}フォロワー`} className={"header__follower"}/>
+          {user && (
+            <>
+              <FollowButton link={`/${user.uid}/followings`} text={`${followingCount}フォロー`} className={"header__follow"}/>
+              <FollowButton link={`/${user.uid}/followers`} text={`${followerCount}フォロワー`} className={"header__follower"}/>
+            </>
+          )}
         </div>
       </div>
       {/* 検索機能 */}
