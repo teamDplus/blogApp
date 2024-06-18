@@ -3,6 +3,7 @@ import "../css/components/Header.css";
 import { Link, useNavigate } from "react-router-dom";
 import AppContext from "../context/AppContext";
 import { HeaderButton } from "./HeaderButton";
+import { FollowButton } from "./FollowButton";
 
 const Header = () => {
   const { user, followerCount,followingCount } = useContext(AppContext);
@@ -29,12 +30,8 @@ const Header = () => {
           <HeaderButton icon={"/peopleIcon.svg"} text="みんなの投稿" link={"/"}/>
         </div>
         <div className="header__follows">
-          <Link to={user ? `/${user.uid}/followings` : "/login"} className="header__follow">
-            <p>{followingCount}フォロー</p>
-          </Link>
-          <Link to={user ? `/${user.uid}/followers` : "/login"} className="header__follower">
-            <p>{followerCount}フォロワー</p>
-          </Link>
+          <FollowButton link={`/${user.uid}/followings`} text={`${followingCount}フォロー`} className={"header__follow"}/>
+          <FollowButton link={`/${user.uid}/followers`} text={`${followerCount}フォロワー`} className={"header__follower"}/>
         </div>
       </div>
       {/* 検索機能 */}
