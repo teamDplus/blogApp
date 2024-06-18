@@ -6,7 +6,7 @@ export const HeaderButton = ({icon,text,link}) => {
     const { user } = useContext(AppContext);
 
   return (
-    <Link to={user ? link : "/login"} className="header__button">
+    <Link to={link} className="header__button">
         <div className="header__button-img">
             <img src={icon} alt="" />
         </div>
