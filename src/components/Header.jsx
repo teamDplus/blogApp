@@ -2,6 +2,7 @@ import React, { useContext, useState } from "react";
 import "../css/components/Header.css";
 import { Link, useNavigate } from "react-router-dom";
 import AppContext from "../context/AppContext";
+import { HeaderButton } from "./HeaderButton";
 
 const Header = () => {
   const { user, followerCount,followingCount } = useContext(AppContext);
@@ -21,36 +22,11 @@ const Header = () => {
       <div className="header__inner">
         <Link to="/" className="header__top">HOME</Link>
         <div className="header__links">
-          <Link to={user ? `/${user.uid}` : "/login"} className="header__button">
-            <div className="header__button-img">
-              <img src="./homeIcon.svg" alt="" />
-            </div>
-            <p className="header__button-text">マイページ</p>
-          </Link>
-          <Link to={user ? `/${user.uid}/post` : "/login"} className="header__button">
-            <div className="header__button-img">
-              <img src="./postIcon.svg" alt="" />
-            </div>
-            <p className="header__button-text">ブログを投稿する</p>
-          </Link>
-          <Link to={user ? `/${user.uid}/drafts` : "/login"} className="header__button">
-            <div className="header__button-img">
-              <img src="./draftsIcon.png" alt="" />
-            </div>
-            <p className="header__button-text">下書き一覧</p>
-          </Link>
-          <Link to={user ? `/${user.uid}/likes` : "/login"} className="header__button">
-            <div className="header__button-img">
-              <img src="./likes.svg" alt="" />
-            </div>
-            <p className="header__button-text">いいね！履歴</p>
-          </Link>
-          <Link to="/" className="header__button">
-            <div className="header__button-img">
-              <img src="./peopleIcon.svg" alt="" />
-            </div>
-            <p className="header__button-text">みんなの投稿</p>
-          </Link>
+          <HeaderButton icon={"/homeIcon.svg"} text="マイページ" link={`${user.uid}`}/>
+          <HeaderButton icon={"/postIcon.svg"} text="ブログを投稿する" link={`/${user.uid}/post`}/>
+          <HeaderButton icon={"/draftsIcon.png"} text="下書き一覧" link={`/${user.uid}/drafts`}/>
+          <HeaderButton icon={"/likes.svg"} text="いいね！履歴" link={`/${user.uid}/likes`}/>
+          <HeaderButton icon={"/peopleIcon.svg"} text="みんなの投稿" link="/"/>
         </div>
         <div className="header__follows">
           <Link to={user ? `/${user.uid}/followings` : "/login"} className="header__follow">
