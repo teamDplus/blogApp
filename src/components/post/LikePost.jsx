@@ -2,26 +2,32 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import AppContext from '../../context/AppContext';
 import { db, auth } from "../../utils/firebase";
-import { collection, addDoc, doc, deleteDoc, setDoc } from "firebase/firestore";
+import { collection, addDoc, doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 import "../../css/components/LikePost.css"
 
 function LikePost() {
     const { user } = useContext(AppContext);
-    const { id } = useParams();
+    const { id, postId } = useParams();
     const [active, setActive] = useState(false);
-    const [count, setCount] = useState(0);
-    // const { likeCount } = useParams([false]);
+    const [likecount, setCount] = useState(0);
+
 
     async function likesPosts(e) {
-      setActive(!active);
+      setActive(!likeCount);
         e.preventDefault();
-        await addDoc(collection(db, "posts"), {
+        await updateDoc(doc(db, "posts", postId), {
           likeCount: true,
         });
-        {setCount(likesPosts ? count+1 : count-1)}
+        // if (beforeIsLiked) {
+        //   likecount = likesPosts ? count : count - 1;
+        // } else {
+        //   likecount = likesPosts ? count + 1 : count;
+        // }
+        {setCount(likesPosts ? likecount+1 : likecount-1)}
       }
 
-      console.log(count)
+
+      console.log(likecount)
 
   return (
     
@@ -29,7 +35,7 @@ function LikePost() {
     {user &&
         id === user.uid ? "" :
             <button type="submit" className='like_button' onClick={likesPosts}>
-        {user ? (<div className={active ? 'like_button-heart active' : 'like_button-heart'}></div>):
+        {user ? (<div className={likecount ? 'like_button-heart active' : 'like_button-heart'}></div>):
         (<Link to="/login"><div className='like_button-heart'></div></Link>)
         }
         </button>
