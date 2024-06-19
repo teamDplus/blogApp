@@ -5,12 +5,15 @@ import { addDoc, collection, serverTimestamp, updateDoc, doc } from "firebase/fi
 import { db } from "../../utils/firebase";
 import { useParams } from "react-router-dom";
 import AppContext from "../../context/AppContext";
+import CommentCheck from "./CommentCheck";
 import { useForm } from "react-hook-form";
 
 function Modal({ isOpen, onClose, setIsModalOpen, comment }) {
   const { user } = useContext(AppContext);
   const { postId } = useParams();
+  //チェックリストの反映
   const [isChecked, setIsChecked] = useState(false);
+  const [isChecked2, setIsChecked2] = useState(false);
 
   // react-hook-formで使うもの
   const {
@@ -20,11 +23,6 @@ function Modal({ isOpen, onClose, setIsModalOpen, comment }) {
   } = useForm();
 
   if (!isOpen) return null;
-
-  //チェックボックスの判定
-  const handleCheckboxChange = (event) => {
-    setIsChecked(event.target.checked);
-  };
 
   // react-hook-formを導入しているので、引数には、各フォームに入力した情報がわたってくる。console.log(data)で確認できる。
   const handlePostComment = async (data) => {
@@ -50,6 +48,13 @@ function Modal({ isOpen, onClose, setIsModalOpen, comment }) {
           });
         }
 
+        //投稿者だけに表示にチェックされたら
+        if (isChecked2) {
+          await updateDoc(commentRef, {
+            anonymous02: true,
+          });
+        }
+
         setIsModalOpen(false); // モーダルを閉じる
       }
 
@@ -71,6 +76,17 @@ function Modal({ isOpen, onClose, setIsModalOpen, comment }) {
         } else {
           await updateDoc(commentDoc, {
             anonymous: false,
+          });
+        }
+
+        //投稿者だけに表示にチェックされたら
+        if (isChecked2) {
+          await updateDoc(commentDoc, {
+            anonymous02: true,
+          });
+        } else {
+          await updateDoc(commentDoc, {
+            anonymous02: false,
           });
         }
 
@@ -104,10 +120,9 @@ function Modal({ isOpen, onClose, setIsModalOpen, comment }) {
             type="text"
             defaultValue={comment ? comment.content : ""} // comment.content が存在する場合はその値、存在しない場合は空文字列を設定
           />
-
           <div>
-            <input type="checkbox" checked={isChecked} onChange={handleCheckboxChange} />
-            匿名
+            <CommentCheck text={"匿名"} isChecked={isChecked} setIsChecked={setIsChecked} />
+            <CommentCheck text={"投稿者のみ表示"} isChecked={isChecked2} setIsChecked={setIsChecked2} />
           </div>
 
           {errors.comment && <span className="validation-message">{errors.comment.message}</span>}
