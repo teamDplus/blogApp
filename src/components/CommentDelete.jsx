@@ -3,8 +3,6 @@ import { doc, deleteDoc } from "firebase/firestore";
 import { db } from "../utils/firebase";
 
 function CommentDelete({ comment, user, postId }) {
-  console.log(comment);
-
   const commentDelete = async () => {
     if (comment.userId == user.uid) {
       const commentDoc = doc(db, "posts", postId, "comments", comment.id);

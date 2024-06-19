@@ -81,19 +81,38 @@ function Post({ EditPost }) {
             <form onSubmit={SendPost}>
               <div className="post__title">
                 <p>タイトル(40字以内)</p>
-                <input placeholder="タイトルを入れてください" type="text" onChange={(e) => {setTitle(e.target.value)}} value={title} maxLength={40} />
+                <input
+                  placeholder="タイトルを入れてください"
+                  type="text"
+                  onChange={(e) => {
+                    setTitle(e.target.value);
+                  }}
+                  value={title}
+                  maxLength={40}
+                />
               </div>
 
               <div className="post__content">
                 <p>本文(100字以上400字以内)</p>
-                <textarea placeholder="本文を入れてください" type="text" onChange={(e) => {setContent(e.target.value)}} value={content} maxLength={400} />
+                <textarea
+                  placeholder="本文を入れてください"
+                  type="text"
+                  onChange={(e) => {
+                    setContent(e.target.value);
+                  }}
+                  value={content}
+                  maxLength={400}
+                />
               </div>
 
-              <div className="post__button">                
-                <button type="submit" disabled={contentLength}>投稿する</button>
-                <button type="button" onClick={editisDraft}>{EditPost ? "下書きに移動する" : "下書き保存する"}</button>
-              </div>           
-              
+              <div className="post__button">
+                <button type="submit" disabled={contentLength}>
+                  投稿する
+                </button>
+                <button type="button" onClick={editisDraft}>
+                  {EditPost ? "下書きに移動する" : "下書き保存する"}
+                </button>
+              </div>
             </form>
           </div>
         </>
@@ -103,26 +122,44 @@ function Post({ EditPost }) {
           <h1>ブログを投稿する</h1>
           <form onSubmit={SendPost}>
             <div className="post__title">
-            <p>タイトル(40字以内)</p>
-            <input placeholder="タイトルを入れてください" type="text" onChange={(e) => {setTitle(e.target.value)}} value={title} maxLength={40} />
+              <p>タイトル(40字以内)</p>
+              <input
+                placeholder="タイトルを入れてください"
+                type="text"
+                onChange={(e) => {
+                  setTitle(e.target.value);
+                }}
+                value={title}
+                maxLength={40}
+              />
             </div>
 
             <div className="post__content">
-            <p>本文(100字以上400字以内)</p>
-              <textarea placeholder="本文を入れてください" type="text" onChange={(e) => {setContent(e.target.value)}} value={content} maxLength={400} />
+              <p>本文(100字以上400字以内)</p>
+              <textarea
+                placeholder="本文を入れてください"
+                type="text"
+                onChange={(e) => {
+                  setContent(e.target.value);
+                }}
+                value={content}
+                maxLength={400}
+              />
             </div>
 
             <div className="post__button">
-              <button type="submit" disabled={contentLength}>投稿する</button>
-              <button type="button" onClick={swicthisDraft}>{EditPost ? "下書きに移動する" : "下書き保存する"}</button>
+              <button type="submit" disabled={contentLength}>
+                投稿する
+              </button>
+              <button type="button" onClick={swicthisDraft}>
+                {EditPost ? "下書きに移動する" : "下書き保存する"}
+              </button>
             </div>
           </form>
         </div>
       )}
     </>
-
   );
-  
 }
 
 export default Post;

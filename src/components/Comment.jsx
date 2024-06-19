@@ -53,8 +53,6 @@ export const Comment = () => {
     return <div>Loading...</div>;
   }
 
-  console.log(comments);
-
   // モーダルを開く関数 「コメントを書く」を押すと発動
   const handleOpenModal = () => {
     setIsModalOpen(true);
@@ -65,7 +63,6 @@ export const Comment = () => {
     setIsModalOpen(false);
   };
 
-  console.log(comments);
   return (
     <div className="comment">
       <h3 className="comment__title">コメント</h3>
@@ -76,7 +73,8 @@ export const Comment = () => {
               <div className="comment-list__item-head">
                 <Link to={`/${comment.userId}`} className="comment-user">
                   <img className="comment-user__img" src={comment.profilePictureUrl} alt="" />
-                  <p className="comment-user__name">{comment.userName}</p>
+                  {/* 匿名じゃない場合と匿名の場合の処理 */}
+                  {comment.anonymous ? <p className="comment-user__name">名前は秘密だよ</p> : <p className="comment-user__name">{comment.userName}</p>}
                 </Link>
                 <p className="comment-date">{comment.createdAt ? comment.createdAt.toDate().toLocaleString() : ""}</p>
               </div>
