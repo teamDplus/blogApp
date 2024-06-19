@@ -2,8 +2,9 @@ import React from "react";
 import { doc, deleteDoc } from "firebase/firestore";
 import { db } from "../utils/firebase";
 
-function DeleteComment({ comment, user, postId }) {
+function CommentDelete({ comment, user, postId }) {
   console.log(comment);
+
   const commentDelete = async () => {
     if (comment.userId == user.uid) {
       const commentDoc = doc(db, "posts", postId, "comments", comment.id);
@@ -19,4 +20,4 @@ function DeleteComment({ comment, user, postId }) {
   );
 }
 
-export default DeleteComment;
+export default CommentDelete;

@@ -4,7 +4,8 @@ import { db } from "../utils/firebase";
 import { Link, useParams } from "react-router-dom";
 import "../css/components/Comment.css";
 import CommentModal from "./modal/CommentModal";
-import CommentDelete from "./DeleteComment";
+import CommentDelete from "./CommentDelete";
+import CommentEdit from "./CommentEdit";
 import AppContext from "../context/AppContext";
 
 export const Comment = () => {
@@ -81,8 +82,11 @@ export const Comment = () => {
               </div>
               <p className="comment-list__item-content">{comment.content}</p>
 
-              {/* 自分がコメントした内容のみ削除できる */}
-              {user.uid == comment.userId ? <CommentDelete comment={comment} user={user} postId={postId} /> : null}
+              {/* 自分がコメントした内容のみ削除、編集できる */}
+              <div className="comment-list__menu">
+                {user.uid == comment.userId ? <CommentDelete comment={comment} user={user} postId={postId} /> : null}
+                {user.uid == comment.userId ? <CommentEdit comment={comment} user={user} postId={postId} /> : null}
+              </div>
             </div>
           ))}
       </div>

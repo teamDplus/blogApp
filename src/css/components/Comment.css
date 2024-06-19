@@ -104,3 +104,28 @@
 .comment-list__item-delete:not(:hover){
   animation: release 0.1s forwards;
 }
+
+.comment-list__item-edit{
+  padding: 7px 10px;
+  max-width: 75px;
+  width: 100%;
+  text-align: center;
+  border-radius: 10px;
+  box-shadow:  6px 6px 20px #c8c9cc, -6px -6px 20px #ffffff;
+  margin-left: 15px;
+}
+
+
+.comment-list__item-edit:hover{
+  animation: press 0.1s forwards;
+}
+
+
+.comment-list__item-edit:not(:hover){
+  animation: release 0.1s forwards;
+}
+
+
+.comment-list__menu{
+  display: flex;
+}

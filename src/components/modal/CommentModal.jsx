@@ -1,13 +1,14 @@
 // components/CommentModal.jsx
 import React, { useContext } from "react";
 import "../../css/components/CommentModal.css";
-import { addDoc, collection, serverTimestamp, updateDoc } from "firebase/firestore";
+import { addDoc, collection, serverTimestamp, updateDoc, doc } from "firebase/firestore";
 import { db } from "../../utils/firebase";
 import { useParams } from "react-router-dom";
 import AppContext from "../../context/AppContext";
 import { useForm } from "react-hook-form";
 
-function Modal({ isOpen, onClose, setIsModalOpen }) {
+function Modal({ isOpen, onClose, setIsModalOpen, comment }) {
+  console.log(comment);
   const { user } = useContext(AppContext);
   const { postId } = useParams();
   // react-hook-formで使うもの
@@ -21,20 +22,36 @@ function Modal({ isOpen, onClose, setIsModalOpen }) {
 
   // react-hook-formを導入しているので、引数には、各フォームに入力した情報がわたってくる。console.log(data)で確認できる。
   const handlePostComment = async (data) => {
-    if (user && user.uid) {
-      // console.log(data)
-      const commentRef = await addDoc(collection(db, "posts", postId, "comments"), {
-        authorId: user.uid,
-        content: data.comment,
-        createdAt: serverTimestamp(),
-      });
+    //コメントを編集ではなく、コメントを投稿された時の条件式（編集を押した際にプロップスを渡して、プロップスが存在するか、しないかで判断）
+    if (!comment) {
+      if (user && user.uid) {
+        // console.log(data)
+        const commentRef = await addDoc(collection(db, "posts", postId, "comments"), {
+          authorId: user.uid,
+          content: data.comment,
+          createdAt: serverTimestamp(),
+        });
 
-      // 取得したドキュメントIDをフィールドとして更新
-      await updateDoc(commentRef, {
-        id: commentRef.id,
-      });
+        // 取得したドキュメントIDをフィールドとして更新
+        await updateDoc(commentRef, {
+          id: commentRef.id,
+        });
 
-      setIsModalOpen(false); // モーダルを閉じる
+        setIsModalOpen(false); // モーダルを閉じる
+      }
+
+      //コメントを投稿ではなく、コメントを編集された時の条件式
+    } else {
+      if (comment) {
+        const commentDoc = doc(db, "posts", postId, "comments", comment.id);
+
+        await updateDoc(commentDoc, {
+          createdAt: serverTimestamp(), // 編集日時を更新
+          content: data.comment,
+        });
+
+        setIsModalOpen(false); // モーダルを閉じる
+      }
     }
   };
 
@@ -60,7 +77,9 @@ function Modal({ isOpen, onClose, setIsModalOpen }) {
                 message: "10文字以上200文字以内で入力してください",
               },
             })}
-          ></textarea>
+            type="text"
+            defaultValue={comment ? comment.content : ""} // comment.content が存在する場合はその値、存在しない場合は空文字列を設定
+          />
           {errors.comment && <span className="validation-message">{errors.comment.message}</span>}
           <button className="comment-modal__button">投稿する</button>
         </form>
