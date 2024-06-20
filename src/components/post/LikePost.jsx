@@ -59,23 +59,7 @@ function LikePost() {
               setActive(true);
           }
       }
-  }
-    
-    
-    // 全ユーザー共通になってるからIDで分けれるようにしたい
-    // likecount更新のタイミングがおかしくてfirebase上のカウントがずれる
-    // async function likesPosts(e) {
-    //   setActive(!active);
-    //   {setLikeCount(!active ? (count) => count+1: (count) => count-1)}
-    //   e.preventDefault();
-    //   await updateDoc(doc(db, "posts", postId), {
-    //     likeCount: likecount,
-    //   });
-    // }
-
-    
-
-    
+  } 
 
       console.log(likecount);
 

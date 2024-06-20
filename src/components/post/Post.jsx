@@ -1,8 +1,8 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { db, auth } from "../../utils/firebase";
 import firebase from "firebase/compat/app";
 import { useParams, useNavigate } from "react-router-dom";
-import { collection, addDoc, doc, deleteDoc, setDoc } from "firebase/firestore";
+import { collection, addDoc, doc, deleteDoc, setDoc, query, where, onSnapshot, serverTimestamp, updateDoc } from "firebase/firestore";
 import "../../css/components/Post.css";
 import AppContext from "../../context/AppContext";
 
@@ -13,53 +13,24 @@ function Post({ EditPost }) {
   const [content, setContent] = useState(EditPost ? EditPost.content : ""); //EditPostが渡ってきたら「content」を入れる。なかったら「("")」
   const { user, loading } = useContext(AppContext);
   const { id, postId } = useParams(); // URLのuserIdを取得
+  const [ likeCount, setLikeCount ] = useState(); // URLのuserIdを取得
 
 console.log(EditPost)
 
   const navigate = useNavigate();
-
-  // 投稿画面で下書き保存ボタンを押したら発火
-  async function swicthisDraft(e) {
-    e.preventDefault();
-    // isDraftで下書きに切り替え
-    await addDoc(collection(db, "posts"), {
-      isDraft: true,
-      authorId: user.uid,
-      content: content,
-      title: title,
-      likeCount: EditPost.likeCount,
-    });
-    navigate(`/${id}/drafts`);
-  }
-
-  // 編集画面で下書き移動ボタンを押したら発火
-  async function editisDraft(e) {
-    e.preventDefault();
-    // isDraftで下書きに切り替え
-    await setDoc(doc(db, "posts", postId), {
-      isDraft: true,
-      authorId: user.uid,
-      content: content,
-      title: title,
-      likeCount: EditPost.likeCount,
-    });
-    navigate(`/${id}/drafts`);
-  }
-
-  // 100字以上になると投稿ボタンが押せるようになる
-  const contentLength = content.length < 100;
+  console.log(likeCount)
 
   //SendPostが押されたらFirebaseの処理開始
   async function SendPost(e) {
     e.preventDefault();
-
+ 
     //postsに各要素を保存
     await addDoc(collection(db, "posts"), {
       isDraft: false,
       authorId: user.uid,
       content: content,
       title: title,
-      likeCount: EditPost.likeCount,
+      likeCount: 0,
     });
 
     setTitle("");
@@ -73,6 +44,38 @@ console.log(EditPost)
 
     navigate("/mypage"); // "/mypage"に移動
   }
+  // 投稿画面で下書き保存ボタンを押したら発火
+  async function swicthisDraft(e) {
+    e.preventDefault();
+    // isDraftで下書きに切り替え
+    await updateDoc(collection(db, "posts"), {
+      isDraft: true,
+      authorId: user.uid,
+      content: content,
+      title: title,
+      likeCount: EditPost.likeCount,
+    });
+    navigate(`/${id}/drafts`);
+  }
+
+  // 編集画面で下書き移動ボタンを押したら発火
+  async function editisDraft(e) {
+    e.preventDefault();
+    // isDraftで下書きに切り替え
+    await updateDoc(doc(db, "posts", postId), {
+      isDraft: true,
+      authorId: user.uid,
+      content: content,
+      title: title,
+      likeCount: EditPost.likeCount,
+    });
+    navigate(`/${id}/drafts`);
+  }
+
+  // 100字以上になると投稿ボタンが押せるようになる
+  const contentLength = content.length < 100;
+
+
 
   // console.log(EditPost);
 
