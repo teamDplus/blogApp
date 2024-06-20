@@ -2,7 +2,7 @@ import React, { useContext, useState, useEffect } from "react";
 import { db, auth } from "../../utils/firebase";
 import firebase from "firebase/compat/app";
 import { useParams, useNavigate } from "react-router-dom";
-import { collection, addDoc, doc, deleteDoc, setDoc, query, where, onSnapshot, serverTimestamp, updateDoc } from "firebase/firestore";
+import { collection, addDoc, doc, deleteDoc, updateDoc, getDoc } from "firebase/firestore";
 import "../../css/components/Post.css";
 import AppContext from "../../context/AppContext";
 
@@ -23,14 +23,22 @@ console.log(EditPost)
   //SendPostが押されたらFirebaseの処理開始
   async function SendPost(e) {
     e.preventDefault();
- 
+    let likeCount = 0;
+
+    if (EditPost) {
+      const postDoc = await getDoc(doc(db, "posts", postId));
+      if (postDoc.exists()) {
+        likeCount = postDoc.data().likeCount;
+      }
+    }
+    
     //postsに各要素を保存
     await addDoc(collection(db, "posts"), {
       isDraft: false,
       authorId: user.uid,
       content: content,
       title: title,
-      likeCount: 0,
+      likeCount: likeCount,
     });
 
     setTitle("");
@@ -53,7 +61,7 @@ console.log(EditPost)
       authorId: user.uid,
       content: content,
       title: title,
-      likeCount: EditPost.likeCount,
+      likeCount: EditPost ? EditPost.likeCount : 0,
     });
     navigate(`/${id}/drafts`);
   }
@@ -67,7 +75,7 @@ console.log(EditPost)
       authorId: user.uid,
       content: content,
       title: title,
-      likeCount: EditPost.likeCount,
+      likeCount: EditPost ? EditPost.likeCount : 0,
     });
     navigate(`/${id}/drafts`);
   }
