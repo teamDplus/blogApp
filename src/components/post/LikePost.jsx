@@ -2,58 +2,82 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import AppContext from '../../context/AppContext';
 import { db, auth } from "../../utils/firebase";
-import { collection, addDoc, doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
+import { collection, addDoc, doc, getDoc, setDoc, updateDoc, arrayUnion, arrayRemove } from "firebase/firestore";
 import "../../css/components/LikePost.css"
 
 function LikePost() {
     const { user } = useContext(AppContext);
     const { id, postId } = useParams();
     const [active, setActive] = useState(false);
-    const [likecount, setCount] = useState(0);
+    const [likecount, setLikeCount] = useState();
+    const [likerId, setlikerId] = useState();
 
-    const commentRef = collection(db, "posts", postId, "comments");
-    const q = query(commentRef, orderBy("createdAt", "desc"));
-    onSnapshot(q, async (querySnapshot) => {
-        const commentsData = await Promise.all(querySnapshot.docs.map(async (docData) => {
-            // まずは、コメントコレクションの情報を取得。cosole.log(commentData)で確認できる。
-            const commentData = docData.data();
-            // 続いて、コメントコレクション内のauthorIdに紐づくusersコレクションの情報を取得。cosole.log(userSnap)で確認できる。
-            const userRef = doc(db, "users", commentData.authorId);
-            const userSnap = await getDoc(userRef);
-            if (userSnap.exists()) {
-                return {
-                    ...commentData,
-                    userId: userSnap.data().userId,
-                    userName: userSnap.data().nickName ? userSnap.data().nickName : userSnap.data().userId,
-                    profilePictureUrl: userSnap.data().profilePictureUrl,
-                };
-            } else {
-                return {
-                    ...commentData,
-                    userName: "Unknown User"
-                };
-            }
-        }));
-        setComments(commentsData);
-    });
+    useEffect(() => {
+      const fetchData = async () => {
+          const postRef = doc(db, "posts", postId);
+          const postSnap = await getDoc(postRef);
 
+          if (postSnap.exists()) {
+              const postData = postSnap.data();
+              setLikeCount(postData.likeCount || 0);
+              setActive(postData.likers?.includes(user.uid) || false);
+          }
+      };
 
-    async function likesPosts(e) {
-      setActive(!likeCount);
-        e.preventDefault();
-        await updateDoc(doc(db, "posts", postId), {
-          likeCount: true,
-        });
-        // if (beforeIsLiked) {
-        //   likecount = likesPosts ? count : count - 1;
-        // } else {
-        //   likecount = likesPosts ? count + 1 : count;
-        // }
-        {setCount(likesPosts ? likecount+1 : likecount-1)}
+      if (user && postId) {
+          fetchData();
       }
+  }, [postId, user]);
 
+  async function likesPosts(e) {
+      e.preventDefault();
 
-      console.log(likecount)
+      if (!user) return;
+
+      const postRef = doc(db, "posts", postId);
+      const postSnap = await getDoc(postRef);
+
+      if (postSnap.exists()) {
+          const postData = postSnap.data();
+          const isLiked = postData.likers?.includes(user.uid) || false;
+
+          if (isLiked) {
+              // いいねを解除
+              await updateDoc(postRef, {
+                  likeCount: postData.likeCount - 1,
+                  likers: arrayRemove(user.uid)
+              });
+              setLikeCount(prevCount => prevCount - 1);
+              setActive(false);
+          } else {
+              // いいねを追加
+              await updateDoc(postRef, {
+                  likeCount: postData.likeCount + 1,
+                  likers: arrayUnion(user.uid)
+              });
+              setLikeCount(prevCount => prevCount + 1);
+              setActive(true);
+          }
+      }
+  }
+    
+    
+    // 全ユーザー共通になってるからIDで分けれるようにしたい
+    // likecount更新のタイミングがおかしくてfirebase上のカウントがずれる
+    // async function likesPosts(e) {
+    //   setActive(!active);
+    //   {setLikeCount(!active ? (count) => count+1: (count) => count-1)}
+    //   e.preventDefault();
+    //   await updateDoc(doc(db, "posts", postId), {
+    //     likeCount: likecount,
+    //   });
+    // }
+
+    
+
+    
+
+      console.log(likecount);
 
   return (
     
@@ -63,7 +87,7 @@ function LikePost() {
             <button type="submit" className='like_button' onClick={likesPosts}>
         {user ? (<div className={likecount ? 'like_button-heart active' : 'like_button-heart'}></div>):
         (<Link to="/login"><div className='like_button-heart'></div></Link>)
-        }
+        }{likecount}
         </button>
     }
     </div>

@@ -14,6 +14,8 @@ function Post({ EditPost }) {
   const { user, loading } = useContext(AppContext);
   const { id, postId } = useParams(); // URLのuserIdを取得
 
+console.log(EditPost)
+
   const navigate = useNavigate();
 
   // 投稿画面で下書き保存ボタンを押したら発火
@@ -25,6 +27,7 @@ function Post({ EditPost }) {
       authorId: user.uid,
       content: content,
       title: title,
+      likeCount: EditPost.likeCount,
     });
     navigate(`/${id}/drafts`);
   }
@@ -38,6 +41,7 @@ function Post({ EditPost }) {
       authorId: user.uid,
       content: content,
       title: title,
+      likeCount: EditPost.likeCount,
     });
     navigate(`/${id}/drafts`);
   }
@@ -55,6 +59,7 @@ function Post({ EditPost }) {
       authorId: user.uid,
       content: content,
       title: title,
+      likeCount: EditPost.likeCount,
     });
 
     setTitle("");
