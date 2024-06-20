@@ -2,7 +2,7 @@ import React, { useContext, useState, useEffect } from "react";
 import { db, auth } from "../../utils/firebase";
 import firebase from "firebase/compat/app";
 import { useParams, useNavigate } from "react-router-dom";
-import { collection, addDoc, doc, deleteDoc, setDoc, query, where, onSnapshot } from "firebase/firestore";
+import { collection, addDoc, doc, deleteDoc, setDoc, query, where, onSnapshot, serverTimestamp } from "firebase/firestore";
 
 import "../../css/components/Post.css";
 import AppContext from "../../context/AppContext";
