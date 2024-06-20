@@ -1,5 +1,5 @@
 // components/CommentModal.jsx
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import "../../css/components/CommentModal.css";
 import { addDoc, collection, serverTimestamp, updateDoc, doc } from "firebase/firestore";
 import { db } from "../../utils/firebase";
@@ -8,9 +8,10 @@ import AppContext from "../../context/AppContext";
 import { useForm } from "react-hook-form";
 
 function Modal({ isOpen, onClose, setIsModalOpen, comment }) {
-  console.log(comment);
   const { user } = useContext(AppContext);
   const { postId } = useParams();
+  const [isChecked, setIsChecked] = useState(false);
+
   // react-hook-formで使うもの
   const {
     register,
@@ -20,9 +21,14 @@ function Modal({ isOpen, onClose, setIsModalOpen, comment }) {
 
   if (!isOpen) return null;
 
+  //チェックボックスの判定
+  const handleCheckboxChange = (event) => {
+    setIsChecked(event.target.checked);
+  };
+
   // react-hook-formを導入しているので、引数には、各フォームに入力した情報がわたってくる。console.log(data)で確認できる。
   const handlePostComment = async (data) => {
-    //コメントを編集ではなく、コメントを投稿された時の条件式（編集を押した際にプロップスを渡して、プロップスが存在するか、しないかで判断）
+    //コメントを投稿された時の条件式（編集を押した際にプロップスを渡して、プロップスが存在するか、しないかで判断）
     if (!comment) {
       if (user && user.uid) {
         // console.log(data)
@@ -37,10 +43,17 @@ function Modal({ isOpen, onClose, setIsModalOpen, comment }) {
           id: commentRef.id,
         });
 
+        //匿名にチェックされたら
+        if (isChecked) {
+          await updateDoc(commentRef, {
+            anonymous: true,
+          });
+        }
+
         setIsModalOpen(false); // モーダルを閉じる
       }
 
-      //コメントを投稿ではなく、コメントを編集された時の条件式
+      //コメントを編集された時の条件式
     } else {
       if (comment) {
         const commentDoc = doc(db, "posts", postId, "comments", comment.id);
@@ -49,6 +62,17 @@ function Modal({ isOpen, onClose, setIsModalOpen, comment }) {
           createdAt: serverTimestamp(), // 編集日時を更新
           content: data.comment,
         });
+
+        //匿名にチェックされたら
+        if (isChecked) {
+          await updateDoc(commentDoc, {
+            anonymous: true,
+          });
+        } else {
+          await updateDoc(commentDoc, {
+            anonymous: false,
+          });
+        }
 
         setIsModalOpen(false); // モーダルを閉じる
       }
@@ -80,6 +104,12 @@ function Modal({ isOpen, onClose, setIsModalOpen, comment }) {
             type="text"
             defaultValue={comment ? comment.content : ""} // comment.content が存在する場合はその値、存在しない場合は空文字列を設定
           />
+
+          <div>
+            <input type="checkbox" checked={isChecked} onChange={handleCheckboxChange} />
+            匿名
+          </div>
+
           {errors.comment && <span className="validation-message">{errors.comment.message}</span>}
           <button className="comment-modal__button">投稿する</button>
         </form>
