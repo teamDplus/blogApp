@@ -5,19 +5,21 @@ import { useNavigate, Link, useParams } from "react-router-dom";
 import "../../css/components/Mypage.css";
 import { auth } from "../../utils/firebase";
 import AppContext from "../../context/AppContext";
-import { collection, query, where, onSnapshot} from "firebase/firestore";
+import { collection, query, where, onSnapshot } from "firebase/firestore";
 import { db } from "../../utils/firebase";
 import GetUserInfo from "./GetUserInfo";
 import { Follow } from "./Follow";
+import { SortPosts } from "../post/SortPosts";
 
 //ログイン情報の取得
 const Mypage = () => {
-  const { id } = useParams(); 
+  const { id } = useParams();
   const navigate = useNavigate();
   const { user, loading } = useContext(AppContext);
   // Firebaseから取得した内容をpostsに代入
   const [posts, setPosts] = useState([]);
- 
+ //ソート
+  const [selectedSortType, setSelectedSortType] = useState('new');
 
   useEffect(() => {
     console.log(user);
@@ -49,33 +51,57 @@ const Mypage = () => {
       snapshot.forEach((doc) => {
         postsData.push({ ...doc.data(), id: doc.id });
       });
-      setPosts(postsData);
+
+      //ソート
+      const sortedPosts = postsData.sort((a, b) => {
+        //新しい順
+        // 隣接するpostData（a,b）のcreatedAt比較し、新しい投稿であれば前に配置、古ければ後ろに配置
+        if (selectedSortType === "new") {
+          if(a.createdAt > b.createdAt) return -1;
+          if(a.createdAt < b.createdAt) return 1;
+          return 0;
+        }
+        //古い順
+        else {
+          if(a.createdAt > b.createdAt) return 1;
+          if(a.createdAt < b.createdAt) return -1;
+          return 0;
+        }
+      });
+
+      setPosts(sortedPosts);
     });
 
     return () => {
       unsubscribe();
     };
-  }, [user,id]);
+  }, [user, id, selectedSortType]);
 
-  
+
 
   return (
     <div className="mypage">
       <h1 className="mypage__title">マイページ</h1>
-      {user && user.uid === id 
-        ? 
+      {user && user.uid === id
+        ?
         <>
           <GetUserInfo />
-            <button onClick={handleSignOut} className="logout">
-              ログアウト
-            </button>
+          <button onClick={handleSignOut} className="logout">
+            ログアウト
+          </button>
         </>
         :
         ""
       }
-      <Follow/>
+      <Follow />
       <div className="mypage-list">
         <h2>ブログ一覧</h2>
+        <div className="mypage--sort">
+          <SortPosts
+            selectedSortType={selectedSortType}
+            setSelectedSortType={setSelectedSortType}
+          />
+        </div>
         <div className="mypage-list__items">
           {posts.map((post) => (
             <div key={post.id}>

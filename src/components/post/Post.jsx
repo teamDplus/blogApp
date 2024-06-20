@@ -1,8 +1,7 @@
 import React, { useContext, useState } from "react";
-import { db, auth } from "../../utils/firebase";
-import firebase from "firebase/compat/app";
+import { db } from "../../utils/firebase";
 import { useParams, useNavigate } from "react-router-dom";
-import { collection, addDoc, doc, deleteDoc, setDoc } from "firebase/firestore";
+import { collection, addDoc, doc, deleteDoc, setDoc, serverTimestamp } from "firebase/firestore";
 import "../../css/components/Post.css";
 import AppContext from "../../context/AppContext";
 
@@ -55,6 +54,7 @@ function Post({ EditPost }) {
       authorId: user.uid,
       content: content,
       title: title,
+      createdAt: serverTimestamp(),
     });
 
     setTitle("");
