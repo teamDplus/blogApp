@@ -11,6 +11,32 @@ function LikePost() {
     const [active, setActive] = useState(false);
     const [likecount, setCount] = useState(0);
 
+    const commentRef = collection(db, "posts", postId, "comments");
+    const q = query(commentRef, orderBy("createdAt", "desc"));
+    onSnapshot(q, async (querySnapshot) => {
+        const commentsData = await Promise.all(querySnapshot.docs.map(async (docData) => {
+            // まずは、コメントコレクションの情報を取得。cosole.log(commentData)で確認できる。
+            const commentData = docData.data();
+            // 続いて、コメントコレクション内のauthorIdに紐づくusersコレクションの情報を取得。cosole.log(userSnap)で確認できる。
+            const userRef = doc(db, "users", commentData.authorId);
+            const userSnap = await getDoc(userRef);
+            if (userSnap.exists()) {
+                return {
+                    ...commentData,
+                    userId: userSnap.data().userId,
+                    userName: userSnap.data().nickName ? userSnap.data().nickName : userSnap.data().userId,
+                    profilePictureUrl: userSnap.data().profilePictureUrl,
+                };
+            } else {
+                return {
+                    ...commentData,
+                    userName: "Unknown User"
+                };
+            }
+        }));
+        setComments(commentsData);
+    });
+
 
     async function likesPosts(e) {
       setActive(!likeCount);
