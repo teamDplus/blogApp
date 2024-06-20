@@ -70,21 +70,61 @@ export const Comment = () => {
         {comments &&
           comments.map((comment) => (
             <div className="comment-list__item" key={comment.id}>
-              <div className="comment-list__item-head">
-                <Link to={`/${comment.userId}`} className="comment-user">
-                  <img className="comment-user__img" src={comment.profilePictureUrl} alt="" />
-                  {/* 匿名じゃない場合と匿名の場合の処理 */}
-                  {comment.anonymous ? <p className="comment-user__name">名前は秘密だよ</p> : <p className="comment-user__name">{comment.userName}</p>}
-                </Link>
-                <p className="comment-date">{comment.createdAt ? comment.createdAt.toDate().toLocaleString() : ""}</p>
-              </div>
-              <p className="comment-list__item-content">{comment.content}</p>
+              {user ? (
+                //ログインしている場合
+                comment.anonymous02 && id == user.uid ? (
+                  /* 投稿者のみに表示にした場合 */
+                  <>
+                    <div className="comment-list__item-head">
+                      <Link to={`/${comment.userId}`} className="comment-user">
+                        <img className="comment-user__img" src={comment.profilePictureUrl} alt="" />
+                        {/* 匿名じゃない場合と匿名の場合の処理 */}
+                        {comment.anonymous ? <p className="comment-user__name">名前は秘密だよ</p> : <p className="comment-user__name">{comment.userName}</p>}
+                      </Link>
+                      <p className="comment-date">{comment.createdAt ? comment.createdAt.toDate().toLocaleString() : ""}</p>
+                    </div>
+                    <p className="comment-list__item-content">{comment.content}</p>
+                  </>
+                ) : !comment.anonymous02 ? (
+                  /* 投稿者のみに表示にしてない場合 */
+                  <>
+                    <div className="comment-list__item-head">
+                      <Link to={`/${comment.userId}`} className="comment-user">
+                        <img className="comment-user__img" src={comment.profilePictureUrl} alt="" />
+                        {/* 匿名じゃない場合と匿名の場合の処理 */}
+                        {comment.anonymous ? <p className="comment-user__name">名前は秘密だよ</p> : <p className="comment-user__name">{comment.userName}</p>}
+                      </Link>
+                      <p className="comment-date">{comment.createdAt ? comment.createdAt.toDate().toLocaleString() : ""}</p>
+                    </div>
+                    <p className="comment-list__item-content">{comment.content}</p>
+                  </>
+                ) : null
+              ) : (
+                <>
+                  {/* //ログインしていない場合 */}
+                  {!comment.anonymous02 ? (
+                    <>
+                      <div className="comment-list__item-head">
+                        <Link to={`/${comment.userId}`} className="comment-user">
+                          <img className="comment-user__img" src={comment.profilePictureUrl} alt="User Profile" />
+                          {/* Display user's name or anonymous message */}
+                          {comment.anonymous ? <p className="comment-user__name">名前は秘密だよ</p> : <p className="comment-user__name">{comment.userName}</p>}
+                        </Link>
+                        <p className="comment-date">{comment.createdAt ? new Date(comment.createdAt).toLocaleString() : ""}</p>
+                      </div>
+                      <p className="comment-list__item-content">{comment.content}</p>
+                    </>
+                  ) : null}
+                </>
+              )}
 
               {/* 自分がコメントした内容のみ削除、編集できる */}
-              <div className="comment-list__menu">
-                {user.uid == comment.userId ? <CommentDelete comment={comment} user={user} postId={postId} /> : null}
-                {user.uid == comment.userId ? <CommentEdit comment={comment} user={user} postId={postId} /> : null}
-              </div>
+              {user ? (
+                <div className="comment-list__menu">
+                  {user.uid == comment.userId ? <CommentDelete comment={comment} user={user} postId={postId} /> : null}
+                  {user.uid == comment.userId ? <CommentEdit comment={comment} user={user} postId={postId} /> : null}
+                </div>
+              ) : null}
             </div>
           ))}
       </div>
