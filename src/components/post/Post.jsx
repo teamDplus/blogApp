@@ -51,7 +51,7 @@ console.log(EditPost)
       await deleteDoc(postDoc); // ドキュメントを削除
     }
 
-    navigate("/mypage"); // "/mypage"に移動
+    navigate(`/${user.uid}`); // "/mypage"に移動
   }
   // 投稿画面で下書き保存ボタンを押したら発火
   async function swicthisDraft(e) {
