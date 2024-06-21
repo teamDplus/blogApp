@@ -8,6 +8,7 @@ import LinkPost from "./LinkPost";
 import "../../css/components/PostList.css";
 import "../../css/components/Post.css";
 import { Comment } from "../Comment";
+import LikePost from "./LikePost";
 
 function Post() {
   //App.jsxのpostIdに設定したURLを取得、<Route path="/:id/posts/:postId"
@@ -38,6 +39,7 @@ function Post() {
     <>
       <div className="post-list">
         <div className="post-list__item">
+          <img src={post.thumbnailUrl} className="post-list__item-thumbnail" alt="" />
           <h3 className="post-list__item-title">{post.title}</h3>
           <p className="post-list__item-content">{post.content}</p>
         </div>
@@ -47,6 +49,7 @@ function Post() {
       <LinkPost />
       <EditPost />
       {/* </div> */}
+      <LikePost />
       <Comment />
     </>
   );

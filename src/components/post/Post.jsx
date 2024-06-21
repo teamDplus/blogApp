@@ -2,7 +2,7 @@ import React, { useContext, useState, useEffect } from "react";
 import { db, auth } from "../../utils/firebase";
 import firebase from "firebase/compat/app";
 import { useParams, useNavigate } from "react-router-dom";
-import { collection, addDoc, doc, deleteDoc, setDoc, query, where, onSnapshot, serverTimestamp, updateDoc } from "firebase/firestore";
+import { collection, addDoc, doc, deleteDoc, setDoc, query, where, onSnapshot, serverTimestamp, updateDoc, getDoc } from "firebase/firestore";
 import "../../css/components/Post.css";
 import AppContext from "../../context/AppContext";
 import InputImage from "../image/InputImage";
@@ -18,8 +18,8 @@ function Post({ EditPost }) {
   const navigate = useNavigate();
   const [fileObject, setFileObject] = useState(null);
   const [newProfilePicture, setNewProfilePicture] = useState(''); //変更後のプロフィール画像
-  const [docRef, setDocRef] = useState(''); //
-
+  let docRef = "";
+  const defaultThumbnailUrl = "https://firebasestorage.googleapis.com/v0/b/blogapp-c1052.appspot.com/o/postImages%2Fdefault%2FnoImage.PNG?alt=media&token=c7febf2c-b45e-4469-b1ce-2b232f8bd56d"
 
   // Firebaseの中にあるpostsのフィールドから、ユーザーの投稿記事を取得
   useEffect(() => {
@@ -46,15 +46,22 @@ function Post({ EditPost }) {
     // 下書きの数は５個までの制限
     if (posts.length <= 4) {
       // isDraftで下書きに切り替え
-      await addDoc(collection(db, "posts"), {
+      docRef = await addDoc(collection(db, "posts"), {
         isDraft: true,
         authorId: user.uid,
         content: content,
         title: title,
+        thumbnailUrl: defaultThumbnailUrl
       });
       navigate(`/${id}/drafts`);
     } else {
       alert("下書きに保存できるのは5個までです。");
+    }
+
+    // サムネイル画像が選択されていれば追加処理を行う
+    if (fileObject) {
+      console.log("imakoko");
+      setThumbnail();
     }
   }
 
@@ -64,7 +71,8 @@ function Post({ EditPost }) {
     if (posts.length <= 4) {
       e.preventDefault();
       // isDraftで下書きに切り替え
-      await setDoc(doc(db, "posts", postId), {
+      docRef = doc(db, "posts", postId);
+      await updateDoc(docRef, {
         isDraft: true,
         authorId: user.uid,
         content: content,
@@ -83,52 +91,66 @@ function Post({ EditPost }) {
   async function SendPost(e) {
     e.preventDefault();
 
-    let docRef = ""
     //postsに各要素を保存
-    if(postId === undefined){
+    //新規投稿
+    if (postId === undefined) {
       docRef = await addDoc(collection(db, "posts"), {
         isDraft: false,
         authorId: user.uid,
         content: content,
         title: title,
         createdAt: serverTimestamp(),
+        thumbnailUrl: defaultThumbnailUrl
       });
     }
-    else{
-      console.log(postId);
-      await updateDoc(postId, {
-        isDraft: false,
-        authorId: user.uid,
-        content: content,
-        title: title,
-      });
+    //編集後に再度投稿
+    else {
+      docRef = doc(db, "posts", postId);
+      // ドキュメントを取得してcreatedAtが存在するか確認
+      const docSnapshot = await getDoc(docRef);
+      if (docSnapshot.exists()) {
+        const data = docSnapshot.data();
+        const updateData = {
+          isDraft: false,
+          authorId: user.uid,
+          content: content,
+          title: title,
+        };
+    
+        // createdAtが存在しない場合は追加
+        //※最初の投稿画面で下書きに保存した場合、createdAtが保存されないため必要
+        if (!data.createdAt) {
+          updateData.createdAt = serverTimestamp();
+        }
+    
+        await updateDoc(docRef, updateData);
+      }
     }
 
     setTitle("");
     setContent("");
 
-    //EditPostが渡ってきたら、元々あったドキュメントを削除して再度上記のコードで登録し直す
-    if (EditPost) {
-      const postDoc = doc(db, "posts", postId); //ドキュメントのidを元にドキュメントを取得
-      // await deleteDoc(postDoc); // ドキュメントを削除
+    // サムネイル画像が選択されていれば追加処理を行う
+    if (fileObject) {
+      setThumbnail();
     }
 
     navigate(`/${user.uid}`); // "/mypage"に移動
+  }
 
-    //サムネイル画像が選択されたときの処理
+  //サムネイル画像が選択されたときの処理
+  const setThumbnail = async () => {
     let thumbnailStorageUrl = "";
-    if (fileObject) {
-      //ストレージ保存先のパスを指定
-      const storageFilePath = "postImages/" + docRef.id + "/thumbnail/";
-      //ストレージに画像を保存、URLを取得する（非同期処理でアップロード完了を待つ）
-      thumbnailStorageUrl = await UploadImageToStorage(fileObject, storageFilePath);
-      // ドキュメントの参照を取得し、thumbnailUrlを追加
-      const postDocRef = doc(db, "posts", docRef.id);
-      //ポストのstorageにサムネイル画像のurlを追加する
-      await updateDoc(postDocRef, {
-        thumbnailUrl: thumbnailStorageUrl,
-      });
-    }
+    //ストレージ保存先のパスを指定
+    const storageFilePath = "postImages/" + docRef.id + "/thumbnail/";
+    //ストレージに画像を保存、URLを取得する（非同期処理でアップロード完了を待つ）
+    thumbnailStorageUrl = await UploadImageToStorage(fileObject, storageFilePath);
+    // ドキュメントの参照を取得し、thumbnailUrlを追加
+    const postDocRef = doc(db, "posts", docRef.id);
+    //ポストのstorageにサムネイル画像のurlを追加する
+    await updateDoc(postDocRef, {
+      thumbnailUrl: thumbnailStorageUrl,
+    });
   }
 
   // console.log(EditPost);
@@ -141,6 +163,15 @@ function Post({ EditPost }) {
           <div className="post">
             <h1>{EditPost ? <p>ブログを編集する</p> : <p>ブログを投稿する</p>}</h1>
             <form onSubmit={SendPost}>
+              <div className="post__thumbnail">
+                <InputImage
+                  imageLabel={"サムネイルの変更"}
+                  fileObject={fileObject}
+                  setFileObject={setFileObject}
+                  setNewProfilePicture={setNewProfilePicture}
+                  newProfilePicture={newProfilePicture}
+                />
+              </div>
               <div className="post__title">
                 <p>タイトル(40字以内)</p>
                 <input

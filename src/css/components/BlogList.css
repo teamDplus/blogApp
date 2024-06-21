@@ -40,7 +40,8 @@
     white-space: nowrap;
 }
 
-img.blog-list__item-thumbnail{
+img.blog-list__item-thumbnail, .mypage-list__item-thumbnail{
     width: 240px;
-    height: auto;
+    height: 130px;
+    object-fit: cover;
 }

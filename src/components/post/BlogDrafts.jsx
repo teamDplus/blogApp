@@ -72,6 +72,7 @@ const BlogDrafts = () => {
                 <div key={post.id}>
                   <Link to={`/${user.uid}/posts/${post.id}`} className="mypage-list__link">
                     <div className="mypage-list__item">
+                      <img src={post.thumbnailUrl} className="mypage-list__item-thumbnail" alt="" />
                       <h3 className="mypage-list__item-title">{post.title}</h3>
                       <p className="mypage-list__item-content">{post.content}</p>
                     </div>
@@ -82,7 +83,7 @@ const BlogDrafts = () => {
           </div>
         </div>
       ) : // 一致しない場合何も表示させない
-      null}
+        null}
     </>
   );
 };

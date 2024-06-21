@@ -12,6 +12,7 @@ import SearchPost from "./components/post/SearchPost";
 import { ResetPassword } from "./components/login/ResetPassword";
 import { ForgotPassword } from "./components/login/ForgotPassword";
 import { SentPassword } from "./components/login/SentPassword";
+import LikeList from "./components/post/LikeList";
 import { Followings } from "./components/post/Followings";
 import { Followers } from "./components/post/Followers";
 
@@ -34,6 +35,7 @@ function App() {
             <Route path="/password_sent" element={<SentPassword />} />
             <Route path="/forgot_password" element={<ForgotPassword />} />
             <Route path="/:id/drafts" element={<Draft />} />
+            <Route path="/:id/likes" element={<LikeList />} />
             <Route path="/search" element={<SearchPost />} />
             <Route path="/:id/followings" element={<Followings />} />
             <Route path="/:id/followers" element={<Followers />} />
