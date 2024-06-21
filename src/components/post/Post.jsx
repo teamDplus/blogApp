@@ -115,7 +115,7 @@ console.log(EditPost)
      likeCount: EditPost ? EditPost.likeCount : 0,
     });
     navigate(`/${id}/drafts`);
-=======
+
     // 下書きの数は５個までの制限
     if (posts.length <= 4) {
       e.preventDefault();
@@ -231,6 +231,7 @@ console.log(EditPost)
       )}
     </>
   );
+}
 }
 
 export default Post;
