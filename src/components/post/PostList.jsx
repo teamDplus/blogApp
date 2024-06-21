@@ -39,6 +39,7 @@ function Post() {
     <>
       <div className="post-list">
         <div className="post-list__item">
+          <img src={post.thumbnailUrl} className="post-list__item-thumbnail" alt="" />
           <h3 className="post-list__item-title">{post.title}</h3>
           <p className="post-list__item-content">{post.content}</p>
         </div>
@@ -49,7 +50,7 @@ function Post() {
       <EditPost />
       {/* </div> */}
       <LikePost />
-      <Comment/>
+      <Comment />
     </>
   );
 }

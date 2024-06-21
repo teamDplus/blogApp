@@ -2,9 +2,11 @@ import React, { useContext, useState, useEffect } from "react";
 import { db, auth } from "../../utils/firebase";
 import firebase from "firebase/compat/app";
 import { useParams, useNavigate } from "react-router-dom";
-import { collection, addDoc, doc, deleteDoc, setDoc, query, where, onSnapshot, serverTimestamp, getDoc, updateDoc } from "firebase/firestore";
+import { collection, addDoc, doc, deleteDoc, setDoc, query, where, onSnapshot, serverTimestamp, updateDoc, getDoc } from "firebase/firestore";
 import "../../css/components/Post.css";
 import AppContext from "../../context/AppContext";
+import InputImage from "../image/InputImage";
+import { SetThumbnail } from "../image/SetThumbnail";
 
 //記事の編集が押されたら（EditPost.jsx）から情報を{EditPost}に渡してる
 function Post({ EditPost }) {
@@ -12,49 +14,12 @@ function Post({ EditPost }) {
   const [content, setContent] = useState(EditPost ? EditPost.content : ""); //EditPostが渡ってきたら「content」を入れる。なかったら「("")」
   const { user, loading } = useContext(AppContext);
   const { id, postId } = useParams(); // URLのuserIdを取得
-  const [ likeCount, setLikeCount ] = useState(); // URLのuserIdを取得
-
-console.log(EditPost)
   const [posts, setPosts] = useState([]);
-
   const navigate = useNavigate();
-  console.log(likeCount)
+  const [fileObject, setFileObject] = useState(null);
+  const [newProfilePicture, setNewProfilePicture] = useState(''); //変更後のプロフィール画像
+  let docRef = "";
 
-  //SendPostが押されたらFirebaseの処理開始
-  async function SendPost(e) {
-    e.preventDefault();
-    let likeCount = 0;
-
-    if (EditPost) {
-      const postDoc = await getDoc(doc(db, "posts", postId));
-      if (postDoc.exists()) {
-        likeCount = postDoc.data().likeCount;
-      }
-    }
-    
-    //postsに各要素を保存
-    await addDoc(collection(db, "posts"), {
-      isDraft: false,
-      authorId: user.uid,
-      content: content,
-      title: title,
-      likeCount: likeCount,
-      createdAt: serverTimestamp(),
-    });
-
-    setTitle("");
-    setContent("");
-
-    //EditPostが渡ってきたら、元々あったドキュメントを削除して再度上記のコードで登録し直す
-    if (EditPost) {
-      const postDoc = doc(db, "posts", postId); //ドキュメントのidを元にドキュメントを取得
-      await deleteDoc(postDoc); // ドキュメントを削除
-    }
-
-    navigate(`/${user.uid}`); // "/mypage"に移動
-  }
-
- 
   // Firebaseの中にあるpostsのフィールドから、ユーザーの投稿記事を取得
   useEffect(() => {
     // postsの中にあるコレクションの中からフィールドのauthorIdとログインしているuserと同じidの記事を取得
@@ -80,42 +45,32 @@ console.log(EditPost)
     // 下書きの数は５個までの制限
     if (posts.length <= 4) {
       // isDraftで下書きに切り替え
-      await addDoc(collection(db, "posts"), {
+      docRef = await addDoc(collection(db, "posts"), {
         isDraft: true,
         authorId: user.uid,
         content: content,
         title: title,
-        likeCount: EditPost ? EditPost.likeCount : 0,
       });
       navigate(`/${id}/drafts`);
     } else {
       alert("下書きに保存できるのは5個までです。");
     }
+
+    SetThumbnail(fileObject, docRef); //サムネイル画像の設定
   }
 
   // 編集画面で下書き移動ボタンを押したら発火
   async function editisDraft(e) {
-    e.preventDefault();
-    // isDraftで下書きに切り替え
-    await updateDoc(doc(db, "posts", postId), {
-      isDraft: true,
-      authorId: user.uid,
-      content: content,
-      title: title,
-     likeCount: EditPost ? EditPost.likeCount : 0,
-    });
-    navigate(`/${id}/drafts`);
-
     // 下書きの数は５個までの制限
     if (posts.length <= 4) {
       e.preventDefault();
       // isDraftで下書きに切り替え
-      await setDoc(doc(db, "posts", postId), {
+      docRef = doc(db, "posts", postId);
+      await updateDoc(docRef, {
         isDraft: true,
         authorId: user.uid,
         content: content,
         title: title,
-        likeCount: EditPost ? EditPost.likeCount : 0,
       });
       navigate(`/${id}/drafts`);
     } else {
@@ -126,11 +81,51 @@ console.log(EditPost)
   // 100字以上になると投稿ボタンが押せるようになる
   const contentLength = content.length < 100;
 
+  //SendPostが押されたらFirebaseの処理開始
+  async function SendPost(e) {
+    e.preventDefault();
+    //postsに各要素を保存
+    //新規投稿
+    if (postId === undefined) {
+      docRef = await addDoc(collection(db, "posts"), {
+        isDraft: false,
+        authorId: user.uid,
+        content: content,
+        title: title,
+        createdAt: serverTimestamp(),
+      });
+    }
+    //編集後に再度投稿
+    else {
+      docRef = doc(db, "posts", postId);
+      // ドキュメントを取得してcreatedAtが存在するか確認
+      const docSnapshot = await getDoc(docRef);
+      if (docSnapshot.exists()) {
+        const data = docSnapshot.data();
+        const updateData = {
+          isDraft: false,
+          authorId: user.uid,
+          content: content,
+          title: title,
+        };
+
+        // createdAtが存在しない場合は追加
+        //※最初の投稿画面で下書きに保存した場合、createdAtが保存されないため必要
+        if (!data.createdAt) {
+          updateData.createdAt = serverTimestamp();
+        }
+
+        await updateDoc(docRef, updateData);
+      }
+    }
+
+    SetThumbnail(fileObject, docRef); //サムネイル画像の設定
+    setTitle("");
+    setContent("");
+    navigate(`/${user.uid}`); // "/mypage"に移動
+  }
 
 
-
-
-  // console.log(EditPost);
 
   return (
     <>
@@ -140,6 +135,15 @@ console.log(EditPost)
           <div className="post">
             <h1>{EditPost ? <p>ブログを編集する</p> : <p>ブログを投稿する</p>}</h1>
             <form onSubmit={SendPost}>
+              <div className="post__thumbnail">
+                <InputImage
+                  imageLabel={"サムネイルの変更"}
+                  fileObject={fileObject}
+                  setFileObject={setFileObject}
+                  setNewProfilePicture={setNewProfilePicture}
+                  newProfilePicture={newProfilePicture}
+                />
+              </div>
               <div className="post__title">
                 <p>タイトル(40字以内)</p>
                 <input
@@ -182,6 +186,15 @@ console.log(EditPost)
         <div className="post">
           <h1>ブログを投稿する</h1>
           <form onSubmit={SendPost}>
+            <div className="post__thumbnail">
+              <InputImage
+                imageLabel={"サムネイルの設定"}
+                fileObject={fileObject}
+                setFileObject={setFileObject}
+                setNewProfilePicture={setNewProfilePicture}
+                newProfilePicture={newProfilePicture}
+              />
+            </div>
             <div className="post__title">
               <p>タイトル(40字以内)</p>
               <input
@@ -222,6 +235,5 @@ console.log(EditPost)
     </>
   );
 }
-
 
 export default Post;

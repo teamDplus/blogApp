@@ -18,7 +18,7 @@ const Mypage = () => {
   const { user, loading } = useContext(AppContext);
   // Firebaseから取得した内容をpostsに代入
   const [posts, setPosts] = useState([]);
- //ソート
+  //ソート
   const [selectedSortType, setSelectedSortType] = useState('new');
 
   useEffect(() => {
@@ -57,14 +57,14 @@ const Mypage = () => {
         //新しい順
         // 隣接するpostData（a,b）のcreatedAt比較し、新しい投稿であれば前に配置、古ければ後ろに配置
         if (selectedSortType === "new") {
-          if(a.createdAt > b.createdAt) return -1;
-          if(a.createdAt < b.createdAt) return 1;
+          if (a.createdAt > b.createdAt) return -1;
+          if (a.createdAt < b.createdAt) return 1;
           return 0;
         }
         //古い順
         else {
-          if(a.createdAt > b.createdAt) return 1;
-          if(a.createdAt < b.createdAt) return -1;
+          if (a.createdAt > b.createdAt) return 1;
+          if (a.createdAt < b.createdAt) return -1;
           return 0;
         }
       });
@@ -107,6 +107,7 @@ const Mypage = () => {
             <div key={post.id}>
               <Link to={`/${id}/posts/${post.id}`} className="mypage-list__link">
                 <div className="mypage-list__item">
+                  <img src={post.thumbnailUrl} className="mypage-list__item-thumbnail" alt="" />
                   <h3 className="mypage-list__item-title">{post.title}</h3>
                   <p className="mypage-list__item-content">{post.content}</p>
                 </div>
