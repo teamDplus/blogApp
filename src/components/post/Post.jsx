@@ -53,19 +53,8 @@ console.log(EditPost)
 
     navigate(`/${user.uid}`); // "/mypage"に移動
   }
-  // 投稿画面で下書き保存ボタンを押したら発火
-  async function swicthisDraft(e) {
-    e.preventDefault();
-    // isDraftで下書きに切り替え
-    await updateDoc(collection(db, "posts"), {
-      isDraft: true,
-      authorId: user.uid,
-      content: content,
-      title: title,
-      likeCount: EditPost ? EditPost.likeCount : 0,
-    });
-    navigate(`/${id}/drafts`);
-  }
+
+ 
   // Firebaseの中にあるpostsのフィールドから、ユーザーの投稿記事を取得
   useEffect(() => {
     // postsの中にあるコレクションの中からフィールドのauthorIdとログインしているuserと同じidの記事を取得
