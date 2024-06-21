@@ -56,6 +56,7 @@ const BlogList = () => {
       <div className="blog-list__items">
         {posts.map((post) => (
           <Link to={`/${post.authorId}/posts/${post.id}`} className="blog-list__item" key={post.id}>
+            <img src={post.thumbnailUrl} className="blog-list__item-thumbnail" alt="" />
             <h3 className="blog-list__item-title">{post.title}</h3>
             <p className="blog-list__item-content">{post.content}</p>
           </Link>

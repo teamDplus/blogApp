@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import "../../css/components/UploadImage.css"
+import "../../css/components/InputImage.css"
 
-const UploadImage = ({ newProfilePicture, setNewProfilePicture, setFileObject }) => {
+const InputImage = ({ newProfilePicture, setNewProfilePicture, setFileObject, imageLabel }) => {
     const [isErrorProfilePicture, setIsErrorProfilePicture] = useState(false);
     const [errorProfilePicture, setErrorProfilePicture] = useState("");
 
@@ -31,7 +31,7 @@ const UploadImage = ({ newProfilePicture, setNewProfilePicture, setFileObject })
         <>
             <img src={newProfilePicture} className='changeUserInfoModal__profilePicture' alt="" />
             <div>
-                <label htmlFor="profilePicture" className="">プロフィール画像</label>
+                <label htmlFor="profilePicture" className="">{imageLabel}</label>
                 <input
                     onChange={onFileInputChange}
                     accept=".png, .jpg, .jpeg"
@@ -47,4 +47,4 @@ const UploadImage = ({ newProfilePicture, setNewProfilePicture, setFileObject })
         </>
     )
 }
-export default UploadImage;
+export default InputImage;

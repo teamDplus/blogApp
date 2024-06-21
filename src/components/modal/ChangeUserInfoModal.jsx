@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import CheckNewUserInfoModal from './CheckNewUserInfoModal';
-import UploadImage from "../login/UploadImage";
+import InputImage from "../image/InputImage";
 import { useForm } from "react-hook-form";
 import { db } from "../../utils/firebase";
 import { collection, query, where, getDocs } from "firebase/firestore";
@@ -82,12 +82,13 @@ const ChangeUserInfoModal = (props) => {
                 />
                 {errors.nickname && <span className="validation-message">{errors.nickname.message}</span>}
               </div>
-              <UploadImage
+              <InputImage
                 setNewProfilePicture={setNewProfilePicture}
                 newProfilePicture={newProfilePicture}
                 setFileObject={setFileObject}
                 fileObject={fileObject}
                 userId={userId}
+                imageLabel={"プロフィール画像"}
               />
               <button type="submit" className="changeUserInfo__button">変更</button>
             </form>

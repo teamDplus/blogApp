@@ -2,10 +2,11 @@ import React, { useContext, useState, useEffect } from "react";
 import { db, auth } from "../../utils/firebase";
 import firebase from "firebase/compat/app";
 import { useParams, useNavigate } from "react-router-dom";
-import { collection, addDoc, doc, deleteDoc, setDoc, query, where, onSnapshot, serverTimestamp } from "firebase/firestore";
-
+import { collection, addDoc, doc, deleteDoc, setDoc, query, where, onSnapshot, serverTimestamp, updateDoc } from "firebase/firestore";
 import "../../css/components/Post.css";
 import AppContext from "../../context/AppContext";
+import InputImage from "../image/InputImage";
+import { UploadImageToStorage } from "../image/UploadImageToStorage";
 
 //記事の編集が押されたら（EditPost.jsx）から情報を{EditPost}に渡してる
 function Post({ EditPost }) {
@@ -14,8 +15,11 @@ function Post({ EditPost }) {
   const { user, loading } = useContext(AppContext);
   const { id, postId } = useParams(); // URLのuserIdを取得
   const [posts, setPosts] = useState([]);
-
   const navigate = useNavigate();
+  const [fileObject, setFileObject] = useState(null);
+  const [newProfilePicture, setNewProfilePicture] = useState(''); //変更後のプロフィール画像
+  const [docRef, setDocRef] = useState(''); //
+
 
   // Firebaseの中にあるpostsのフィールドから、ユーザーの投稿記事を取得
   useEffect(() => {
@@ -79,14 +83,26 @@ function Post({ EditPost }) {
   async function SendPost(e) {
     e.preventDefault();
 
+    let docRef = ""
     //postsに各要素を保存
-    await addDoc(collection(db, "posts"), {
-      isDraft: false,
-      authorId: user.uid,
-      content: content,
-      title: title,
-      createdAt: serverTimestamp(),
-    });
+    if(postId === undefined){
+      docRef = await addDoc(collection(db, "posts"), {
+        isDraft: false,
+        authorId: user.uid,
+        content: content,
+        title: title,
+        createdAt: serverTimestamp(),
+      });
+    }
+    else{
+      console.log(postId);
+      await updateDoc(postId, {
+        isDraft: false,
+        authorId: user.uid,
+        content: content,
+        title: title,
+      });
+    }
 
     setTitle("");
     setContent("");
@@ -94,10 +110,25 @@ function Post({ EditPost }) {
     //EditPostが渡ってきたら、元々あったドキュメントを削除して再度上記のコードで登録し直す
     if (EditPost) {
       const postDoc = doc(db, "posts", postId); //ドキュメントのidを元にドキュメントを取得
-      await deleteDoc(postDoc); // ドキュメントを削除
+      // await deleteDoc(postDoc); // ドキュメントを削除
     }
 
     navigate(`/${user.uid}`); // "/mypage"に移動
+
+    //サムネイル画像が選択されたときの処理
+    let thumbnailStorageUrl = "";
+    if (fileObject) {
+      //ストレージ保存先のパスを指定
+      const storageFilePath = "postImages/" + docRef.id + "/thumbnail/";
+      //ストレージに画像を保存、URLを取得する（非同期処理でアップロード完了を待つ）
+      thumbnailStorageUrl = await UploadImageToStorage(fileObject, storageFilePath);
+      // ドキュメントの参照を取得し、thumbnailUrlを追加
+      const postDocRef = doc(db, "posts", docRef.id);
+      //ポストのstorageにサムネイル画像のurlを追加する
+      await updateDoc(postDocRef, {
+        thumbnailUrl: thumbnailStorageUrl,
+      });
+    }
   }
 
   // console.log(EditPost);
@@ -152,6 +183,15 @@ function Post({ EditPost }) {
         <div className="post">
           <h1>ブログを投稿する</h1>
           <form onSubmit={SendPost}>
+            <div className="post__thumbnail">
+              <InputImage
+                imageLabel={"サムネイルの設定"}
+                fileObject={fileObject}
+                setFileObject={setFileObject}
+                setNewProfilePicture={setNewProfilePicture}
+                newProfilePicture={newProfilePicture}
+              />
+            </div>
             <div className="post__title">
               <p>タイトル(40字以内)</p>
               <input

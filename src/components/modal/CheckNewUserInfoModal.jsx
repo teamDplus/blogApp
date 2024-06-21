@@ -1,6 +1,7 @@
 import { collection, query, where, getDocs, updateDoc } from "firebase/firestore";
 import { db } from "../../utils/firebase";
-import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage"
+import { UploadImageToStorage } from "../image/UploadImageToStorage";
+import { useState } from "react";
 
 //変更内容を確認するモーダル
 const CheckNewUserInfoModal = (props) => {
@@ -19,39 +20,13 @@ const CheckNewUserInfoModal = (props) => {
     setNewNickName //変更後のニックネームの設定
   } = props;
 
-  //新しいプロフィール画像をStorageに保存する
-  const uploadPictureToStorage = async () => {
-    if(fileObject){
-      const storage = getStorage();
-      //storageの保存先を指定
-      const storageRef = ref(storage, "profileImages/" + userId + "/" + fileObject.name);
-      //firebaseStorageに画像を保存
-      const uploadImage = uploadBytesResumable(storageRef, fileObject);
-  
-      // アップロードの進行状態を取得
-      uploadImage.on("state_changed", (snapshot) => {
-      },
-        (error) => {
-          console.log(error);
-        },
-        () => {
-          // アップロード完了時にダウンロードURLを取得し、画面に表示する
-          getDownloadURL(uploadImage.snapshot.ref).then((url) => {
-            setNewProfilePicture(url);
-          }).catch((error) => {
-            console.log(error);
-          });
-        })
-    }
-  };
-
   // isCheckModalOpenがtrueのときのみ確認用モーダルを表示
   if (!isCheckModalOpen) return null;
-  uploadPictureToStorage();
   //「はい」を押した場合、ユーザ情報を変更する
   const changeUserInfo = async () => {
     const oldUserInfo = query(collection(db, 'users'), where('userId', '==', userId));
     const querySnapshot = await getDocs(oldUserInfo);
+
     querySnapshot.forEach(async (doc) => {
       //入力された情報のみ保存し、データを更新する
       const updates = {};
@@ -65,10 +40,16 @@ const CheckNewUserInfoModal = (props) => {
         setTextNoNickName(false);
       }
       //新しいプロフィール画像が入力された場合
+      let profilePictureStorageUrl = newProfilePicture;
       if (fileObject) {
-        updates.profilePictureUrl = newProfilePicture;
+        //ストレージ保存先のパスを指定
+        const storageFilePath = "profileImages/" + userId + "/";
+        //ストレージに画像を保存、URLを取得する（非同期処理でアップロード完了を待つ）
+        profilePictureStorageUrl = await UploadImageToStorage(fileObject, storageFilePath);
+        //プロフィール画像を変更の対象とする
+        updates.profilePictureUrl = profilePictureStorageUrl;
         //マイページの表示を更新
-        setProfilePicture(newProfilePicture);
+        setProfilePicture(profilePictureStorageUrl);
       }
 
       //update[]に保存された値のみデータベースを更新する

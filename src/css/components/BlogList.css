@@ -39,3 +39,8 @@
     text-overflow: ellipsis;
     white-space: nowrap;
 }
+
+img.blog-list__item-thumbnail{
+    width: 240px;
+    height: auto;
+}
