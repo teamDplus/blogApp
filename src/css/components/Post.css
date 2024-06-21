@@ -52,11 +52,14 @@
   margin: 0 auto;
 }
 
-
 .post__button button:not(:hover){
   animation: release 0.1s forwards;
 }
 
+.post__button button:disabled {
+  animation: none;
+  cursor:not-allowed;
+}
 
 .post__button button {
   border: none;

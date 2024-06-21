@@ -1,14 +1,40 @@
 .header{
+    position: fixed;
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
     min-height: 819px;
-    min-width: 233px;
+    min-width: 260px;
     background: #E6E7EE;
-    padding: 10px;
+    padding: 20px;
     padding-left: 24px;
     box-shadow:  10px 10px 15px #CDCDCD,-10px -10px 15px #FFFFFF;
+    height: 100vh;
+}
+
+.header__top{
+    font-size: 32px;
+    transition: 0.2s all;
+}
+
+.header__top:hover{
+    opacity: 0.5;
+}
+
+.header__links{
+    margin-top: 32px;
 }
 
 .header__links a{
     margin-bottom: 47px;
+}
+
+.header__links p{
+    transition: 0.1s all;
+}
+
+.header__links p:hover{
+    opacity: 0.5;
 }
 
 .header__button{
@@ -49,3 +75,90 @@
     animation: release 0.1s forwards;
 }
 
+.header__search {
+    max-width: 220px;
+    width: 100%;
+    margin-left: 250px;
+    height: 43px;
+    line-height: 43px;
+    position: absolute;
+    top: 2%;
+    background: #E6E7EE; 
+    border-radius: 8px; 
+    box-shadow: inset 4px 4px 8px #c8c9cc, inset -4px -4px 8px #ffffff; 
+    padding: 0 10px; 
+    display: flex;
+    align-items: center; 
+    justify-content: space-between; 
+    color: #000; 
+    border-radius: 30px;
+}
+
+.header__search input {
+    border: none; 
+    background: none; 
+    outline: none; 
+    width: 100%; 
+    height: 100%; 
+    color: inherit; 
+}
+
+.header__follows{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.header__follow{
+    transition: 0.2s all;
+    text-align: center;
+    max-width: 102px;
+    width: 100%;
+    height: 36px;
+    box-shadow: 6px 6px 20px #c8c9cc, -6px -6px 20px #ffffff;
+    padding: 0 20px;
+    background: #E6E7EE;
+    border-radius: 35px;
+    margin: 0 auto;
+    cursor: pointer;
+}
+
+.header__follow p{
+    margin: 0;
+    line-height: 36px;
+}
+
+.header__follow:hover{
+     animation: press 0.1s forwards;
+}
+
+.header__follow:not(:hover){
+    animation: release 0.1s forwards;
+}
+
+.header__follower{
+    transition: 0.2s all;
+    text-align: center;
+    max-width: 102px;
+    width: 100%;
+    height: 36px;
+    box-shadow: 6px 6px 20px #c8c9cc, -6px -6px 20px #ffffff;
+    padding: 0 20px;
+    background: #E6E7EE;
+    border-radius: 35px;
+    margin: 0 auto;
+    cursor: pointer;
+}
+
+.header__follower p{
+    margin: 0;
+    line-height: 36px;
+}
+
+.header__follower:hover{
+     animation: press 0.1s forwards;
+}
+
+.header__follower:not(:hover){
+    animation: release 0.1s forwards;
+}

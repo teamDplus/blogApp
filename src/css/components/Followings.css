@@ -1,0 +1,22 @@
+.follow{
+    width: 600px;
+    margin: 0 auto;
+}
+
+.follow__user{
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    gap: 10px;
+    transition: 0.2s all;
+}
+
+.follow__user:hover{
+    opacity: 0.5;
+}
+
+.follow__user img{
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+}
