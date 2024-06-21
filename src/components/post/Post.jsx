@@ -2,7 +2,7 @@ import React, { useContext, useState, useEffect } from "react";
 import { db, auth } from "../../utils/firebase";
 import firebase from "firebase/compat/app";
 import { useParams, useNavigate } from "react-router-dom";
-import { collection, addDoc, doc, deleteDoc, setDoc, query, where, onSnapshot, serverTimestamp } from "firebase/firestore";
+import { collection, addDoc, doc, deleteDoc, setDoc, query, where, onSnapshot, serverTimestamp, getDoc, updateDoc } from "firebase/firestore";
 import "../../css/components/Post.css";
 import AppContext from "../../context/AppContext";
 
@@ -65,6 +65,7 @@ console.log(EditPost)
       likeCount: EditPost ? EditPost.likeCount : 0,
     });
     navigate(`/${id}/drafts`);
+  }
   // Firebaseの中にあるpostsのフィールドから、ユーザーの投稿記事を取得
   useEffect(() => {
     // postsの中にあるコレクションの中からフィールドのauthorIdとログインしているuserと同じidの記事を取得
@@ -232,6 +233,6 @@ console.log(EditPost)
     </>
   );
 }
-}
+
 
 export default Post;
