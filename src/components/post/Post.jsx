@@ -19,6 +19,7 @@ function Post({ EditPost }) {
   const [fileObject, setFileObject] = useState(null);
   const [newProfilePicture, setNewProfilePicture] = useState(''); //変更後のプロフィール画像
   let docRef = "";
+  const [thumbnailStorageUrl, setThumbnailStorageUrl] = useState('');
   const defaultThumbnailUrl = "https://firebasestorage.googleapis.com/v0/b/blogapp-c1052.appspot.com/o/postImages%2Fdefault%2FnoImage.PNG?alt=media&token=c7febf2c-b45e-4469-b1ce-2b232f8bd56d"
 
   // Firebaseの中にあるpostsのフィールドから、ユーザーの投稿記事を取得
@@ -51,18 +52,13 @@ function Post({ EditPost }) {
         authorId: user.uid,
         content: content,
         title: title,
-        thumbnailUrl: defaultThumbnailUrl
       });
       navigate(`/${id}/drafts`);
     } else {
       alert("下書きに保存できるのは5個までです。");
     }
 
-    // サムネイル画像が選択されていれば追加処理を行う
-    if (fileObject) {
-      console.log("imakoko");
-      setThumbnail();
-    }
+    setThumbnail(); //サムネイル画像の設定
   }
 
   // 編集画面で下書き移動ボタンを押したら発火
@@ -90,7 +86,6 @@ function Post({ EditPost }) {
   //SendPostが押されたらFirebaseの処理開始
   async function SendPost(e) {
     e.preventDefault();
-
     //postsに各要素を保存
     //新規投稿
     if (postId === undefined) {
@@ -100,7 +95,6 @@ function Post({ EditPost }) {
         content: content,
         title: title,
         createdAt: serverTimestamp(),
-        thumbnailUrl: defaultThumbnailUrl
       });
     }
     //編集後に再度投稿
@@ -116,35 +110,49 @@ function Post({ EditPost }) {
           content: content,
           title: title,
         };
-    
+
         // createdAtが存在しない場合は追加
         //※最初の投稿画面で下書きに保存した場合、createdAtが保存されないため必要
         if (!data.createdAt) {
           updateData.createdAt = serverTimestamp();
         }
-    
+
         await updateDoc(docRef, updateData);
       }
     }
 
+    setThumbnail(); //サムネイル画像の設定
     setTitle("");
     setContent("");
-
-    // サムネイル画像が選択されていれば追加処理を行う
-    if (fileObject) {
-      setThumbnail();
-    }
-
     navigate(`/${user.uid}`); // "/mypage"に移動
   }
 
-  //サムネイル画像が選択されたときの処理
+  //サムネイル画像の設定
   const setThumbnail = async () => {
     let thumbnailStorageUrl = "";
-    //ストレージ保存先のパスを指定
-    const storageFilePath = "postImages/" + docRef.id + "/thumbnail/";
-    //ストレージに画像を保存、URLを取得する（非同期処理でアップロード完了を待つ）
-    thumbnailStorageUrl = await UploadImageToStorage(fileObject, storageFilePath);
+    //サムネイル画像が選択された場合
+    if (fileObject) {
+      //ストレージ保存先のパスを指定
+      const storageFilePath = "postImages/" + docRef.id + "/thumbnail/";
+      //ストレージに画像を保存、URLを取得する（非同期処理でアップロード完了を待つ）
+      thumbnailStorageUrl = await UploadImageToStorage(fileObject, storageFilePath);
+    }
+    //選択されていない場合
+    else {
+      // ドキュメントを取得してthumbnailUrlが存在するか確認
+      const docSnapshot = await getDoc(docRef);
+      if (docSnapshot.exists()) {
+        const data = docSnapshot.data();
+        // thumbnailUrlが既に存在する場合は処理を抜ける
+        //下書きから投稿する際にdefaultThumbnailUrlに変更されてしまうため
+        if (data.thumbnailUrl) {
+          return
+        }
+      }
+
+      //NO IMAGE画像を設定
+      thumbnailStorageUrl = defaultThumbnailUrl;
+    }
     // ドキュメントの参照を取得し、thumbnailUrlを追加
     const postDocRef = doc(db, "posts", docRef.id);
     //ポストのstorageにサムネイル画像のurlを追加する
@@ -152,8 +160,6 @@ function Post({ EditPost }) {
       thumbnailUrl: thumbnailStorageUrl,
     });
   }
-
-  // console.log(EditPost);
 
   return (
     <>
