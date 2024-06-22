@@ -7,12 +7,18 @@ import CommentModal from "./modal/CommentModal";
 import CommentDelete from "./CommentDelete";
 import CommentEdit from "./CommentEdit";
 import AppContext from "../context/AppContext";
+import useModal from "../hooks/useModal";
 
 export const Comment = () => {
   const [comments, setComments] = useState(null);
   const { user, loading } = useContext(AppContext);
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const { id, postId } = useParams();
+  const {
+    handleOpenModal,
+    handleCloseModal,
+    setIsModalOpen,
+    isModalOpen,
+  } = useModal();
 
   useEffect(() => {
     // このuseEffectの中全体で行っていることは、コメントコレクションの情報と、それに紐づくusersコレクションの情報の取得
@@ -52,16 +58,6 @@ export const Comment = () => {
   if (!comments) {
     return <div>Loading...</div>;
   }
-
-  // モーダルを開く関数 「コメントを書く」を押すと発動
-  const handleOpenModal = () => {
-    setIsModalOpen(true);
-  };
-
-  // モーダルを閉じる関数 CommentModal.jsxの閉じるが押されたら発動
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-  };
 
   return (
     <div className="comment">

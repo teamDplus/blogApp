@@ -11,27 +11,25 @@ import { FacebookLogin } from './FacebookLogin';
 import { useForm } from 'react-hook-form';
 import { db } from "../../utils/firebase";
 import { collection, query, where, getDocs } from "firebase/firestore";
+import useModal from '../../hooks/useModal';
 
 //ユーザ情報の登録
 const Signup = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const {
     register,
     handleSubmit,
     formState: { errors }
   } = useForm()
-
-  //登録情報を確認するモーダルの開閉
-  const openModal = (e) => {
-    setIsModalOpen(true);
-  };
-  const closeModal = () => {
-    setIsModalOpen(false);
-  };
-
+  const {
+    handleOpenModal,
+    handleCloseModal,
+    setIsModalOpen,
+    isModalOpen,
+  } = useModal();
+ 
   // モーダルで「はい」を押したときにFirbaseへ登録する
   const signUp = (e) => {
     e.preventDefault();
@@ -60,7 +58,7 @@ const Signup = () => {
   return (
     <div className="signup">
       <h1 className="signup__title">ユーザ登録</h1>
-      <form onSubmit={handleSubmit(openModal)} className="signup__form">
+      <form onSubmit={handleSubmit(handleOpenModal)} className="signup__form">
         <div>
           <label htmlFor="email" className="">メールアドレス</label>
           <input
@@ -105,7 +103,7 @@ const Signup = () => {
       </div>
       <SignupCheckModal
         isOpen={isModalOpen}
-        onClose={closeModal}
+        onClose={handleCloseModal}
         onConfirm={signUp}
         email={email}
         password={password}

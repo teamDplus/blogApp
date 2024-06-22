@@ -6,23 +6,20 @@ import { doc, deleteDoc } from "firebase/firestore";
 import { db } from "../../utils/firebase";
 import DeleteModal from "../modal/DeleteModal";
 import "../../css/components/DeletePost.css";
+import useModal from "../../hooks/useModal";
 
 function DeletePost() {
   const { id, postId } = useParams();
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const { user, loading } = useContext(AppContext);
+  const {
+    handleOpenModal,
+    handleCloseModal,
+    setIsModalOpen,
+    isModalOpen,
+  } = useModal();
 
   const navigate = useNavigate();
 
-  // モーダルを開く関数 記事が削除されるが押されたら発動
-  const handleOpenModal = () => {
-    setIsModalOpen(true);
-  };
-
-  // モーダルを閉じる関数 Modal.jsxのいいえが押されたら発動
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-  };
 
   const handleConfirmDelete = async () => {
     const postDoc = doc(db, "posts", postId);
