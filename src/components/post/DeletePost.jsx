@@ -29,7 +29,7 @@ function DeletePost() {
 
     await deleteDoc(postDoc); // ドキュメントを削除
     setIsModalOpen(false); // モーダルを閉じる
-    navigate("/mypage"); // "/mypage"に移動
+    navigate(`/${user.uid}`); // "/mypage"に移動
   };
 
   return (
