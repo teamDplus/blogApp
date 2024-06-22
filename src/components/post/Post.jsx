@@ -39,44 +39,25 @@ function Post({ EditPost }) {
     };
   }, [user, id]);
 
-  // 投稿画面で下書き保存ボタンを押したら発火
-  async function swicthisDraft(e) {
+  const saveDraft = async (e) => {
     e.preventDefault();
-    // 下書きの数は５個までの制限
-    if (posts.length <= 4) {
-      // isDraftで下書きに切り替え
-      docRef = await addDoc(collection(db, "posts"), {
-        isDraft: true,
-        authorId: user.uid,
-        content: content,
-        title: title,
-      });
-      navigate(`/${id}/drafts`);
-    } else {
+    if (posts.length >= 5) {
       alert("下書きに保存できるのは5個までです。");
+      return;
     }
 
-    SetThumbnail(fileObject, docRef); //サムネイル画像の設定
-  }
+    docRef = postId ? doc(db, "posts", postId) : await addDoc(collection(db, "posts"), {});
+    await updateDoc(docRef, {
+      isDraft: true,
+      authorId: user.uid,
+      content,
+      title,
+      createdAt: postId ? undefined : serverTimestamp(),
+    });
 
-  // 編集画面で下書き移動ボタンを押したら発火
-  async function editisDraft(e) {
-    // 下書きの数は５個までの制限
-    if (posts.length <= 4) {
-      e.preventDefault();
-      // isDraftで下書きに切り替え
-      docRef = doc(db, "posts", postId);
-      await updateDoc(docRef, {
-        isDraft: true,
-        authorId: user.uid,
-        content: content,
-        title: title,
-      });
-      navigate(`/${id}/drafts`);
-    } else {
-      alert("下書きに保存できるのは5個までです。");
-    }
-  }
+    SetThumbnail(fileObject, docRef);
+    navigate(`/${id}/drafts`);
+  };
 
   // 100字以上になると投稿ボタンが押せるようになる
   const contentLength = content.length < 100;
@@ -129,109 +110,54 @@ function Post({ EditPost }) {
 
   return (
     <>
-      {/* EditPostから情報が渡ってきた場合（編集が押された場合の処理）*/}
-      {EditPost ? (
-        <>
-          <div className="post">
-            <h1>{EditPost ? <p>ブログを編集する</p> : <p>ブログを投稿する</p>}</h1>
-            <form onSubmit={SendPost}>
-              <div className="post__thumbnail">
-                <InputImage
-                  imageLabel={"サムネイルの変更"}
-                  fileObject={fileObject}
-                  setFileObject={setFileObject}
-                  setNewProfilePicture={setNewProfilePicture}
-                  newProfilePicture={newProfilePicture}
-                />
-              </div>
-              <div className="post__title">
-                <p>タイトル(40字以内)</p>
-                <input
-                  placeholder="タイトルを入れてください"
-                  type="text"
-                  onChange={(e) => {
-                    setTitle(e.target.value);
-                  }}
-                  value={title}
-                  maxLength={40}
-                />
-              </div>
-
-              <div className="post__content">
-                <p>本文(100字以上400字以内)</p>
-                <textarea
-                  placeholder="本文を入れてください"
-                  type="text"
-                  onChange={(e) => {
-                    setContent(e.target.value);
-                  }}
-                  value={content}
-                  maxLength={400}
-                />
-              </div>
-
-              <div className="post__button">
-                <button type="submit" disabled={contentLength}>
-                  投稿する
-                </button>
-                <button type="button" onClick={editisDraft}>
-                  {EditPost ? "下書きに移動する" : "下書き保存する"}
-                </button>
-              </div>
-            </form>
+      <div className="post">
+        <h1>{EditPost ? <p>ブログを編集する</p> : <p>ブログを投稿する</p>}</h1>
+        <form onSubmit={SendPost}>
+          <div className="post__thumbnail">
+            <InputImage
+              imageLabel={"サムネイルの変更"}
+              fileObject={fileObject}
+              setFileObject={setFileObject}
+              setNewProfilePicture={setNewProfilePicture}
+              newProfilePicture={newProfilePicture}
+            />
           </div>
-        </>
-      ) : (
-        // EditPostから情報が渡ってきてない場合（ブログを投稿するが押された場合の処理）
-        <div className="post">
-          <h1>ブログを投稿する</h1>
-          <form onSubmit={SendPost}>
-            <div className="post__thumbnail">
-              <InputImage
-                imageLabel={"サムネイルの設定"}
-                fileObject={fileObject}
-                setFileObject={setFileObject}
-                setNewProfilePicture={setNewProfilePicture}
-                newProfilePicture={newProfilePicture}
-              />
-            </div>
-            <div className="post__title">
-              <p>タイトル(40字以内)</p>
-              <input
-                placeholder="タイトルを入れてください"
-                type="text"
-                onChange={(e) => {
-                  setTitle(e.target.value);
-                }}
-                value={title}
-                maxLength={40}
-              />
-            </div>
+          <div className="post__title">
+            <p>タイトル(40字以内)</p>
+            <input
+              placeholder="タイトルを入れてください"
+              type="text"
+              onChange={(e) => {
+                setTitle(e.target.value);
+              }}
+              value={title}
+              maxLength={40}
+            />
+          </div>
 
-            <div className="post__content">
-              <p>本文(100字以上400字以内)</p>
-              <textarea
-                placeholder="本文を入れてください"
-                type="text"
-                onChange={(e) => {
-                  setContent(e.target.value);
-                }}
-                value={content}
-                maxLength={400}
-              />
-            </div>
+          <div className="post__content">
+            <p>本文(100字以上400字以内)</p>
+            <textarea
+              placeholder="本文を入れてください"
+              type="text"
+              onChange={(e) => {
+                setContent(e.target.value);
+              }}
+              value={content}
+              maxLength={400}
+            />
+          </div>
 
-            <div className="post__button">
-              <button type="submit" disabled={contentLength}>
-                投稿する
-              </button>
-              <button type="button" onClick={swicthisDraft}>
-                {EditPost ? "下書きに移動する" : "下書き保存する"}
-              </button>
-            </div>
-          </form>
-        </div>
-      )}
+          <div className="post__button">
+            <button type="submit" disabled={contentLength}>
+              投稿する
+            </button>
+            <button type="button" onClick={saveDraft}>
+              {EditPost ? "下書きに移動する" : "下書き保存する"}
+            </button>
+          </div>
+        </form>
+      </div>
     </>
   );
 }
