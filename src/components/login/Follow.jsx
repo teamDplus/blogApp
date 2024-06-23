@@ -51,7 +51,7 @@ export const Follow = () => {
     const followingRef = collection(db, "users", user.uid, "following");
     const followerRef = collection(db, "users", id, "followers");
     const followingQuery = query(followingRef, where("followingId", "==", id));
-    const followerQuery = query(followerRef, where("followerId", "==", id));
+    const followerQuery = query(followerRef, where("followerId", "==", user.uid));
     const followingQuerySnapshot = await getDocs(followingQuery);
     const followerQuerySnapshot = await getDocs(followerQuery);
 // ユーザーが存在していたら、そのドキュメントを削除
