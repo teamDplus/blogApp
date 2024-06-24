@@ -3,6 +3,7 @@ import "../../css/components/BlogList.css";
 import { collection, onSnapshot } from "firebase/firestore";
 import { db } from "../../utils/firebase";
 import { Link } from "react-router-dom";
+import sortPosts  from "../../utils/sortPosts";
 import { SortPosts } from "./SortPosts";
 
 const BlogList = () => {
@@ -19,24 +20,8 @@ const BlogList = () => {
       });
 
       //ソート
-      const sortedPosts = [...postsData].sort((a, b) => {
-        //新しい順
-        // 隣接するpostData（a,b）のcreatedAt比較し、新しい投稿であれば前に配置、古ければ後ろに配置
-        if (selectedSortType === "new") {
-          if (a.createdAt > b.createdAt) return -1;
-          if (a.createdAt < b.createdAt) return 1;
-          return 0;
-        }
-        //古い順
-        else {
-          if (a.createdAt > b.createdAt) return 1;
-          if (a.createdAt < b.createdAt) return -1;
-          return 0;
-        }
-      });
+      setPosts(sortPosts(postsData, selectedSortType));
 
-      console.log(postsData);
-      setPosts(sortedPosts);
     });
 
     return () => {
