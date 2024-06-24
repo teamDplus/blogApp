@@ -10,6 +10,8 @@ import { db } from "../../utils/firebase";
 import GetUserInfo from "./GetUserInfo";
 import { SortPosts } from "../post/SortPosts";
 import { Follow } from "../follow/Follow";
+import sortPosts  from "../../utils/sortPosts";
+import useLogout from "../../hooks/useLogout";
 
 //ログイン情報の取得
 const Mypage = () => {
@@ -20,6 +22,7 @@ const Mypage = () => {
   const [posts, setPosts] = useState([]);
   //ソート
   const [selectedSortType, setSelectedSortType] = useState('new');
+  const {handleSignOut} = useLogout();
 
   useEffect(() => {
     console.log(user);
@@ -28,17 +31,6 @@ const Mypage = () => {
     }
   }, [user]);
 
-  // ログアウトが押された際の挙動
-  const handleSignOut = () => {
-    signOut(auth)
-      .then(() => {
-        console.log("サインアウトしました。");
-        navigate(`/`);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  };
 
   // Firebaseの中にあるpostsのフィールドから、ユーザーの投稿記事を取得
   useEffect(() => {
@@ -51,25 +43,9 @@ const Mypage = () => {
       snapshot.forEach((doc) => {
         postsData.push({ ...doc.data(), id: doc.id });
       });
+      // ソート
+      setPosts(sortPosts(postsData, selectedSortType));
 
-      //ソート
-      const sortedPosts = postsData.sort((a, b) => {
-        //新しい順
-        // 隣接するpostData（a,b）のcreatedAt比較し、新しい投稿であれば前に配置、古ければ後ろに配置
-        if (selectedSortType === "new") {
-          if (a.createdAt > b.createdAt) return -1;
-          if (a.createdAt < b.createdAt) return 1;
-          return 0;
-        }
-        //古い順
-        else {
-          if (a.createdAt > b.createdAt) return 1;
-          if (a.createdAt < b.createdAt) return -1;
-          return 0;
-        }
-      });
-
-      setPosts(sortedPosts);
     });
 
     return () => {
