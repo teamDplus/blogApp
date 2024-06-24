@@ -3,7 +3,7 @@ import "../css/components/Header.css";
 import { Link, useNavigate } from "react-router-dom";
 import AppContext from "../context/AppContext";
 import { HeaderButton } from "./HeaderButton";
-import { FollowButton } from "./FollowButton";
+import { FollowButton } from "./follow/FollowButton";
 
 const Header = () => {
   const { user, followerCount,followingCount } = useContext(AppContext);
