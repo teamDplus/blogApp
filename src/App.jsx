@@ -13,8 +13,8 @@ import { ResetPassword } from "./components/login/ResetPassword";
 import { ForgotPassword } from "./components/login/ForgotPassword";
 import { SentPassword } from "./components/login/SentPassword";
 import LikeList from "./components/post/LikeList";
-import { Followings } from "./components/post/Followings";
-import { Followers } from "./components/post/Followers";
+import { Followers } from "./components/follow/Followers";
+import { Followings } from "./components/follow/Followings";
 
 function App() {
   return (

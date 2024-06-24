@@ -8,8 +8,8 @@ import AppContext from "../../context/AppContext";
 import { collection, query, where, onSnapshot } from "firebase/firestore";
 import { db } from "../../utils/firebase";
 import GetUserInfo from "./GetUserInfo";
-import { Follow } from "./Follow";
 import { SortPosts } from "../post/SortPosts";
+import { Follow } from "../follow/Follow";
 
 //ログイン情報の取得
 const Mypage = () => {
