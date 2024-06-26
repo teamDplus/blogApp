@@ -19,7 +19,8 @@ function LikePost() {
 
           if (postSnap.exists()) {
               const postData = postSnap.data();
-              setLikeCount(postData.likeCount || 0);
+            //   いいねデータがあれば長さ（いいね数）を取得
+              setLikeCount((postData.likers || []).length || 0);
               setActive(postData.likers?.includes(user.uid) || false);
           }
       };
@@ -27,7 +28,7 @@ function LikePost() {
       if (user && postId) {
           fetchData();
       }
-  }, [postId, user]);
+  }, [postId, user, likecount]);
 
   async function likesPosts(e) {
       e.preventDefault();
@@ -61,7 +62,6 @@ function LikePost() {
       }
   } 
 
-      console.log(likecount);
 
   return (
     
@@ -69,7 +69,7 @@ function LikePost() {
     {user &&
         id === user.uid ? "" :
             <button type="submit" className='like_button' onClick={likesPosts}>
-        {user ? (<div className={likecount ? 'like_button-heart active' : 'like_button-heart'}></div>):
+        {user ? (<div className={active ? 'like_button-heart active' : 'like_button-heart'}></div>):
         (<Link to="/login"><div className='like_button-heart'></div></Link>)
         }{likecount}
         </button>
