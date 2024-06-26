@@ -1,44 +1,55 @@
-import { useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useParams, useNavigate, Link } from "react-router-dom";
+import React, { useContext, useEffect, useState } from "react";
+import { collection, onSnapshot, query, where } from "firebase/firestore";
 import { db } from "../../utils/firebase";
-import { doc, getDoc } from "firebase/firestore";
-import BlogList from "./BlogList.jsx";
+import AppContext from "../../context/AppContext";
 
 function LikeList() {
-  // useEffect(() => {
-  //   // postsの中にあるコレクションの中からフィールドのauthorIdとログインしているuserと同じidの記事を取得
-  //   //postsの中にあるisDraftがfalseを取得(公開済みの記事)
-  //   const q = query(collection(db, "posts"), where("authorId", "==", user.uid), where("isDraft", "==", false));
+  const { user } = useContext(AppContext);
+  const navigate = useNavigate();
+  const [posts, setPosts] = useState([]);
 
-  //   const unsubscribe = onSnapshot(q, (snapshot) => {
-  //     const postsData = [];
-  //     snapshot.forEach((doc) => {
-  //       postsData.push({ ...doc.data(), id: doc.id });
-  //     });
-  //     setPosts(postsData);
-  //   });
+  useEffect(() => {
+    console.log(user);
+    if (!user) {
+      navigate("/");
+    }
+  }, [user, navigate]);
 
-  //   return () => {
-  //     unsubscribe();
-  //   };
-  // }, [user]);
-  
-    return (
-      <>
-    <div className="blog-list">
-        <h2 className='blog-list__title'>いいね一覧</h2>
+  useEffect(() => {
+    if (!user) return;
+
+    const q = query(collection(db, "posts"), where("likers", "array-contains", user.uid));
+
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const postsData = [];
+      snapshot.forEach((doc) => {
+        postsData.push({ ...doc.data(), id: doc.id });
+      });
+      setPosts(postsData);
+    });
+
+    return () => {
+      unsubscribe();
+    };
+  }, [user]);
+
+  return (
+    <>
+      <div className="blog-list">
+        <h2 className="blog-list__title">いいね一覧</h2>
         <div className="blog-list__items">
-            {/* {posts.map((post) => (
-                <Link to={`/${post.authorId}/posts/${post.id}`} className="blog-list__item" key={post.id}>
-                    <h3 className="blog-list__item-title">{post.title}</h3>
-                    <p className="blog-list__item-content">{post.content}</p>
-                </Link>
-            ))} */}
+          {posts.map((post) => (
+            <Link to={`/${post.authorId}/posts/${post.id}`} className="blog-list__item" key={post.id}>
+              <img src={post.thumbnailUrl} className="blog-list__item-thumbnail" alt="" />
+              <h3 className="blog-list__item-title">{post.title}</h3>
+              <p className="blog-list__item-content">{post.content}</p>
+            </Link>
+          ))}
         </div>
-    </div>
-      </>
-    );
-  }
-  
+      </div>
+    </>
+  );
+}
 
-export default LikeList
+export default LikeList;
