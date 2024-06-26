@@ -10,6 +10,7 @@ export const SortPosts = ({selectedSortType, setSelectedSortType}) => {
             <select onChange={getSelectedSortType} value={selectedSortType} name="sort" id="sort" className="sort--select">
                 <option value="new">新しい順</option>
                 <option value="old">古い順</option>
+                <option value="good">いいね順</option>
             </select>
         </div>
     )
