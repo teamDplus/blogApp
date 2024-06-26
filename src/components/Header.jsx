@@ -28,6 +28,7 @@ const Header = () => {
             <HeaderButton icon={"/draftsIcon.png"} text="下書き一覧" link={user ? `/${user.uid}/drafts` : "/login"}/>
             <HeaderButton icon={"/likes.svg"} text="いいね！履歴" link={user ? `/${user.uid}/likes` : "/login"}/>
             <HeaderButton icon={"/peopleIcon.svg"} text="みんなの投稿" link={"/"}/>
+            <HeaderButton icon={"/chat.svg"} text="チャット" link={user ? `/${user.uid}/chat` : "/login"}/>
         </div>
         <div className="header__follows">
           {user && (

@@ -10,6 +10,7 @@ import { db } from "../../utils/firebase";
 import GetUserInfo from "./GetUserInfo";
 import { SortPosts } from "../post/SortPosts";
 import { Follow } from "../follow/Follow";
+import ChatList from "../ChatList";
 
 //ログイン情報の取得
 const Mypage = () => {
@@ -94,6 +95,7 @@ const Mypage = () => {
         ""
       }
       <Follow />
+      <ChatList />
       <div className="mypage-list">
         <h2>ブログ一覧</h2>
         <div className="mypage--sort">
