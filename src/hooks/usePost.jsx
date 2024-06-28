@@ -19,7 +19,7 @@ export const usePost = ({EditPost}) => {
   // Firebaseの中にあるpostsのフィールドから、ユーザーの投稿記事を取得
   useEffect(() => {
     // postsの中にあるコレクションの中からフィールドのauthorIdとログインしているuserと同じidの記事を取得
-    //postsの中にあるisDraftがfalseを取得(公開済みの記事)
+    //postsの中にあるisDraftがtrueを取得(下書きの記事)
     const q = query(collection(db, "posts"), where("authorId", "==", id), where("isDraft", "==", true));
 
     const unsubscribe = onSnapshot(q, (snapshot) => {
