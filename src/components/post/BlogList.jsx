@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "../../css/components/BlogList.css";
-import { collection, onSnapshot } from "firebase/firestore";
+import { collection, query, where, onSnapshot } from "firebase/firestore";
 import { db } from "../../utils/firebase";
 import { Link } from "react-router-dom";
 import sortPosts  from "../../utils/sortPosts";
@@ -13,7 +13,11 @@ const BlogList = () => {
 
 
   useEffect(() => {
-    const unsubscribe = onSnapshot(collection(db, "posts"), (snapshot) => {
+    // postsの中にあるコレクションの中からフィールドのauthorIdとログインしているuserと同じidの記事を取得
+    //postsの中にあるisDraftがfalseを取得(公開済みの記事)
+    const q = query(collection(db, "posts"), where("isDraft", "==", false));
+
+    const unsubscribe = onSnapshot(q, (snapshot) => {
       const postsData = [];
       snapshot.forEach((doc) => {
         postsData.push({ ...doc.data(), id: doc.id });
@@ -31,7 +35,7 @@ const BlogList = () => {
   console.log(posts);
   return (
     <div className="blog-list">
-      <h2 className="blog-list__title">ブログ一覧</h2>
+      <h1 className="blog-list__title">ブログ一覧</h1>
       <div className="blog-list__sort">
         <SortPosts
           selectedSortType={selectedSortType}

@@ -48,3 +48,9 @@
     white-space: nowrap;
     text-decoration: none;
 }
+
+.mypage-list__item-title{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}

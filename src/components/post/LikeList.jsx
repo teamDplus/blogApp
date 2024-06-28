@@ -37,7 +37,7 @@ function LikeList() {
   return (
     <>
       <div className="blog-list">
-        <h2 className="blog-list__title">いいね一覧</h2>
+        <h1 className="blog-list__title">いいね一覧</h1>
         <div className="blog-list__items">
           {posts.map((post) => (
             <Link to={`/${post.authorId}/posts/${post.id}`} className="blog-list__item" key={post.id}>
