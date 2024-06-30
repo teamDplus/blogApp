@@ -1,13 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { getAuth } from 'firebase/auth';
 import { collection, query, where, getDocs } from "firebase/firestore";
 import { db } from "../../utils/firebase";
 import ChangeUserInfoModal from "../modal/ChangeUserInfoModal"
 import "../../css/components/GetUserInfo.css"
 import { useParams } from 'react-router-dom';
+import AppContext from '../../context/AppContext';
 
 //ログイン中のユーザ情報を取得
 const GetUserInfo = () => {
+    const { user, followerCount,followingCount } = useContext(AppContext);
     const { postId,id } = useParams();
     const [isSetModalOpen, setIsSetModalOpen] = useState(false);
     const [userId, setUserId] = useState('');  //ユーザ固有のid
@@ -64,9 +66,13 @@ const GetUserInfo = () => {
             <div className='mypage__user--profilePicture'>
                 <img src={profilePicture} alt="" />
             </div>
+            {id == user.uid ? (
             <div className='mypage__user--changeUserInfo'>
                 <button onClick={openSetModal}>ユーザ情報の変更</button>
-            </div>
+            </div>          
+            ) : (
+                ""
+            )}
             <ChangeUserInfoModal
                 isSetModalOpen={isSetModalOpen}
                 onSetModalClose={closeSetModal}
