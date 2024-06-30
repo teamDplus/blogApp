@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { getAuth } from 'firebase/auth';
 import { collection, query, where, getDocs } from "firebase/firestore";
 import { db } from "../../utils/firebase";
 import ChangeUserInfoModal from "../modal/ChangeUserInfoModal"
@@ -16,17 +15,13 @@ const GetUserInfo = () => {
     const [nickName, setNickName] = useState('');  //現在のニックネーム
     const [profilePicture, setProfilePicture] = useState('');
     const [displayName, setDisplayName] = useState(''); //表示名(ニックネーム、ユーザ名、ユーザidどれを表示するか)
-    const [link, setLink] = useState(''); //リンク
     const [textNoNickName, setTextNoNickName] = useState(false); //ニックネームの設定を促すメッセージ
 
     useEffect(() => {
         // 表示名の設定（nickNameが登録されていれば表示、されていなければname:ユーザ名を表示）
         const getDisplayName = async () => {
             // ログインユーザの取得
-            const auth = getAuth();
-            const user = auth.currentUser;
 
-            if (user) {
                 // uidから該当するユーザ情報をデータベース名:userから取得
                 const q = query(collection(db, 'users'), where('userId', '==', id));
                 const querySnapshot = await getDocs(q);
@@ -39,13 +34,12 @@ const GetUserInfo = () => {
                     //アイコンを取得
                     setProfilePicture(doc.data().profilePictureUrl);
                     //リンクを取得
-                    setLink(doc.data().userId);
                     // nickNameが登録されていればnickNameを表示→name:ユーザ名→userId
                     setDisplayName(doc.data().nickName || doc.data().name || doc.data().userId || "");
                     //nicknameが登録されていなければ登録を促すメッセージを表示
                     if(doc.data().nickName == null || doc.data().nickName == "") setTextNoNickName(true);
                 });
-            }
+            
         };
         getDisplayName();
     }, []);
@@ -69,7 +63,7 @@ const GetUserInfo = () => {
             <Link to={`/${userId}`} className='mypage__user--profilePicture'>
                 <img src={profilePicture} alt="" />
             </Link>
-            {id == user.uid ? (
+            {user && id == user.uid ? (
             <div className='mypage__user--changeUserInfo'>
                 <button onClick={openSetModal}>ユーザ情報の変更</button>
             </div>          
