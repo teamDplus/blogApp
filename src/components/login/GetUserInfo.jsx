@@ -4,7 +4,7 @@ import { collection, query, where, getDocs } from "firebase/firestore";
 import { db } from "../../utils/firebase";
 import ChangeUserInfoModal from "../modal/ChangeUserInfoModal"
 import "../../css/components/GetUserInfo.css"
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import AppContext from '../../context/AppContext';
 
 //ログイン中のユーザ情報を取得
@@ -16,6 +16,7 @@ const GetUserInfo = () => {
     const [nickName, setNickName] = useState('');  //現在のニックネーム
     const [profilePicture, setProfilePicture] = useState('');
     const [displayName, setDisplayName] = useState(''); //表示名(ニックネーム、ユーザ名、ユーザidどれを表示するか)
+    const [link, setLink] = useState(''); //リンク
     const [textNoNickName, setTextNoNickName] = useState(false); //ニックネームの設定を促すメッセージ
 
     useEffect(() => {
@@ -37,6 +38,8 @@ const GetUserInfo = () => {
                     setUserId(doc.data().userId);
                     //アイコンを取得
                     setProfilePicture(doc.data().profilePictureUrl);
+                    //リンクを取得
+                    setLink(doc.data().userId);
                     // nickNameが登録されていればnickNameを表示→name:ユーザ名→userId
                     setDisplayName(doc.data().nickName || doc.data().name || doc.data().userId || "");
                     //nicknameが登録されていなければ登録を促すメッセージを表示
@@ -66,6 +69,11 @@ const GetUserInfo = () => {
             <div className='mypage__user--profilePicture'>
                 <img src={profilePicture} alt="" />
             </div>
+            {id !== user.uid ? (
+                <Link to={`/${userId}`}>ユーザーページへ</Link>
+            ) : (
+                ""
+            )}
             {id == user.uid ? (
             <div className='mypage__user--changeUserInfo'>
                 <button onClick={openSetModal}>ユーザ情報の変更</button>
