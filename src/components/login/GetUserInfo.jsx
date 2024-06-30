@@ -66,14 +66,9 @@ const GetUserInfo = () => {
             {textNoNickName == true && (
                 <div className='mypage__user--noNickName'>ニックネームが登録されていません</div>
             )}
-            <div className='mypage__user--profilePicture'>
+            <Link to={`/${userId}`} className='mypage__user--profilePicture'>
                 <img src={profilePicture} alt="" />
-            </div>
-            {id !== user.uid ? (
-                <Link to={`/${userId}`}>ユーザーページへ</Link>
-            ) : (
-                ""
-            )}
+            </Link>
             {id == user.uid ? (
             <div className='mypage__user--changeUserInfo'>
                 <button onClick={openSetModal}>ユーザ情報の変更</button>

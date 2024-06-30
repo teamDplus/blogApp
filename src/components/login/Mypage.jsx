@@ -57,17 +57,18 @@ const Mypage = () => {
 
   return (
     <div className="mypage">
-      <h1 className="mypage__title">マイページ</h1>
       {user && user.uid === id
         ?
         <>
-          <GetUserInfo />
-          <button onClick={handleSignOut} className="logout">
-            ログアウト
-          </button>
+        <h1 className="mypage__title">マイページ</h1>
+        <button onClick={handleSignOut} className="logout">
+          ログアウト
+        </button>
         </>
         :
-        ""
+        <>
+          <GetUserInfo />
+        </>
       }
       <Follow />
       <div className="mypage-list">
