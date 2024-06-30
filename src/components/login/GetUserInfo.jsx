@@ -4,9 +4,11 @@ import { collection, query, where, getDocs } from "firebase/firestore";
 import { db } from "../../utils/firebase";
 import ChangeUserInfoModal from "../modal/ChangeUserInfoModal"
 import "../../css/components/GetUserInfo.css"
+import { useParams } from 'react-router-dom';
 
 //ログイン中のユーザ情報を取得
 const GetUserInfo = () => {
+    const { postId,id } = useParams();
     const [isSetModalOpen, setIsSetModalOpen] = useState(false);
     const [userId, setUserId] = useState('');  //ユーザ固有のid
     const [nickName, setNickName] = useState('');  //現在のニックネーム
@@ -23,7 +25,7 @@ const GetUserInfo = () => {
 
             if (user) {
                 // uidから該当するユーザ情報をデータベース名:userから取得
-                const q = query(collection(db, 'users'), where('userId', '==', user.uid));
+                const q = query(collection(db, 'users'), where('userId', '==', id));
                 const querySnapshot = await getDocs(q);
 
                 querySnapshot.forEach((doc) => {

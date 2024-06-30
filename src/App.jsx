@@ -15,6 +15,7 @@ import { SentPassword } from "./components/login/SentPassword";
 import LikeList from "./components/post/LikeList";
 import { Followers } from "./components/follow/Followers";
 import { Followings } from "./components/follow/Followings";
+import { VerifyEmail } from "./components/login/VerifyEmail";
 
 function App() {
   return (
@@ -39,6 +40,7 @@ function App() {
             <Route path="/search" element={<SearchPost />} />
             <Route path="/:id/followings" element={<Followings />} />
             <Route path="/:id/followers" element={<Followers />} />
+            <Route path="/verify_email" element={<VerifyEmail />} />
           </Routes>
         </div>
       </div>
