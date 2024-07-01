@@ -24,12 +24,7 @@ const Mypage = () => {
   const [selectedSortType, setSelectedSortType] = useState('new');
   const {handleSignOut} = useLogout();
 
-  useEffect(() => {
-    console.log(user);
-    if (!user) {
-      navigate("/");
-    }
-  }, [user]);
+ 
 
 
   // Firebaseの中にあるpostsのフィールドから、ユーザーの投稿記事を取得
@@ -57,19 +52,21 @@ const Mypage = () => {
 
   return (
     <div className="mypage">
-      <h1 className="mypage__title">マイページ</h1>
-      {user && user.uid === id
-        ?
+      {user && user.uid === id ? (
         <>
+          <h1 className="mypage__title">マイページ</h1>
           <GetUserInfo />
           <button onClick={handleSignOut} className="logout">
             ログアウト
           </button>
         </>
-        :
-        ""
+      ) : (
+        <GetUserInfo />
+      )
       }
-      <Follow />
+      {user && (
+        <Follow />
+      )}
       <div className="mypage-list">
         <h2>ブログ一覧</h2>
         <div className="mypage--sort">

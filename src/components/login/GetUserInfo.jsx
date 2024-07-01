@@ -1,12 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import { getAuth } from 'firebase/auth';
+import React, { useState, useEffect, useContext } from 'react';
 import { collection, query, where, getDocs } from "firebase/firestore";
 import { db } from "../../utils/firebase";
 import ChangeUserInfoModal from "../modal/ChangeUserInfoModal"
 import "../../css/components/GetUserInfo.css"
+import { Link, useParams } from 'react-router-dom';
+import AppContext from '../../context/AppContext';
 
 //ログイン中のユーザ情報を取得
 const GetUserInfo = () => {
+    const { user, followerCount,followingCount } = useContext(AppContext);
+    const { postId,id } = useParams();
     const [isSetModalOpen, setIsSetModalOpen] = useState(false);
     const [userId, setUserId] = useState('');  //ユーザ固有のid
     const [nickName, setNickName] = useState('');  //現在のニックネーム
@@ -18,12 +21,9 @@ const GetUserInfo = () => {
         // 表示名の設定（nickNameが登録されていれば表示、されていなければname:ユーザ名を表示）
         const getDisplayName = async () => {
             // ログインユーザの取得
-            const auth = getAuth();
-            const user = auth.currentUser;
 
-            if (user) {
                 // uidから該当するユーザ情報をデータベース名:userから取得
-                const q = query(collection(db, 'users'), where('userId', '==', user.uid));
+                const q = query(collection(db, 'users'), where('userId', '==', id));
                 const querySnapshot = await getDocs(q);
 
                 querySnapshot.forEach((doc) => {
@@ -33,12 +33,13 @@ const GetUserInfo = () => {
                     setUserId(doc.data().userId);
                     //アイコンを取得
                     setProfilePicture(doc.data().profilePictureUrl);
+                    //リンクを取得
                     // nickNameが登録されていればnickNameを表示→name:ユーザ名→userId
                     setDisplayName(doc.data().nickName || doc.data().name || doc.data().userId || "");
                     //nicknameが登録されていなければ登録を促すメッセージを表示
                     if(doc.data().nickName == null || doc.data().nickName == "") setTextNoNickName(true);
                 });
-            }
+            
         };
         getDisplayName();
     }, []);
@@ -59,12 +60,16 @@ const GetUserInfo = () => {
             {textNoNickName == true && (
                 <div className='mypage__user--noNickName'>ニックネームが登録されていません</div>
             )}
-            <div className='mypage__user--profilePicture'>
+            <Link to={`/${userId}`} className='mypage__user--profilePicture'>
                 <img src={profilePicture} alt="" />
-            </div>
+            </Link>
+            {user && id == user.uid ? (
             <div className='mypage__user--changeUserInfo'>
                 <button onClick={openSetModal}>ユーザ情報の変更</button>
-            </div>
+            </div>          
+            ) : (
+                ""
+            )}
             <ChangeUserInfoModal
                 isSetModalOpen={isSetModalOpen}
                 onSetModalClose={closeSetModal}

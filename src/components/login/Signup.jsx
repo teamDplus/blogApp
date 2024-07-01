@@ -1,4 +1,4 @@
-import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { createUserWithEmailAndPassword, sendSignInLinkToEmail } from 'firebase/auth';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { auth } from '../../utils/firebase';
@@ -29,23 +29,34 @@ const Signup = () => {
     setIsModalOpen,
     isModalOpen,
   } = useModal();
- 
+  
+  const actionCodeSettings = {
+    url: 'http://localhost:3000/verify_email',
+    handleCodeInApp: true
+  };
+
   // モーダルで「はい」を押したときにFirbaseへ登録する
-  const signUp = (e) => {
+  const signUp = async(e) => {
     e.preventDefault();
-    createUserWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        const user = userCredential.user
-        console.log(userCredential);
-        //登録が完了したらマイページに移動
-        navigate(`/${user.uid}`);
-      })
-      .catch((error) => {
-        console.error(error);
-        alert('登録に失敗しました。再度お試しください。')
-      });
-    // モーダルを閉じる
-    setIsModalOpen(false);
+    // await createUserWithEmailAndPassword(auth, email, password)
+    //   .then((userCredential) => {
+    //     const user = userCredential.user
+    //     console.log(userCredential);
+    //   })
+    //   .catch((error) => {
+    //     console.error(error);
+    //   });
+      
+    await sendSignInLinkToEmail(auth, email, actionCodeSettings)
+  .then(() => {
+    window.localStorage.setItem('emailForSignIn', email);
+    alert("メールを送信しました！")
+  })
+  .catch((error) => {
+    console.error(error)
+  });
+      // モーダルを閉じる
+      setIsModalOpen(false);
   }
 
   //メールアドレスの重複を検知
