@@ -4,7 +4,6 @@ import { UploadImageToStorage } from "../image/UploadImageToStorage";
 
 //サムネイル画像の設定
 export const SetThumbnail = async (fileObject, docRef) => {
-    console.log(fileObject);
     let thumbnailStorageUrl = "";
     const defaultThumbnailUrl = "https://firebasestorage.googleapis.com/v0/b/blogapp-c1052.appspot.com/o/postImages%2Fdefault%2FnoImage.PNG?alt=media&token=c7febf2c-b45e-4469-b1ce-2b232f8bd56d"
 

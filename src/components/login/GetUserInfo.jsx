@@ -8,8 +8,8 @@ import AppContext from '../../context/AppContext';
 
 //ログイン中のユーザ情報を取得
 const GetUserInfo = () => {
-    const { user, followerCount,followingCount } = useContext(AppContext);
-    const { postId,id } = useParams();
+    const { user, followerCount, followingCount } = useContext(AppContext);
+    const { postId, id } = useParams();
     const [isSetModalOpen, setIsSetModalOpen] = useState(false);
     const [userId, setUserId] = useState('');  //ユーザ固有のid
     const [nickName, setNickName] = useState('');  //現在のニックネーム
@@ -22,24 +22,24 @@ const GetUserInfo = () => {
         const getDisplayName = async () => {
             // ログインユーザの取得
 
-                // uidから該当するユーザ情報をデータベース名:userから取得
-                const q = query(collection(db, 'users'), where('userId', '==', id));
-                const querySnapshot = await getDocs(q);
+            // uidから該当するユーザ情報をデータベース名:userから取得
+            const q = query(collection(db, 'users'), where('userId', '==', id));
+            const querySnapshot = await getDocs(q);
 
-                querySnapshot.forEach((doc) => {
-                    //nickNameを取得
-                    setNickName(doc.data().nickName);
-                    //ユーザidを取得
-                    setUserId(doc.data().userId);
-                    //アイコンを取得
-                    setProfilePicture(doc.data().profilePictureUrl);
-                    //リンクを取得
-                    // nickNameが登録されていればnickNameを表示→name:ユーザ名→userId
-                    setDisplayName(doc.data().nickName || doc.data().name || doc.data().userId || "");
-                    //nicknameが登録されていなければ登録を促すメッセージを表示
-                    if(doc.data().nickName == null || doc.data().nickName == "") setTextNoNickName(true);
-                });
-            
+            querySnapshot.forEach((doc) => {
+                //nickNameを取得
+                setNickName(doc.data().nickName);
+                //ユーザidを取得
+                setUserId(doc.data().userId);
+                //アイコンを取得
+                setProfilePicture(doc.data().profilePictureUrl);
+                //リンクを取得
+                // nickNameが登録されていればnickNameを表示→name:ユーザ名→userId
+                setDisplayName(doc.data().nickName || doc.data().name || doc.data().userId || "");
+                //nicknameが登録されていなければ登録を促すメッセージを表示
+                if (doc.data().nickName == null || doc.data().nickName == "") setTextNoNickName(true);
+            });
+
         };
         getDisplayName();
     }, []);
@@ -57,16 +57,20 @@ const GetUserInfo = () => {
     return (
         <div className="mypage__user">
             <div className='mypage__user--displayName'>{displayName}</div>
-            {textNoNickName == true && (
-                <div className='mypage__user--noNickName'>ニックネームが登録されていません</div>
-            )}
             <Link to={`/${userId}`} className='mypage__user--profilePicture'>
                 <img src={profilePicture} alt="" />
             </Link>
-            {user && id == user.uid ? (
-            <div className='mypage__user--changeUserInfo'>
-                <button onClick={openSetModal}>ユーザ情報の変更</button>
-            </div>          
+            {user && id === user.uid && window.location.pathname === `/${user.uid}` ? (
+                <>
+                    {textNoNickName ? (
+                        <div className='mypage__user--noNickName'>ニックネームが登録されていません</div>
+                    ) : (
+                        ""
+                    )}
+                    <div className='mypage__user--changeUserInfo'>
+                        <button onClick={openSetModal}>ユーザ情報の変更</button>
+                    </div>
+                </>
             ) : (
                 ""
             )}

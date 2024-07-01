@@ -34,7 +34,7 @@ function Post({ EditPost }) {
         <form onSubmit={SendPost}>
           <div className="post__thumbnail">
             <InputImage
-              imageLabel={"サムネイルの変更"}
+              imageLabel={"サムネイルの追加"}
               fileObject={fileObject}
               setFileObject={setFileObject}
               setNewProfilePicture={setNewProfilePicture}
